@@ -59,7 +59,7 @@ CAMPER_SCENARIO = DemoScenario(
     section_labels={
         "stays": "Übernachten / Stellplätze",
         "camper_services": "Services",
-        "experiences": "Erleben / Ausflüge",
+        "experiences": "Erleben",
     },
     summary_labels={
         "stays": "Übernachten",
@@ -92,13 +92,13 @@ AUSFLUG_SCENARIO = DemoScenario(
     subtitle="Ausflüge vom Reise-/Campingort rund um Bern",
     section_order=("experiences",),
     section_labels={
-        "experiences": "Erleben / Ausflüge",
+        "experiences": "Erleben",
     },
     summary_labels={
-        "experiences": "Ausflüge",
+        "experiences": "Erleben",
     },
     tab_labels={
-        "experiences": "Ausflüge",
+        "experiences": "Erleben",
     },
     default_active_section="experiences",
     show_empty_sections=False,
@@ -190,12 +190,14 @@ def notes_for(result) -> list[str]:
     return notes
 
 
-def render_summary_card(key: str, label: str, count: int) -> str:
+def render_summary_card(key: str, label: str, count: int, is_active: bool) -> str:
+    active_class = " active" if is_active else ""
+    aria_pressed = "true" if is_active else "false"
     return f"""
-      <div class="summary-card summary-{h(key)}">
+      <button class="summary-card summary-{h(key)}{active_class}" type="button" data-filter="{h(key)}" aria-pressed="{aria_pressed}" aria-label="{h(label)} anzeigen, {h(count)} Treffer">
         <div class="summary-number">{h(count)}</div>
         <div class="summary-label">{h(label)}</div>
-      </div>
+      </button>
     """
 
 
@@ -229,21 +231,6 @@ def render_page_script(enable_tabs: bool) -> str:
     tab_setup = ""
     if enable_tabs:
         tab_setup = """
-      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
-      const sections = Array.from(document.querySelectorAll("[data-section]"));
-
-      const showSection = (key) => {
-        tabs.forEach((tab) => {
-          const isActive = tab.dataset.tab === key;
-          tab.classList.toggle("active", isActive);
-          tab.setAttribute("aria-selected", isActive ? "true" : "false");
-        });
-
-        sections.forEach((section) => {
-          section.hidden = section.dataset.section !== key;
-        });
-      };
-
       tabs.forEach((tab) => {
         tab.addEventListener("click", () => {
           if (tab.disabled) {
@@ -255,6 +242,42 @@ def render_page_script(enable_tabs: bool) -> str:
 """
     return """  <script>
     (() => {
+      const filterButtons = Array.from(document.querySelectorAll("[data-filter]"));
+      const sections = Array.from(document.querySelectorAll("[data-section]"));
+      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
+      let activeFilter = filterButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.filter || "";
+
+      const setFilter = (key) => {
+        activeFilter = key || "";
+
+        filterButtons.forEach((button) => {
+          const isActive = activeFilter !== "" && button.dataset.filter === activeFilter;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+
+        tabs.forEach((tab) => {
+          const isActive = activeFilter !== "" && tab.dataset.tab === activeFilter;
+          tab.classList.toggle("active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        sections.forEach((section) => {
+          section.hidden = activeFilter !== "" && section.dataset.section !== activeFilter;
+        });
+      };
+
+      const showSection = (key) => {
+        setFilter(key);
+      };
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextFilter = activeFilter === button.dataset.filter ? "" : button.dataset.filter;
+          setFilter(nextFilter);
+        });
+      });
+
 __TAB_SETUP__
       const savedPlaces = new Map();
       const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));
@@ -604,7 +627,12 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     active_key = active_section_key(grouped, scenario, section_keys)
 
     summary_html = "\n".join(
-        render_summary_card(key, scenario.summary_labels[key], len(grouped[key]))
+        render_summary_card(
+            key,
+            scenario.summary_labels[key],
+            len(grouped[key]),
+            key == active_key,
+        )
         for key in section_keys
     )
     sections_html = "\n".join(
@@ -756,11 +784,34 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     }}
 
     .summary-card {{
+      appearance: none;
+      width: 100%;
       background: rgba(255, 255, 255, 0.78);
       border: 1px solid var(--line);
       border-radius: 17px;
       padding: 12px 10px;
       box-shadow: 0 8px 22px rgba(13, 67, 110, 0.08);
+      color: inherit;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }}
+
+    .summary-card.active {{
+      border-color: var(--blue-700);
+      box-shadow:
+        0 0 0 2px rgba(23, 105, 170, 0.16),
+        0 10px 26px rgba(13, 67, 110, 0.13);
+    }}
+
+    .summary-card:hover {{
+      transform: translateY(-1px);
+    }}
+
+    .summary-card:focus-visible {{
+      outline: 2px solid var(--blue-500);
+      outline-offset: 3px;
     }}
 
     .summary-stays {{

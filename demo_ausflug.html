@@ -120,11 +120,34 @@
     }
 
     .summary-card {
+      appearance: none;
+      width: 100%;
       background: rgba(255, 255, 255, 0.78);
       border: 1px solid var(--line);
       border-radius: 17px;
       padding: 12px 10px;
       box-shadow: 0 8px 22px rgba(13, 67, 110, 0.08);
+      color: inherit;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .summary-card.active {
+      border-color: var(--blue-700);
+      box-shadow:
+        0 0 0 2px rgba(23, 105, 170, 0.16),
+        0 10px 26px rgba(13, 67, 110, 0.13);
+    }
+
+    .summary-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .summary-card:focus-visible {
+      outline: 2px solid var(--blue-500);
+      outline-offset: 3px;
     }
 
     .summary-stays {
@@ -596,10 +619,10 @@
 
       <section class="summary" style="--summary-count: 1" aria-label="Zusammenfassung">
         
-      <div class="summary-card summary-experiences">
+      <button class="summary-card summary-experiences active" type="button" data-filter="experiences" aria-pressed="true" aria-label="Erleben anzeigen, 4 Treffer">
         <div class="summary-number">4</div>
-        <div class="summary-label">Ausflüge</div>
-      </div>
+        <div class="summary-label">Erleben</div>
+      </button>
     
       </section>
 
@@ -615,7 +638,7 @@
       
     <section class="section" data-section="experiences">
       <div class="section-heading">
-        <h2>Erleben / Ausflüge</h2>
+        <h2>Erleben</h2>
         <span>4 Treffer</span>
       </div>
       <div class="cards">
@@ -744,6 +767,42 @@
   </main>
   <script>
     (() => {
+      const filterButtons = Array.from(document.querySelectorAll("[data-filter]"));
+      const sections = Array.from(document.querySelectorAll("[data-section]"));
+      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
+      let activeFilter = filterButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.filter || "";
+
+      const setFilter = (key) => {
+        activeFilter = key || "";
+
+        filterButtons.forEach((button) => {
+          const isActive = activeFilter !== "" && button.dataset.filter === activeFilter;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+
+        tabs.forEach((tab) => {
+          const isActive = activeFilter !== "" && tab.dataset.tab === activeFilter;
+          tab.classList.toggle("active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        sections.forEach((section) => {
+          section.hidden = activeFilter !== "" && section.dataset.section !== activeFilter;
+        });
+      };
+
+      const showSection = (key) => {
+        setFilter(key);
+      };
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextFilter = activeFilter === button.dataset.filter ? "" : button.dataset.filter;
+          setFilter(nextFilter);
+        });
+      });
+
 
       const savedPlaces = new Map();
       const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));
