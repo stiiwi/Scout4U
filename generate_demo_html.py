@@ -309,6 +309,24 @@ __TAB_SETUP__
       });
 
       renderFavorites();
+
+      const explainButtons = Array.from(document.querySelectorAll("[data-explain-toggle]"));
+
+      explainButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const card = button.closest("[data-place-card]");
+          const panel = card ? card.querySelector("[data-explanation-panel]") : null;
+
+          if (!panel) {
+            return;
+          }
+
+          const isOpen = button.getAttribute("aria-expanded") === "true";
+          panel.hidden = isOpen;
+          button.setAttribute("aria-expanded", isOpen ? "false" : "true");
+          button.textContent = isOpen ? "Warum passt das?" : "Weniger anzeigen";
+        });
+      });
     })();
   </script>""".replace("__TAB_SETUP__", tab_setup.rstrip())
 
@@ -349,9 +367,10 @@ def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> 
     )
 
     details_html = "\n".join(render_detail_chip(item) for item in details_items(result))
+    why = why_text(result, scenario)
 
     return f"""
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">{h(format_category(result.poi.poi_type))}</span>
           <span class="fit-pill">{h(fit_text)}</span>
@@ -360,15 +379,19 @@ def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> 
           <h3>{h(result.poi.name)}</h3>
           <button class="save-button" type="button" data-save-place data-place-id="{h(result.poi.id)}" data-place-name="{h(result.poi.name)}" aria-pressed="false" aria-label="{h(result.poi.name)} merken">Merken</button>
         </div>
-        <p class="why">{h(why_text(result, scenario))}</p>
+        <p class="why">{h(why)}</p>
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
         </div>
-        <div class="detail-block">
-          <div class="detail-label">{h(detail_label)}</div>
-          <div class="chip-row detail-row">{details_html}</div>
-        </div>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">{h(why)}</p>
+          <div class="detail-block">
+            <div class="detail-label">{h(detail_label)}</div>
+            <div class="chip-row detail-row">{details_html}</div>
+          </div>
 {notes_html}
+        </div>
       </article>
     """
 
@@ -884,6 +907,44 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     .save-button:focus-visible {{
       outline: 2px solid var(--blue-500);
       outline-offset: 2px;
+    }}
+
+    .explain-button {{
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 1px solid #c6e0f4;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--blue-700);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }}
+
+    .explain-button:focus-visible {{
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
+    }}
+
+    .explanation-panel {{
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #f7fbff;
+    }}
+
+    .explanation-panel[hidden] {{
+      display: none;
+    }}
+
+    .explanation-text {{
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.9rem;
+      line-height: 1.45;
+      font-weight: 700;
     }}
 
     .why {{

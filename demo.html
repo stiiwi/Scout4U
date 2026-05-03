@@ -387,6 +387,44 @@
       outline-offset: 2px;
     }
 
+    .explain-button {
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 1px solid #c6e0f4;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--blue-700);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
+
+    .explain-button:focus-visible {
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
+    }
+
+    .explanation-panel {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #f7fbff;
+    }
+
+    .explanation-panel[hidden] {
+      display: none;
+    }
+
+    .explanation-text {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.9rem;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
     .why {
       margin: 9px 0 14px;
       color: var(--muted);
@@ -566,7 +604,7 @@
       </div>
       <div class="cards">
         
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Sehr gute Passung</span>
@@ -579,18 +617,22 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>4.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 18</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
 <span class="chip detail-chip">Camper-Stellplatz</span>
 <span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">Strom</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Stellplatz mit Basisversorgung</p>
+        </div>
       </article>
     
 
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Sehr gute Passung</span>
@@ -603,18 +645,22 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>23.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 25</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
 <span class="chip detail-chip">Camper-Stellplatz</span>
 <span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">Strom</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Ruhiger Stellplatz nahe Thun</p>
+        </div>
       </article>
     
 
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
@@ -627,12 +673,16 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>18 km</span><span class="chip fact-chip"><span>Preis</span>CHF 12</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Camper-Stellplatz</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">Camper-Stellplatz</span>
 <span class="chip detail-chip">Frischwasser</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Einfacher Stellplatz am Rand der Altstadt</p>
+        </div>
       </article>
     
       </div>
@@ -646,7 +696,7 @@
       </div>
       <div class="cards">
         
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Gemischt</span>
           <span class="fit-pill">Gute Passung</span>
@@ -659,16 +709,20 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>22 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Frischwasser, Toilette</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">Toilette</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Schöner Ort mit Toilette am Wasser</p>
+        </div>
       </article>
     
 
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
@@ -681,16 +735,20 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>0.8 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">öffentliche Toilette</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Toilette</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">öffentliche Toilette</span>
 <span class="chip detail-chip">Toilette</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Zentral und wettergeschützt</p>
+        </div>
       </article>
     
 
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
@@ -703,17 +761,21 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>3.2 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Chemietoilette</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">Chemietoilette</span>
 <span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">WC-Entsorgung</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung und Frischwasser</p>
+        </div>
       </article>
     
 
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
@@ -726,16 +788,20 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>22.5 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">WC-Entsorgung</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung mit Frischwasser</p>
+        </div>
       </article>
     
 
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
@@ -748,16 +814,20 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>9.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 4</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Dusche</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Toilette</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">Dusche</span>
 <span class="chip detail-chip">Toilette</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Einfache Dusche mit Toilette</p>
+        </div>
       </article>
     
 
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Solide Option</span>
@@ -770,12 +840,16 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>23 km</span><span class="chip fact-chip"><span>Preis</span>CHF 1</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">öffentliche Toilette</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Passt zu deinen Bedürfnissen: Toilette</p>
+          <div class="detail-block">
+            <div class="detail-label">Vor Ort</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">öffentliche Toilette</span>
 <span class="chip detail-chip">Toilette</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Wettergeschützt und zentral</p>
+        </div>
       </article>
     
       </div>
@@ -789,7 +863,7 @@
       </div>
       <div class="cards">
         
-      <article class="place-card">
+      <article class="place-card" data-place-card>
         <div class="card-topline">
           <span class="category-pill">Ausflug / schöner Ort</span>
           <span class="fit-pill">Solide Option</span>
@@ -802,14 +876,18 @@
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>18.5 km</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
         </div>
-        <div class="detail-block">
-          <div class="detail-label">Erlebnis</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Kultur</span>
+        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">Trifft deine Interessen: familienfreundlich (1)</p>
+          <div class="detail-block">
+            <div class="detail-label">Erlebnis</div>
+            <div class="chip-row detail-row"><span class="chip detail-chip">Kultur</span>
 <span class="chip detail-chip">Museum</span>
 <span class="chip detail-chip">familienfreundlich</span>
 <span class="chip detail-chip">fotogen</span></div>
-        </div>
+          </div>
 <p class="note-text">Hinweis: Öffnungszeiten prüfen · Kulturort mit Innenräumen</p>
+        </div>
       </article>
     
       </div>
@@ -898,6 +976,24 @@
       });
 
       renderFavorites();
+
+      const explainButtons = Array.from(document.querySelectorAll("[data-explain-toggle]"));
+
+      explainButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const card = button.closest("[data-place-card]");
+          const panel = card ? card.querySelector("[data-explanation-panel]") : null;
+
+          if (!panel) {
+            return;
+          }
+
+          const isOpen = button.getAttribute("aria-expanded") === "true";
+          panel.hidden = isOpen;
+          button.setAttribute("aria-expanded", isOpen ? "false" : "true");
+          button.textContent = isOpen ? "Warum passt das?" : "Weniger anzeigen";
+        });
+      });
     })();
   </script>
 </body>
