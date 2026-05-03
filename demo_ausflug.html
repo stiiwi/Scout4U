@@ -244,53 +244,6 @@
       display: none;
     }
 
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 0 14px 18px;
-      padding: 5px;
-      border-radius: 22px;
-      background: #e6f2fb;
-      border: 1px solid #d2e7f6;
-    }
-
-    .tab {
-      display: inline-flex;
-      flex: 1 1 108px;
-      justify-content: center;
-      align-items: center;
-      min-height: 36px;
-      padding: 7px 6px;
-      border: 0;
-      border-radius: 999px;
-      appearance: none;
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 800;
-      transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease;
-    }
-
-    .tab.active {
-      background: #ffffff;
-      color: var(--blue-900);
-      box-shadow: 0 5px 14px rgba(13, 67, 110, 0.11);
-    }
-
-    .tab:focus-visible {
-      outline: 2px solid var(--blue-500);
-      outline-offset: 2px;
-    }
-
-    .tab:disabled {
-      color: #98aaba;
-      cursor: default;
-      opacity: 0.72;
-    }
-
     .section {
       margin: 22px 14px 0;
     }
@@ -634,7 +587,6 @@
         <ul class="favorites-list" data-favorites-list></ul>
       </section>
 
-
       
     <section class="section" data-section="experiences">
       <div class="section-heading">
@@ -769,7 +721,6 @@
     (() => {
       const filterButtons = Array.from(document.querySelectorAll("[data-filter]"));
       const sections = Array.from(document.querySelectorAll("[data-section]"));
-      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
       let activeFilter = filterButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.filter || "";
 
       const setFilter = (key) => {
@@ -781,19 +732,9 @@
           button.setAttribute("aria-pressed", isActive ? "true" : "false");
         });
 
-        tabs.forEach((tab) => {
-          const isActive = activeFilter !== "" && tab.dataset.tab === activeFilter;
-          tab.classList.toggle("active", isActive);
-          tab.setAttribute("aria-selected", isActive ? "true" : "false");
-        });
-
         sections.forEach((section) => {
           section.hidden = activeFilter !== "" && section.dataset.section !== activeFilter;
         });
-      };
-
-      const showSection = (key) => {
-        setFilter(key);
       };
 
       filterButtons.forEach((button) => {
@@ -802,7 +743,6 @@
           setFilter(nextFilter);
         });
       });
-
 
       const savedPlaces = new Map();
       const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));

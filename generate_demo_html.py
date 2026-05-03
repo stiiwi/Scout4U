@@ -34,7 +34,6 @@ class DemoScenario:
     section_order: tuple[str, ...]
     section_labels: dict[str, str]
     summary_labels: dict[str, str]
-    tab_labels: dict[str, str]
     default_active_section: str
     show_empty_sections: bool = True
     show_interest_weights: bool = True
@@ -66,11 +65,6 @@ CAMPER_SCENARIO = DemoScenario(
         "camper_services": "Services",
         "experiences": "Erleben",
     },
-    tab_labels={
-        "stays": "Übernachten",
-        "camper_services": "Services",
-        "experiences": "Erleben",
-    },
     default_active_section="stays",
     intro_template=(
         "Stell dir vor, du bist mit dem Camper rund um Bern unterwegs und es regnet. "
@@ -95,9 +89,6 @@ AUSFLUG_SCENARIO = DemoScenario(
         "experiences": "Erleben",
     },
     summary_labels={
-        "experiences": "Erleben",
-    },
-    tab_labels={
         "experiences": "Erleben",
     },
     default_active_section="experiences",
@@ -209,42 +200,11 @@ def fit_label(score: float) -> str:
     return "Solide Option"
 
 
-def render_tabs(grouped: dict, scenario: DemoScenario, active_key: str, section_keys: list[str]) -> str:
-    tabs = []
-    for key in section_keys:
-        count = len(grouped[key])
-        active_class = " active" if key == active_key else ""
-        empty_class = " empty-tab" if count == 0 else ""
-        aria_selected = "true" if key == active_key else "false"
-        disabled_attr = ""
-        if count == 0 and key != active_key:
-            disabled_attr = ' disabled aria-disabled="true" title="Keine Treffer in dieser Gruppe"'
-        tabs.append(
-            f'<button class="tab{active_class}{empty_class}" type="button" '
-            f'data-tab="{h(key)}" aria-selected="{aria_selected}"{disabled_attr}>'
-            f"{h(scenario.tab_labels[key])}</button>"
-        )
-    return "\n".join(tabs)
-
-
-def render_page_script(enable_tabs: bool) -> str:
-    tab_setup = ""
-    if enable_tabs:
-        tab_setup = """
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          if (tab.disabled) {
-            return;
-          }
-          showSection(tab.dataset.tab);
-        });
-      });
-"""
+def render_page_script() -> str:
     return """  <script>
     (() => {
       const filterButtons = Array.from(document.querySelectorAll("[data-filter]"));
       const sections = Array.from(document.querySelectorAll("[data-section]"));
-      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
       let activeFilter = filterButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.filter || "";
 
       const setFilter = (key) => {
@@ -256,19 +216,9 @@ def render_page_script(enable_tabs: bool) -> str:
           button.setAttribute("aria-pressed", isActive ? "true" : "false");
         });
 
-        tabs.forEach((tab) => {
-          const isActive = activeFilter !== "" && tab.dataset.tab === activeFilter;
-          tab.classList.toggle("active", isActive);
-          tab.setAttribute("aria-selected", isActive ? "true" : "false");
-        });
-
         sections.forEach((section) => {
           section.hidden = activeFilter !== "" && section.dataset.section !== activeFilter;
         });
-      };
-
-      const showSection = (key) => {
-        setFilter(key);
       };
 
       filterButtons.forEach((button) => {
@@ -278,7 +228,6 @@ def render_page_script(enable_tabs: bool) -> str:
         });
       });
 
-__TAB_SETUP__
       const savedPlaces = new Map();
       const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));
       const favoritesList = document.querySelector("[data-favorites-list]");
@@ -351,7 +300,7 @@ __TAB_SETUP__
         });
       });
     })();
-  </script>""".replace("__TAB_SETUP__", tab_setup.rstrip())
+  </script>"""
 
 
 def render_fact_chip(label: str, value: str, class_name: str = "") -> str:
@@ -644,18 +593,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     favorites_html = render_favorites_panel()
 
     section_count = len(section_keys)
-    tabs_block_html = ""
-    tab_script_html = ""
-    if section_count > 1:
-        tabs_html = render_tabs(grouped, scenario, active_key, section_keys)
-        tabs_block_html = f"""
-      <nav class="tabs" style="--tab-count: {h(section_count)}" aria-label="Demo-Bereiche">
-        {tabs_html}
-      </nav>
-"""
-        tab_script_html = render_page_script(enable_tabs=True)
-    else:
-        tab_script_html = render_page_script(enable_tabs=False)
+    page_script_html = render_page_script()
 
     context = (
         f"{profile.profile_name} · {weather_label(scenario.weather)} · "
@@ -906,53 +844,6 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
 
     .favorites-list:empty {{
       display: none;
-    }}
-
-    .tabs {{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 0 14px 18px;
-      padding: 5px;
-      border-radius: 22px;
-      background: #e6f2fb;
-      border: 1px solid #d2e7f6;
-    }}
-
-    .tab {{
-      display: inline-flex;
-      flex: 1 1 108px;
-      justify-content: center;
-      align-items: center;
-      min-height: 36px;
-      padding: 7px 6px;
-      border: 0;
-      border-radius: 999px;
-      appearance: none;
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 800;
-      transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease;
-    }}
-
-    .tab.active {{
-      background: #ffffff;
-      color: var(--blue-900);
-      box-shadow: 0 5px 14px rgba(13, 67, 110, 0.11);
-    }}
-
-    .tab:focus-visible {{
-      outline: 2px solid var(--blue-500);
-      outline-offset: 2px;
-    }}
-
-    .tab:disabled {{
-      color: #98aaba;
-      cursor: default;
-      opacity: 0.72;
     }}
 
     .section {{
@@ -1289,13 +1180,12 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
 {bridge_html}
 {favorites_html}
 
-{tabs_block_html}
       {sections_html}
 
       <p class="footnote">Diese HTML-Seite wird lokal aus CSV-Testdaten erzeugt. Keine Live-Daten, keine Karte, keine API.</p>
     </div>
   </main>
-{tab_script_html}
+{page_script_html}
 </body>
 </html>
 """
