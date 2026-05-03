@@ -8,9 +8,9 @@ Scout4U ist nicht nur eine Stellplatz-App. Der erste Fokus liegt auf Camping- un
 
 - Übernachten / Stellplätze
 - Versorgen / Services
-- Erleben / Ausflüge
+- Erleben
 
-Die Natur-&-Aussicht-Demo ist künftig als Beispiel für Ausflüge vom Reise-/Campingort aus zu verstehen, nicht als Beweis für eine komplett offene Allgemein-App.
+Die Erleben-Kategorie zeigt Ausflüge vom Reise-/Campingort aus, nicht eine komplett offene Allgemein-App.
 
 ## Aktueller Stand
 
@@ -20,14 +20,13 @@ Die Natur-&-Aussicht-Demo ist künftig als Beispiel für Ausflüge vom Reise-/Ca
 - Keine Datenbank.
 - Keine Karte/GPS.
 - CSV-Dateien dienen aktuell als Testdaten.
-- HTML-Demos werden lokal erzeugt.
+- Eine lokale HTML-Demo wird erzeugt.
 
-## Demos
+## Demo
 
-- `demo.html`: Camper-Demo rund um Bern bei Regen mit Stellplätzen, Services und Ausflügen.
-- `demo_ausflug.html`: Natur-&-Aussicht-Demo rund um Bern bei Sonne, verstanden als Ausflüge vom Reise-/Campingort aus.
+- `demo.html`: Camper-Demo rund um Bern mit Stellplätzen, Services und Ausflügen vom Reise-/Campingort aus.
 
-Beide Dateien können lokal im Browser geöffnet werden.
+Die Datei kann lokal im Browser geöffnet werden.
 
 ## Lokale Nutzung
 
@@ -37,7 +36,7 @@ Self-Test:
 python3 scout4u_score.py --self-test
 ```
 
-HTML-Demos erzeugen:
+HTML-Demo erzeugen:
 
 ```bash
 python3 generate_demo_html.py
@@ -46,7 +45,7 @@ python3 generate_demo_html.py
 ## Wichtige Dateien
 
 - `scout4u_score.py`: Hauptlogik für CSV-Parsing, Scoring, Filterung und CLI-Ausgabe.
-- `generate_demo_html.py`: Erzeugt die lokalen HTML-Demos aus den bestehenden CSV-Testdaten.
+- `generate_demo_html.py`: Erzeugt die lokale HTML-Demo aus den bestehenden CSV-Testdaten.
 - `project_status.md`: Detaillierter aktueller Projektstand und offene Fragen.
 - `scout4u_testlog.md`: Bisherige Testnotizen und fachliche Beobachtungen.
 - CSV-Testdaten: Beispiel-POIs und Beispiel-Profile für Bern, Camper-Reisen und Ausflugsszenarien.

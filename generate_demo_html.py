@@ -38,12 +38,14 @@ class DemoScenario:
     show_empty_sections: bool = True
     show_interest_weights: bool = True
     intro_template: str = ""
-    bridge_text: str = ""
-    bridge_link_text: str = ""
-    bridge_href: str = ""
 
 
 CAMPER_SECTION_ORDER = tuple(key for key, _label in RECOMMENDATION_SECTION_ORDER)
+EXPERIENCE_POIS_PATH = Path("pois_bern_test_sample.csv")
+EXPERIENCE_PROFILES_PATH = Path("profiles_test_sample.csv")
+EXPERIENCE_PROFILE_ID = "A"
+EXPERIENCE_WEATHER = "sunny"
+EXPERIENCE_TOP = 4
 
 CAMPER_SCENARIO = DemoScenario(
     output_path=Path("demo.html"),
@@ -68,44 +70,13 @@ CAMPER_SCENARIO = DemoScenario(
     default_active_section="stays",
     intro_template=(
         "Stell dir vor, du bist mit dem Camper rund um Bern unterwegs und es regnet. "
-        "Scout4U schlägt dir passende Stopps zum Übernachten, für Services und zum Erleben vor."
+        "Scout4U schlägt dir passende Stopps zum Übernachten, für Services und zum Erleben vor. "
+        "Unter Erleben findest du Ausflüge vom Reise-/Campingort aus, die besonders für trockene oder sonnige Zeitfenster passen."
     ),
-    bridge_text="Für sonnige Tage zeigt Scout4U auch Ausflüge vom Reise-/Campingort aus:",
-    bridge_link_text="Natur & Aussicht-Ausflüge ansehen",
-    bridge_href="demo_ausflug.html",
-)
-
-AUSFLUG_SCENARIO = DemoScenario(
-    output_path=Path("demo_ausflug.html"),
-    pois_path=Path("pois_bern_test_sample.csv"),
-    profiles_path=Path("profiles_test_sample.csv"),
-    profile_id="A",
-    weather="sunny",
-    top=10,
-    document_title="Scout4U Ausflüge",
-    subtitle="Ausflüge vom Reise-/Campingort rund um Bern",
-    section_order=("experiences",),
-    section_labels={
-        "experiences": "Erleben",
-    },
-    summary_labels={
-        "experiences": "Erleben",
-    },
-    default_active_section="experiences",
-    show_empty_sections=False,
-    show_interest_weights=False,
-    intro_template=(
-        "Stell dir vor, du stehst mit Camper oder Zelt in der Region Bern und möchtest bei Sonne raus. "
-        "Scout4U zeigt dir passende Natur- und Aussichtsausflüge vom Reise-/Campingort aus."
-    ),
-    bridge_text="Zurück zur Camping-Reisebegleiter-Demo mit Übernachten, Services und Erleben:",
-    bridge_link_text="Camping-Demo ansehen",
-    bridge_href="demo.html",
 )
 
 SCENARIOS = (
     CAMPER_SCENARIO,
-    AUSFLUG_SCENARIO,
 )
 
 
@@ -154,12 +125,12 @@ def matched_interests_text(result, show_weights: bool) -> str:
     return f"Trifft deine Interessen: {interests}"
 
 
-def why_text(result, scenario: DemoScenario) -> str:
+def why_text(result, show_interest_weights: bool) -> str:
     if is_service_poi(result.poi):
         if result.score.matched_services:
             return "Passt zu deinen Bedürfnissen: " + display_labels(result.score.matched_services)
         return "Service-Ort in deiner Nähe"
-    return matched_interests_text(result, scenario.show_interest_weights)
+    return matched_interests_text(result, show_interest_weights)
 
 
 def details_items(result) -> list[str]:
@@ -426,7 +397,7 @@ def today_hint_text(result, weather: str) -> str:
     return today_sentence(join_today_reasons(reasons[:2]))
 
 
-def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> str:
+def render_recommendation_card(result, weather: str, show_interest_weights: bool) -> str:
     detail_label = "Vor Ort" if is_service_poi(result.poi) else "Erlebnis"
     fit_text = fit_label(result.score.total)
     today_hint = today_hint_text(result, weather)
@@ -452,7 +423,7 @@ def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> 
     )
 
     details_html = "\n".join(render_detail_chip(item) for item in details_items(result))
-    why = why_text(result, scenario)
+    why = why_text(result, show_interest_weights)
 
     return f"""
       <article class="place-card" data-place-card>
@@ -479,7 +450,7 @@ def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> 
 {notes_html}
         </div>
       </article>
-    """
+"""
 
 
 def render_section(
@@ -488,6 +459,7 @@ def render_section(
     scenario: DemoScenario,
     active_key: str,
     weather: str,
+    show_interest_weights: bool,
 ) -> str:
     title = scenario.section_labels[key]
     hidden_attr = "" if key == active_key else " hidden"
@@ -498,7 +470,7 @@ def render_section(
         )
     else:
         cards = "\n".join(
-            render_recommendation_card(result, weather, scenario)
+            render_recommendation_card(result, weather, show_interest_weights)
             for result in results
         )
         content_html = f"""      <div class="cards">
@@ -549,18 +521,6 @@ def render_intro(scenario: DemoScenario, grouped: dict, section_keys: list[str])
     return f'      <p class="intro-text">{h(text)}</p>'
 
 
-def render_bridge(scenario: DemoScenario) -> str:
-    if not scenario.bridge_text:
-        return ""
-    link_html = ""
-    if scenario.bridge_href and scenario.bridge_link_text:
-        link_html = (
-            f' <a href="{h(scenario.bridge_href)}">'
-            f"{h(scenario.bridge_link_text)}</a>"
-        )
-    return f'      <p class="bridge-text">{h(scenario.bridge_text)}{link_html}</p>'
-
-
 def render_favorites_panel() -> str:
     return """      <section class="favorites-panel" aria-label="Gemerkte Orte">
         <div class="favorites-heading">Gemerkte Orte</div>
@@ -569,9 +529,23 @@ def render_favorites_panel() -> str:
       </section>"""
 
 
-def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
+def render_html(
+    scenario: DemoScenario,
+    profile,
+    recommendations: list,
+    experience_recommendations=None,
+) -> str:
     visible_recommendations = recommendations[: scenario.top]
     grouped = group_recommendations(visible_recommendations)
+    section_weather = {key: scenario.weather for key in scenario.section_order}
+    section_interest_weights = {
+        key: scenario.show_interest_weights for key in scenario.section_order
+    }
+    if experience_recommendations is not None:
+        grouped["experiences"] = experience_recommendations[:EXPERIENCE_TOP]
+        section_weather["experiences"] = EXPERIENCE_WEATHER
+        section_interest_weights["experiences"] = False
+
     section_keys = visible_section_keys(grouped, scenario)
     active_key = active_section_key(grouped, scenario, section_keys)
 
@@ -585,11 +559,17 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
         for key in section_keys
     )
     sections_html = "\n".join(
-        render_section(key, grouped[key], scenario, active_key, scenario.weather)
+        render_section(
+            key,
+            grouped[key],
+            scenario,
+            active_key,
+            section_weather[key],
+            section_interest_weights[key],
+        )
         for key in section_keys
     )
     intro_html = render_intro(scenario, grouped, section_keys)
-    bridge_html = render_bridge(scenario)
     favorites_html = render_favorites_panel()
 
     section_count = len(section_keys)
@@ -787,28 +767,6 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
       font-size: 0.95rem;
       font-weight: 700;
       line-height: 1.45;
-    }}
-
-    .bridge-text {{
-      margin: -6px 18px 18px;
-      padding: 11px 12px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.72);
-      color: var(--muted);
-      font-size: 0.86rem;
-      font-weight: 700;
-      line-height: 1.45;
-    }}
-
-    .bridge-text a {{
-      color: var(--blue-700);
-      text-decoration: none;
-      white-space: nowrap;
-    }}
-
-    .bridge-text a:hover {{
-      text-decoration: underline;
     }}
 
     .favorites-panel {{
@@ -1177,7 +1135,6 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
       </section>
 
 {intro_html}
-{bridge_html}
 {favorites_html}
 
       {sections_html}
@@ -1191,12 +1148,33 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
 """
 
 
+def load_recommendations(pois_path: Path, profiles_path: Path, profile_id: str, weather: str):
+    pois = parse_pois(pois_path)
+    profiles = parse_profiles(profiles_path)
+    profile = select_profile(profiles, profile_id)
+    recommendations, _filtered = evaluate_pois(pois, profile, weather)
+    return profile, recommendations
+
+
+def build_experience_recommendations() -> list:
+    _profile, recommendations = load_recommendations(
+        EXPERIENCE_POIS_PATH,
+        EXPERIENCE_PROFILES_PATH,
+        EXPERIENCE_PROFILE_ID,
+        EXPERIENCE_WEATHER,
+    )
+    return recommendations[:EXPERIENCE_TOP]
+
+
 def build_demo(scenario: DemoScenario) -> None:
-    pois = parse_pois(scenario.pois_path)
-    profiles = parse_profiles(scenario.profiles_path)
-    profile = select_profile(profiles, scenario.profile_id)
-    recommendations, _filtered = evaluate_pois(pois, profile, scenario.weather)
-    html = render_html(scenario, profile, recommendations)
+    profile, recommendations = load_recommendations(
+        scenario.pois_path,
+        scenario.profiles_path,
+        scenario.profile_id,
+        scenario.weather,
+    )
+    experience_recommendations = build_experience_recommendations()
+    html = render_html(scenario, profile, recommendations, experience_recommendations)
     scenario.output_path.write_text(html, encoding="utf-8")
     print(f"HTML-Demo erzeugt: {scenario.output_path}")
 

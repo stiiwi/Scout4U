@@ -8,7 +8,7 @@ Scout4U ist dabei nicht nur eine Stellplatz-App. Der Fokus liegt auf Camping- un
 
 - Übernachten / Stellplätze
 - Versorgen / Services
-- Erleben / Ausflüge
+- Erleben
 
 ## Produktkontext
 
@@ -48,7 +48,6 @@ Scout4U ist dabei nicht nur eine Stellplatz-App. Der Fokus liegt auf Camping- un
 - scout4u_score.py
 - generate_demo_html.py
 - demo.html
-- demo_ausflug.html
 - README.md
 - pois_bern_test_sample.csv
 - profiles_test_sample.csv
@@ -127,39 +126,30 @@ Priorität bei Mehrfachzuordnung:
 
 ## HTML-Demo
 
-- `generate_demo_html.py` erzeugt mit einem Aufruf beide HTML-Demos:
+- `generate_demo_html.py` erzeugt mit einem Aufruf die lokale HTML-Demo:
 
 ```bash
 python3 generate_demo_html.py
 ```
 
 - Der Generator nutzt bestehende Logik aus `scout4u_score.py`.
-- `scout4u_score.py` wurde für die zweite Demo nicht geändert.
-- Die CSV-Dateien wurden für die zweite Demo nicht geändert.
-- Die HTML-Demos laden keine externen Ressourcen.
-- Die HTML-Demos enthalten keine Debug-Score-Details.
-- `demo.html` zeigt eine lokale Scout4U-Demo für Profil Camper-Reise, Wetter Regen und Radius 25 km.
-- Inhalt: Camper-Vorschläge rund um Bern aus den Camper-Beispiel-CSV-Dateien.
-- `demo.html` hat interaktive Tabs für Stellplätze, Services und Ausflüge.
+- `scout4u_score.py` wurde für die Demo-Zusammenführung nicht geändert.
+- Die CSV-Dateien wurden für die Demo-Zusammenführung nicht geändert.
+- Die HTML-Demo lädt keine externen Ressourcen.
+- Die HTML-Demo enthält keine Debug-Score-Details.
+- `demo.html` zeigt eine lokale Scout4U-Demo für Camper-Reisen rund um Bern.
+- Inhalt: Stellplätze und Services aus den Camper-Beispiel-CSV-Dateien sowie Erleben-Ausflüge vom Reise-/Campingort aus.
+- Die oberen Kategorie-Kacheln filtern die drei Hauptbereiche:
+  - Übernachten
+  - Services
+  - Erleben
 - Passung wird nutzerfreundlich als Label angezeigt, z.B. Sehr gute Passung, Gute Passung oder Solide Option.
-- Die Demos enthalten eine Merkliste / Gemerkte Orte.
+- Die Demo enthält eine Merkliste / Gemerkte Orte.
 - Jede Karte hat eine aufklappbare "Warum passt das?"-Erklärung.
-- Die Demos wurden für eine erste Präsentation an eine Nicht-Tech-Nutzerin vorbereitet.
-- Die sichtbaren Profilnamen wurden neutralisiert:
-  - Camper-Reise
-  - Natur & Aussicht
-- Beide Demos haben freundliche Intro-Sätze in Alltagssprache.
-- Beide Demos verlinken gegenseitig aufeinander, um zu zeigen, dass Scout4U neben Stellplätzen und Services auch Ausflüge abdecken soll.
-
-## Zweite HTML-Demo
-
-- `demo_ausflug.html` wurde ergänzt.
-- Demo zeigt Natur & Aussicht rund um Bern als Ausflüge vom Reise-/Campingort aus.
-- Nutzt Profil A / Natur & Aussicht, Wetter Sonne und Radius 50 km.
-- Nutzt bestehende Bern-Testdaten aus `pois_bern_test_sample.csv` und `profiles_test_sample.csv`.
-- Zeigt aktuell 4 Top-Tipps.
-- Die sichtbare Warum-Zeile zeigt keine Gewichtungszahlen in Klammern mehr.
-- Ziel: zeigen, dass Scout4U nicht nur Stellplätze und Camper-Services empfiehlt, sondern auch passende Ausflüge in der Umgebung.
+- Die Demo wurde für eine erste Präsentation an eine Nicht-Tech-Nutzerin vorbereitet.
+- Die sichtbaren Profilnamen wurden neutralisiert.
+- Die bisher separate Natur-&-Aussicht-Demo wurde in die Erleben-Kategorie der Hauptdemo integriert.
+- Erleben wird als Ausflüge für trockene oder sonnige Zeitfenster vom Reise-/Campingort aus erklärt.
 
 ## Aktuelle Visuelle Richtung
 
@@ -167,8 +157,7 @@ python3 generate_demo_html.py
 - Smartphone-App-Mockup mit schmalem Container.
 - Kompakter blauer Header.
 - Statistik-Karten.
-- Camper-Demo: Segment-Leiste für Stellplätze / Services / Ausflüge.
-- Ausflugsdemo: einfache Top-Tipps-Ansicht ohne künstliche Tab-Leiste.
+- Obere Kategorie-Kacheln für Übernachten / Services / Erleben.
 - Einspaltige App-Karten mit Chips für Fakten und Services.
 - Merkliste / Gemerkte Orte als einfache lokale Demo-Interaktion.
 - Aufklappbare "Warum passt das?"-Erklärungen pro Karte.
@@ -212,7 +201,7 @@ Ergebnis: Self-Test OK
 python3 generate_demo_html.py
 ```
 
-Ergebnis: `demo.html` und `demo_ausflug.html` erfolgreich erzeugt.
+Ergebnis: `demo.html` erfolgreich erzeugt.
 
 ## Bestätigter Stand
 
@@ -223,10 +212,9 @@ Ergebnis: `demo.html` und `demo_ausflug.html` erfolgreich erzeugt.
 - Self-Test OK.
 - Camper-Demoausgabe ist grundsätzlich zeigbar.
 - HTML-Camper-Demo ist zeigbar und interaktiv.
-- HTML-Ausflugsdemo ist als zweites Szenario ergänzt.
-- Beide HTML-Demos sind für eine erste Nicht-Tech-Vorführung geglättet.
-- Beide HTML-Demos verlinken dezent aufeinander.
-- Merkliste / Gemerkte Orte ist in den Demos vorhanden.
+- Die Erleben-/Ausflugsinhalte sind in die Hauptdemo integriert.
+- Die HTML-Demo ist für eine erste Nicht-Tech-Vorführung geglättet.
+- Merkliste / Gemerkte Orte ist in der Demo vorhanden.
 - Aufklappbare "Warum passt das?"-Erklärungen pro Karte sind vorhanden.
 - README.md ist vorhanden.
 - Self-Test war zuletzt grün.
@@ -239,7 +227,7 @@ Ergebnis: `demo.html` und `demo_ausflug.html` erfolgreich erzeugt.
 - Scout4U ist für V1.0 auf Camping-/Camper-Reisen fokussiert:
   - Übernachten / Stellplätze.
   - Versorgen / Services.
-  - Erleben / Ausflüge vom Reise-/Campingort aus.
+- Scout4U ergänzt dazu Erleben mit Ausflügen vom Reise-/Campingort aus.
 - Nächste sinnvolle Schritte könnten sein:
   - README bei Bedarf später erweitern.
   - Kleine UI-Politur.
