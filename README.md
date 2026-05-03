@@ -1,12 +1,16 @@
 # Scout4U
 
-Scout4U ist ein früher lokaler Prototyp für eine spätere App-Idee. Die App soll passende Orte in der Umgebung vorschlagen, abhängig von Situation, Interessen und Kontext.
+Scout4U ist ein früher lokaler Prototyp für eine spätere App-Idee. In V1 soll Scout4U ein smarter Reisebegleiter für Camper und Camping-Reisende werden: Er schlägt passende Stellplätze, Services und Ausflüge in der Umgebung vor, abhängig von Wetter, Entfernung und persönlichen Vorlieben.
 
 ## Positionierung
 
-Scout4U ist langfristig nicht nur eine Camper-App. Camper-Reisen ist aktuell der erste V1-Fokus, weil die erste Zielperson viel mit dem Camper unterwegs ist.
+Scout4U ist nicht nur eine Stellplatz-App. Der erste Fokus liegt auf Camping- und Camper-Reisen, aber mit breiterem Nutzen:
 
-Die zweite Demo zeigt bewusst, dass Scout4U auch allgemeine Ausflugs- und Naturtipps abdecken kann.
+- Übernachten / Stellplätze
+- Versorgen / Services
+- Erleben / Ausflüge
+
+Die Natur-&-Aussicht-Demo ist künftig als Beispiel für Ausflüge vom Reise-/Campingort aus zu verstehen, nicht als Beweis für eine komplett offene Allgemein-App.
 
 ## Aktueller Stand
 
@@ -20,8 +24,8 @@ Die zweite Demo zeigt bewusst, dass Scout4U auch allgemeine Ausflugs- und Naturt
 
 ## Demos
 
-- `demo.html`: Camper-Demo rund um Bern bei Regen.
-- `demo_ausflug.html`: Natur-&-Aussicht-Demo rund um Bern bei Sonne.
+- `demo.html`: Camper-Demo rund um Bern bei Regen mit Stellplätzen, Services und Ausflügen.
+- `demo_ausflug.html`: Natur-&-Aussicht-Demo rund um Bern bei Sonne, verstanden als Ausflüge vom Reise-/Campingort aus.
 
 Beide Dateien können lokal im Browser geöffnet werden.
 

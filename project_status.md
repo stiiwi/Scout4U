@@ -2,7 +2,13 @@
 
 ## Kurzbeschreibung
 
-Scout4U ist ein lokaler Python-CLI-Prototyp für eine spätere mobile App-Idee. Die App soll langfristig passende Orte in der Umgebung empfehlen. Für Version 1.0 ist Camper-Reisen ein wichtiger Fokus, aber Scout4U soll langfristig breiter bleiben.
+Scout4U ist ein lokaler Python-CLI-Prototyp für eine spätere mobile App-Idee. In V1 soll Scout4U zuerst ein smarter Reisebegleiter für Camper und Camping-Reisende werden: Er schlägt passende Stellplätze, Services und Ausflüge in der Umgebung vor, abhängig von Wetter, Entfernung und persönlichen Vorlieben.
+
+Scout4U ist dabei nicht nur eine Stellplatz-App. Der Fokus liegt auf Camping- und Camper-Reisen, aber mit breiterem Nutzen:
+
+- Übernachten / Stellplätze
+- Versorgen / Services
+- Erleben / Ausflüge
 
 ## Produktkontext
 
@@ -10,7 +16,8 @@ Scout4U ist ein lokaler Python-CLI-Prototyp für eine spätere mobile App-Idee. 
 - Sie hatte die ursprüngliche App-Idee.
 - Ich möchte ihr später einen kleinen, cool aussehenden Prototyp zeigen.
 - Sie reist viel mit dem Camper, besonders in England, Frankreich, Island, Spanien und Italien.
-- Camper-Funktionen sind deshalb für V1.0 hoch priorisiert.
+- Camper- und Camping-Reisende sind deshalb der erste V1-Fokus.
+- Ausflüge bleiben wichtig, werden aber als Tipps vom Reise-/Campingort aus verstanden.
 
 ## Aktueller technischer Stand
 
@@ -135,22 +142,24 @@ python3 generate_demo_html.py
 - Inhalt: Camper-Vorschläge rund um Bern aus den Camper-Beispiel-CSV-Dateien.
 - `demo.html` hat interaktive Tabs für Stellplätze, Services und Ausflüge.
 - Passung wird nutzerfreundlich als Label angezeigt, z.B. Sehr gute Passung, Gute Passung oder Solide Option.
+- Die Demos enthalten eine Merkliste / Gemerkte Orte.
+- Jede Karte hat eine aufklappbare "Warum passt das?"-Erklärung.
 - Die Demos wurden für eine erste Präsentation an eine Nicht-Tech-Nutzerin vorbereitet.
 - Die sichtbaren Profilnamen wurden neutralisiert:
   - Camper-Reise
   - Natur & Aussicht
 - Beide Demos haben freundliche Intro-Sätze in Alltagssprache.
-- Beide Demos verlinken gegenseitig aufeinander, um zu zeigen, dass Scout4U nicht nur Camper-Services abdecken soll.
+- Beide Demos verlinken gegenseitig aufeinander, um zu zeigen, dass Scout4U neben Stellplätzen und Services auch Ausflüge abdecken soll.
 
 ## Zweite HTML-Demo
 
 - `demo_ausflug.html` wurde ergänzt.
-- Demo zeigt Natur & Aussicht rund um Bern.
+- Demo zeigt Natur & Aussicht rund um Bern als Ausflüge vom Reise-/Campingort aus.
 - Nutzt Profil A / Natur & Aussicht, Wetter Sonne und Radius 50 km.
 - Nutzt bestehende Bern-Testdaten aus `pois_bern_test_sample.csv` und `profiles_test_sample.csv`.
 - Zeigt aktuell 4 Top-Tipps.
 - Die sichtbare Warum-Zeile zeigt keine Gewichtungszahlen in Klammern mehr.
-- Ziel: zeigen, dass Scout4U langfristig mehr kann als Camper-Services.
+- Ziel: zeigen, dass Scout4U nicht nur Stellplätze und Camper-Services empfiehlt, sondern auch passende Ausflüge in der Umgebung.
 
 ## Aktuelle Visuelle Richtung
 
@@ -161,6 +170,8 @@ python3 generate_demo_html.py
 - Camper-Demo: Segment-Leiste für Stellplätze / Services / Ausflüge.
 - Ausflugsdemo: einfache Top-Tipps-Ansicht ohne künstliche Tab-Leiste.
 - Einspaltige App-Karten mit Chips für Fakten und Services.
+- Merkliste / Gemerkte Orte als einfache lokale Demo-Interaktion.
+- Aufklappbare "Warum passt das?"-Erklärungen pro Karte.
 
 ## UI-Learning
 
@@ -215,6 +226,8 @@ Ergebnis: `demo.html` und `demo_ausflug.html` erfolgreich erzeugt.
 - HTML-Ausflugsdemo ist als zweites Szenario ergänzt.
 - Beide HTML-Demos sind für eine erste Nicht-Tech-Vorführung geglättet.
 - Beide HTML-Demos verlinken dezent aufeinander.
+- Merkliste / Gemerkte Orte ist in den Demos vorhanden.
+- Aufklappbare "Warum passt das?"-Erklärungen pro Karte sind vorhanden.
 - README.md ist vorhanden.
 - Self-Test war zuletzt grün.
 - Scoring wurde bei der Ausgabe-Politur nicht neu gebaut.
@@ -223,9 +236,10 @@ Ergebnis: `demo.html` und `demo_ausflug.html` erfolgreich erzeugt.
 
 - Der aktuelle Stand ist ein guter Demo-Meilenstein.
 - Noch keine echte App, keine API, keine Datenbank und keine Karte.
-- Scout4U zeigt jetzt zwei Richtungen:
-  - Camper-Nutzen für V1.0.
-  - Natur-/Ausflugs-Empfehlungen als breiteres Langfristsignal.
+- Scout4U ist für V1.0 auf Camping-/Camper-Reisen fokussiert:
+  - Übernachten / Stellplätze.
+  - Versorgen / Services.
+  - Erleben / Ausflüge vom Reise-/Campingort aus.
 - Nächste sinnvolle Schritte könnten sein:
   - README bei Bedarf später erweitern.
   - Kleine UI-Politur.
