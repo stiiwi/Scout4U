@@ -12,7 +12,6 @@ from scout4u_score import (
     format_category,
     format_number,
     format_price,
-    format_score,
     group_recommendations,
     is_service_poi,
     parse_pois,
@@ -70,6 +69,10 @@ CAMPER_SCENARIO = DemoScenario(
         "experiences": "Ausflüge",
     },
     default_active_section="stays",
+    intro_template=(
+        "Stell dir vor, du bist mit dem Camper rund um Bern unterwegs und es regnet. "
+        "Scout4U schlägt dir passende Orte vor."
+    ),
 )
 
 AUSFLUG_SCENARIO = DemoScenario(
@@ -94,7 +97,10 @@ AUSFLUG_SCENARIO = DemoScenario(
     default_active_section="experiences",
     show_empty_sections=False,
     show_interest_weights=False,
-    intro_template="{count_word} {proposal_word} für Sonne, Natur und Aussicht rund um Bern.",
+    intro_template=(
+        "Stell dir vor, du möchtest rund um Bern einen schönen Ausflug machen. "
+        "Scout4U zeigt dir passende Natur- und Aussichtstipps."
+    ),
 )
 
 SCENARIOS = (
@@ -254,7 +260,6 @@ def render_detail_chip(value: str) -> str:
 def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> str:
     detail_label = "Vor Ort" if is_service_poi(result.poi) else "Erlebnis"
     fit_text = fit_label(result.score.total)
-    score_title = f"Interner Score: {format_score(result.score.total)}"
     notes = notes_for(result)
     notes_html = ""
     if notes:
@@ -282,7 +287,7 @@ def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> 
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">{h(format_category(result.poi.poi_type))}</span>
-          <span class="fit-pill" title="{h(score_title)}">{h(fit_text)}</span>
+          <span class="fit-pill">{h(fit_text)}</span>
         </div>
         <h3>{h(result.poi.name)}</h3>
         <p class="why">{h(why_text(result, scenario))}</p>

@@ -1,4 +1,4 @@
 profile_id,profile_name,radius_km,interests,hard_anti_tags,soft_anti_tags
-A,Natur-Stephen,50,natur:3;aussicht:3;wasser:2;fotogen:2;geheimtipp:1,,touristisch;shopping
+A,Natur & Aussicht,50,natur:3;aussicht:3;wasser:2;fotogen:2;geheimtipp:1,,touristisch;shopping
 B,Familie Müller,30,familienfreundlich:3;museum:3;kultur:2;natur:2;wasser:1,wanderung_schwer,touristisch;teuer
 C,Städtetrip-Lisa,15,altstadt:3;kultur:3;museum:2;fotogen:1;geheimtipp:1,wanderung_schwer,touristisch;shopping
