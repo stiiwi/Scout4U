@@ -19,14 +19,27 @@ Scout4U ist ein lokaler Python-CLI-Prototyp für eine spätere mobile App-Idee. 
 - Keine Datenbank.
 - Keine Karte.
 - Lokales Python-CLI-Tool mit CSV-Dateien.
+- Git-Repository auf Branch `main`.
+- Privates GitHub-Repository: `stiiwi/Scout4U`.
 - Hauptdatei: scout4u_score.py
 - Self-Test funktioniert: `python3 scout4u_score.py --self-test` -> Self-Test OK
+
+## Git/GitHub-Stand
+
+- Projekt ist jetzt ein Git-Repository.
+- Repository ist privat auf GitHub unter `stiiwi/Scout4U` gesichert.
+- Aktueller Branch: `main`.
+- Wichtige Commits:
+  - `Initial Scout4U prototype with CLI and HTML demo`
+  - `Improve HTML demo tabs and fit labels`
+  - `Add excursion HTML demo`
 
 ## Aktuelle Dateien
 
 - scout4u_score.py
 - generate_demo_html.py
 - demo.html
+- demo_ausflug.html
 - pois_bern_test_sample.csv
 - profiles_test_sample.csv
 - pois_camper_test_sample.csv
@@ -104,12 +117,31 @@ Priorität bei Mehrfachzuordnung:
 
 ## HTML-Demo
 
-- `generate_demo_html.py` erzeugt `demo.html`.
+- `generate_demo_html.py` erzeugt mit einem Aufruf beide HTML-Demos:
+
+```bash
+python3 generate_demo_html.py
+```
+
 - Der Generator nutzt bestehende Logik aus `scout4u_score.py`.
-- Die HTML-Demo lädt keine externen Ressourcen.
-- Die HTML-Demo enthält keine Debug-Score-Details.
+- `scout4u_score.py` wurde für die zweite Demo nicht geändert.
+- Die CSV-Dateien wurden für die zweite Demo nicht geändert.
+- Die HTML-Demos laden keine externen Ressourcen.
+- Die HTML-Demos enthalten keine Debug-Score-Details.
 - `demo.html` zeigt eine lokale Scout4U-Demo für Profil Camper-Vera, Wetter Regen und Radius 25 km.
-- Inhalt: Camper-Vorschläge rund um Bern aus den Beispiel-CSV-Dateien.
+- Inhalt: Camper-Vorschläge rund um Bern aus den Camper-Beispiel-CSV-Dateien.
+- `demo.html` hat interaktive Tabs für Stellplätze, Services und Ausflüge.
+- Passung wird nutzerfreundlich als Label angezeigt, z.B. Sehr gute Passung, Gute Passung oder Solide Option.
+
+## Zweite HTML-Demo
+
+- `demo_ausflug.html` wurde ergänzt.
+- Demo zeigt Natur & Aussicht rund um Bern.
+- Nutzt Profil A / Natur-Stephen, Wetter Sonne und Radius 50 km.
+- Nutzt bestehende Bern-Testdaten aus `pois_bern_test_sample.csv` und `profiles_test_sample.csv`.
+- Zeigt aktuell 4 Top-Tipps.
+- Die sichtbare Warum-Zeile zeigt keine Gewichtungszahlen in Klammern mehr.
+- Ziel: zeigen, dass Scout4U langfristig mehr kann als Camper-Services.
 
 ## Aktuelle Visuelle Richtung
 
@@ -117,7 +149,8 @@ Priorität bei Mehrfachzuordnung:
 - Smartphone-App-Mockup mit schmalem Container.
 - Kompakter blauer Header.
 - Statistik-Karten.
-- Segment-Leiste für Stellplätze / Services / Ausflüge.
+- Camper-Demo: Segment-Leiste für Stellplätze / Services / Ausflüge.
+- Ausflugsdemo: einfache Top-Tipps-Ansicht ohne künstliche Tab-Leiste.
 - Einspaltige App-Karten mit Chips für Fakten und Services.
 
 ## UI-Learning
@@ -155,7 +188,24 @@ python3 scout4u_score.py --pois pois_camper_test_sample.csv --profiles profiles_
 - --show-filtered funktioniert.
 - Self-Test OK.
 - Camper-Demoausgabe ist grundsätzlich zeigbar.
+- HTML-Camper-Demo ist zeigbar und interaktiv.
+- HTML-Ausflugsdemo ist als zweites Szenario ergänzt.
+- Self-Test war zuletzt grün.
 - Scoring wurde bei der Ausgabe-Politur nicht neu gebaut.
+
+## Aktuelle Einschätzung
+
+- Der aktuelle Stand ist ein guter Demo-Meilenstein.
+- Noch keine echte App, keine API, keine Datenbank und keine Karte.
+- Scout4U zeigt jetzt zwei Richtungen:
+  - Camper-Nutzen für V1.0.
+  - Natur-/Ausflugs-Empfehlungen als breiteres Langfristsignal.
+- Nächste sinnvolle Schritte könnten sein:
+  - README ergänzen.
+  - Kleine UI-Politur.
+  - Demo-Profile schöner benennen.
+  - Später responsive Desktop/Mobile weiterdenken.
+  - Noch keine echte Android-App bauen.
 
 ## Offene Designfragen
 
@@ -170,6 +220,8 @@ python3 scout4u_score.py --pois pois_camper_test_sample.csv --profiles profiles_
 
 Als nächstes sollte nicht am Scoring gedreht werden. Sinnvoller nächster Schritt:
 
-1. Aktuellen HTML-Demo-Stand als Meilenstein stehen lassen oder Demo-Daten weiter verfeinern.
-2. Optional später responsive Layout einbauen: Desktop breiter, Mobile app-artig.
-3. Noch keine echte Android-App bauen, erst das Demo-Gefühl weiter testen.
+1. Aktuellen Demo-Stand als Meilenstein stehen lassen.
+2. README ergänzen, damit der Projektstand schnell verständlich ist.
+3. Optional kleine UI-Politur oder schönere Demo-Profilnamen.
+4. Später responsive Layout einbauen: Desktop breiter, Mobile app-artig.
+5. Noch keine echte Android-App bauen, erst das Demo-Gefühl weiter testen.
