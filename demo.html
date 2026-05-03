@@ -114,7 +114,7 @@
 
     .summary {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(var(--summary-count, 3), minmax(0, 1fr));
       gap: 8px;
       margin: 14px 14px 12px;
     }
@@ -156,9 +156,17 @@
       font-weight: 700;
     }
 
+    .intro-text {
+      margin: 0 18px 18px;
+      color: var(--blue-900);
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
     .tabs {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(var(--tab-count, 3), minmax(0, 1fr));
       gap: 6px;
       margin: 0 14px 18px;
       padding: 5px;
@@ -419,7 +427,7 @@
         <div class="context">Camper-Vera · Regen · 25 km</div>
       </header>
 
-      <section class="summary" aria-label="Zusammenfassung">
+      <section class="summary" style="--summary-count: 3" aria-label="Zusammenfassung">
         
       <div class="summary-card summary-stays">
         <div class="summary-number">3</div>
@@ -440,7 +448,10 @@
     
       </section>
 
-      <nav class="tabs" aria-label="Demo-Bereiche">
+
+
+
+      <nav class="tabs" style="--tab-count: 3" aria-label="Demo-Bereiche">
         <button class="tab active" type="button" data-tab="stays" aria-selected="true">Stellplätze</button>
 <button class="tab" type="button" data-tab="camper_services" aria-selected="false">Services</button>
 <button class="tab" type="button" data-tab="experiences" aria-selected="false">Ausflüge</button>

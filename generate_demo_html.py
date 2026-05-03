@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from dataclasses import dataclass
 from html import escape
 from pathlib import Path
 
@@ -21,31 +22,85 @@ from scout4u_score import (
 )
 
 
-POIS_PATH = Path("pois_camper_test_sample.csv")
-PROFILES_PATH = Path("profiles_camper_test_sample.csv")
-PROFILE_ID = "V"
-WEATHER = "rainy"
-TOP = 10
-OUTPUT_PATH = Path("demo.html")
-DEFAULT_ACTIVE_SECTION = "stays"
+@dataclass(frozen=True)
+class DemoScenario:
+    output_path: Path
+    pois_path: Path
+    profiles_path: Path
+    profile_id: str
+    weather: str
+    top: int
+    document_title: str
+    subtitle: str
+    section_order: tuple[str, ...]
+    section_labels: dict[str, str]
+    summary_labels: dict[str, str]
+    tab_labels: dict[str, str]
+    default_active_section: str
+    show_empty_sections: bool = True
+    show_interest_weights: bool = True
+    intro_template: str = ""
 
-SECTION_LABELS = {
-    "stays": "Stellplätze",
-    "camper_services": "Camper-Services",
-    "experiences": "Ausflüge / schöne Orte",
-}
 
-SUMMARY_LABELS = {
-    "stays": "Stellplätze",
-    "camper_services": "Services",
-    "experiences": "Ausflug",
-}
+CAMPER_SECTION_ORDER = tuple(key for key, _label in RECOMMENDATION_SECTION_ORDER)
 
-TAB_LABELS = {
-    "stays": "Stellplätze",
-    "camper_services": "Services",
-    "experiences": "Ausflüge",
-}
+CAMPER_SCENARIO = DemoScenario(
+    output_path=Path("demo.html"),
+    pois_path=Path("pois_camper_test_sample.csv"),
+    profiles_path=Path("profiles_camper_test_sample.csv"),
+    profile_id="V",
+    weather="rainy",
+    top=10,
+    document_title="Scout4U Demo",
+    subtitle="Camper-Vorschläge rund um Bern",
+    section_order=CAMPER_SECTION_ORDER,
+    section_labels={
+        "stays": "Stellplätze",
+        "camper_services": "Camper-Services",
+        "experiences": "Ausflüge / schöne Orte",
+    },
+    summary_labels={
+        "stays": "Stellplätze",
+        "camper_services": "Services",
+        "experiences": "Ausflug",
+    },
+    tab_labels={
+        "stays": "Stellplätze",
+        "camper_services": "Services",
+        "experiences": "Ausflüge",
+    },
+    default_active_section="stays",
+)
+
+AUSFLUG_SCENARIO = DemoScenario(
+    output_path=Path("demo_ausflug.html"),
+    pois_path=Path("pois_bern_test_sample.csv"),
+    profiles_path=Path("profiles_test_sample.csv"),
+    profile_id="A",
+    weather="sunny",
+    top=10,
+    document_title="Scout4U Natur & Aussicht",
+    subtitle="Natur & Aussicht rund um Bern",
+    section_order=("experiences",),
+    section_labels={
+        "experiences": "Natur & Aussicht",
+    },
+    summary_labels={
+        "experiences": "Top-Tipps",
+    },
+    tab_labels={
+        "experiences": "Top-Tipps",
+    },
+    default_active_section="experiences",
+    show_empty_sections=False,
+    show_interest_weights=False,
+    intro_template="{count_word} {proposal_word} für Sonne, Natur und Aussicht rund um Bern.",
+)
+
+SCENARIOS = (
+    CAMPER_SCENARIO,
+    AUSFLUG_SCENARIO,
+)
 
 
 def h(value) -> str:
@@ -60,22 +115,45 @@ def weather_label(weather: str) -> str:
     return labels.get(weather, weather)
 
 
-def matched_interests_text(result) -> str:
+def count_word_de(count: int) -> str:
+    words = {
+        0: "Keine",
+        1: "Ein",
+        2: "Zwei",
+        3: "Drei",
+        4: "Vier",
+        5: "Fünf",
+        6: "Sechs",
+        7: "Sieben",
+        8: "Acht",
+        9: "Neun",
+        10: "Zehn",
+    }
+    return words.get(count, format_number(count))
+
+
+def matched_interests_text(result, show_weights: bool) -> str:
     if not result.score.matched_interests:
         return "Schöner Ort in deinem Radius"
-    interests = ", ".join(
-        f"{display_label(tag)} ({weight})"
-        for tag, weight in result.score.matched_interests
-    )
+    if show_weights:
+        interests = ", ".join(
+            f"{display_label(tag)} ({weight})"
+            for tag, weight in result.score.matched_interests
+        )
+    else:
+        interests = ", ".join(
+            display_label(tag)
+            for tag, _weight in result.score.matched_interests
+        )
     return f"Trifft deine Interessen: {interests}"
 
 
-def why_text(result) -> str:
+def why_text(result, scenario: DemoScenario) -> str:
     if is_service_poi(result.poi):
         if result.score.matched_services:
             return "Passt zu deinen Bedürfnissen: " + display_labels(result.score.matched_services)
         return "Service-Ort in deiner Nähe"
-    return matched_interests_text(result)
+    return matched_interests_text(result, scenario.show_interest_weights)
 
 
 def details_items(result) -> list[str]:
@@ -114,9 +192,9 @@ def fit_label(score: float) -> str:
     return "Solide Option"
 
 
-def render_tabs(grouped: dict, active_key: str) -> str:
+def render_tabs(grouped: dict, scenario: DemoScenario, active_key: str, section_keys: list[str]) -> str:
     tabs = []
-    for key, _ in RECOMMENDATION_SECTION_ORDER:
+    for key in section_keys:
         count = len(grouped[key])
         active_class = " active" if key == active_key else ""
         empty_class = " empty-tab" if count == 0 else ""
@@ -127,9 +205,39 @@ def render_tabs(grouped: dict, active_key: str) -> str:
         tabs.append(
             f'<button class="tab{active_class}{empty_class}" type="button" '
             f'data-tab="{h(key)}" aria-selected="{aria_selected}"{disabled_attr}>'
-            f"{h(TAB_LABELS[key])}</button>"
+            f"{h(scenario.tab_labels[key])}</button>"
         )
     return "\n".join(tabs)
+
+
+def render_tab_script() -> str:
+    return """  <script>
+    (() => {
+      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
+      const sections = Array.from(document.querySelectorAll("[data-section]"));
+
+      const showSection = (key) => {
+        tabs.forEach((tab) => {
+          const isActive = tab.dataset.tab === key;
+          tab.classList.toggle("active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        sections.forEach((section) => {
+          section.hidden = section.dataset.section !== key;
+        });
+      };
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          if (tab.disabled) {
+            return;
+          }
+          showSection(tab.dataset.tab);
+        });
+      });
+    })();
+  </script>"""
 
 
 def render_fact_chip(label: str, value: str, class_name: str = "") -> str:
@@ -143,7 +251,7 @@ def render_detail_chip(value: str) -> str:
     return f'<span class="chip detail-chip">{h(value)}</span>'
 
 
-def render_recommendation_card(result) -> str:
+def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> str:
     detail_label = "Vor Ort" if is_service_poi(result.poi) else "Erlebnis"
     fit_text = fit_label(result.score.total)
     score_title = f"Interner Score: {format_score(result.score.total)}"
@@ -165,7 +273,7 @@ def render_recommendation_card(result) -> str:
         )
 
     fact_chips.append(
-        render_fact_chip("Wetter", weather_sentence(result.poi, WEATHER), "weather-chip")
+        render_fact_chip("Wetter", weather_sentence(result.poi, weather), "weather-chip")
     )
 
     details_html = "\n".join(render_detail_chip(item) for item in details_items(result))
@@ -177,7 +285,7 @@ def render_recommendation_card(result) -> str:
           <span class="fit-pill" title="{h(score_title)}">{h(fit_text)}</span>
         </div>
         <h3>{h(result.poi.name)}</h3>
-        <p class="why">{h(why_text(result))}</p>
+        <p class="why">{h(why_text(result, scenario))}</p>
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
         </div>
@@ -190,8 +298,14 @@ def render_recommendation_card(result) -> str:
     """
 
 
-def render_section(key: str, results: list, active_key: str) -> str:
-    title = SECTION_LABELS[key]
+def render_section(
+    key: str,
+    results: list,
+    scenario: DemoScenario,
+    active_key: str,
+    weather: str,
+) -> str:
+    title = scenario.section_labels[key]
     hidden_attr = "" if key == active_key else " hidden"
     count_label = f"{len(results)} Treffer" if results else "Keine Treffer"
     if not results:
@@ -199,7 +313,10 @@ def render_section(key: str, results: list, active_key: str) -> str:
             '      <p class="empty-state">Für diesen Bereich gibt es gerade keine passenden Treffer.</p>'
         )
     else:
-        cards = "\n".join(render_recommendation_card(result) for result in results)
+        cards = "\n".join(
+            render_recommendation_card(result, weather, scenario)
+            for result in results
+        )
         content_html = f"""      <div class="cards">
         {cards}
       </div>"""
@@ -215,29 +332,78 @@ def render_section(key: str, results: list, active_key: str) -> str:
     """
 
 
-def render_html(profile, weather: str, recommendations: list) -> str:
-    visible_recommendations = recommendations[:TOP]
+def visible_section_keys(grouped: dict, scenario: DemoScenario) -> list[str]:
+    keys = [
+        key
+        for key in scenario.section_order
+        if scenario.show_empty_sections or grouped[key]
+    ]
+    if keys:
+        return keys
+    return [scenario.default_active_section]
+
+
+def active_section_key(grouped: dict, scenario: DemoScenario, section_keys: list[str]) -> str:
+    if scenario.default_active_section in section_keys:
+        return scenario.default_active_section
+    for key in section_keys:
+        if grouped[key]:
+            return key
+    return section_keys[0]
+
+
+def render_intro(scenario: DemoScenario, grouped: dict, section_keys: list[str]) -> str:
+    if not scenario.intro_template:
+        return ""
+    count = sum(len(grouped[key]) for key in section_keys)
+    proposal_word = "Vorschlag" if count == 1 else "Vorschläge"
+    text = scenario.intro_template.format(
+        count=count,
+        count_word=count_word_de(count),
+        proposal_word=proposal_word,
+    )
+    return f'      <p class="intro-text">{h(text)}</p>'
+
+
+def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
+    visible_recommendations = recommendations[: scenario.top]
     grouped = group_recommendations(visible_recommendations)
+    section_keys = visible_section_keys(grouped, scenario)
+    active_key = active_section_key(grouped, scenario, section_keys)
 
     summary_html = "\n".join(
-        render_summary_card(key, SUMMARY_LABELS[key], len(grouped[key]))
-        for key, _ in RECOMMENDATION_SECTION_ORDER
+        render_summary_card(key, scenario.summary_labels[key], len(grouped[key]))
+        for key in section_keys
     )
-    active_key = DEFAULT_ACTIVE_SECTION
-    tabs_html = render_tabs(grouped, active_key)
     sections_html = "\n".join(
-        render_section(key, grouped[key], active_key)
-        for key, _ in RECOMMENDATION_SECTION_ORDER
+        render_section(key, grouped[key], scenario, active_key, scenario.weather)
+        for key in section_keys
     )
+    intro_html = render_intro(scenario, grouped, section_keys)
 
-    context = f"{profile.profile_name} · {weather_label(weather)} · {format_number(profile.radius_km)} km"
+    section_count = len(section_keys)
+    tabs_block_html = ""
+    tab_script_html = ""
+    if section_count > 1:
+        tabs_html = render_tabs(grouped, scenario, active_key, section_keys)
+        tabs_block_html = f"""
+      <nav class="tabs" style="--tab-count: {h(section_count)}" aria-label="Demo-Bereiche">
+        {tabs_html}
+      </nav>
+"""
+        tab_script_html = render_tab_script()
+
+    context = (
+        f"{profile.profile_name} · {weather_label(scenario.weather)} · "
+        f"{format_number(profile.radius_km)} km"
+    )
 
     return f"""<!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Scout4U Demo</title>
+  <title>{h(scenario.document_title)}</title>
   <style>
     :root {{
       --blue-950: #08233f;
@@ -348,7 +514,7 @@ def render_html(profile, weather: str, recommendations: list) -> str:
 
     .summary {{
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(var(--summary-count, 3), minmax(0, 1fr));
       gap: 8px;
       margin: 14px 14px 12px;
     }}
@@ -390,9 +556,17 @@ def render_html(profile, weather: str, recommendations: list) -> str:
       font-weight: 700;
     }}
 
+    .intro-text {{
+      margin: 0 18px 18px;
+      color: var(--blue-900);
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }}
+
     .tabs {{
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(var(--tab-count, 3), minmax(0, 1fr));
       gap: 6px;
       margin: 0 14px 18px;
       padding: 5px;
@@ -649,63 +823,41 @@ def render_html(profile, weather: str, recommendations: list) -> str:
       <header class="hero">
         <p class="eyebrow">Lokale Demo mit Beispiel-Daten</p>
         <h1>Scout4U</h1>
-        <p class="subtitle">Camper-Vorschläge rund um Bern</p>
+        <p class="subtitle">{h(scenario.subtitle)}</p>
         <div class="context">{h(context)}</div>
       </header>
 
-      <section class="summary" aria-label="Zusammenfassung">
+      <section class="summary" style="--summary-count: {h(section_count)}" aria-label="Zusammenfassung">
         {summary_html}
       </section>
 
-      <nav class="tabs" aria-label="Demo-Bereiche">
-        {tabs_html}
-      </nav>
+{intro_html}
 
+{tabs_block_html}
       {sections_html}
 
       <p class="footnote">Diese HTML-Seite wird lokal aus CSV-Testdaten erzeugt. Keine Live-Daten, keine Karte, keine API.</p>
     </div>
   </main>
-  <script>
-    (() => {{
-      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
-      const sections = Array.from(document.querySelectorAll("[data-section]"));
-
-      const showSection = (key) => {{
-        tabs.forEach((tab) => {{
-          const isActive = tab.dataset.tab === key;
-          tab.classList.toggle("active", isActive);
-          tab.setAttribute("aria-selected", isActive ? "true" : "false");
-        }});
-
-        sections.forEach((section) => {{
-          section.hidden = section.dataset.section !== key;
-        }});
-      }};
-
-      tabs.forEach((tab) => {{
-        tab.addEventListener("click", () => {{
-          if (tab.disabled) {{
-            return;
-          }}
-          showSection(tab.dataset.tab);
-        }});
-      }});
-    }})();
-  </script>
+{tab_script_html}
 </body>
 </html>
 """
 
 
+def build_demo(scenario: DemoScenario) -> None:
+    pois = parse_pois(scenario.pois_path)
+    profiles = parse_profiles(scenario.profiles_path)
+    profile = select_profile(profiles, scenario.profile_id)
+    recommendations, _filtered = evaluate_pois(pois, profile, scenario.weather)
+    html = render_html(scenario, profile, recommendations)
+    scenario.output_path.write_text(html, encoding="utf-8")
+    print(f"HTML-Demo erzeugt: {scenario.output_path}")
+
+
 def main() -> int:
-    pois = parse_pois(POIS_PATH)
-    profiles = parse_profiles(PROFILES_PATH)
-    profile = select_profile(profiles, PROFILE_ID)
-    recommendations, _filtered = evaluate_pois(pois, profile, WEATHER)
-    html = render_html(profile, WEATHER, recommendations)
-    OUTPUT_PATH.write_text(html, encoding="utf-8")
-    print(f"HTML-Demo erzeugt: {OUTPUT_PATH}")
+    for scenario in SCENARIOS:
+        build_demo(scenario)
     return 0
 
 
