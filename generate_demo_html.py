@@ -27,6 +27,7 @@ PROFILE_ID = "V"
 WEATHER = "rainy"
 TOP = 10
 OUTPUT_PATH = Path("demo.html")
+DEFAULT_ACTIVE_SECTION = "stays"
 
 SECTION_LABELS = {
     "stays": "Stellplätze",
@@ -105,12 +106,28 @@ def render_summary_card(key: str, label: str, count: int) -> str:
     """
 
 
-def render_tabs(grouped: dict) -> str:
+def fit_label(score: float) -> str:
+    if score >= 12:
+        return "Sehr gute Passung"
+    if score >= 8:
+        return "Gute Passung"
+    return "Solide Option"
+
+
+def render_tabs(grouped: dict, active_key: str) -> str:
     tabs = []
     for key, _ in RECOMMENDATION_SECTION_ORDER:
-        active_class = " active" if grouped[key] else ""
+        count = len(grouped[key])
+        active_class = " active" if key == active_key else ""
+        empty_class = " empty-tab" if count == 0 else ""
+        aria_selected = "true" if key == active_key else "false"
+        disabled_attr = ""
+        if count == 0 and key != active_key:
+            disabled_attr = ' disabled aria-disabled="true" title="Keine Treffer in dieser Gruppe"'
         tabs.append(
-            f'<span class="tab{active_class}">{h(TAB_LABELS[key])}</span>'
+            f'<button class="tab{active_class}{empty_class}" type="button" '
+            f'data-tab="{h(key)}" aria-selected="{aria_selected}"{disabled_attr}>'
+            f"{h(TAB_LABELS[key])}</button>"
         )
     return "\n".join(tabs)
 
@@ -128,6 +145,8 @@ def render_detail_chip(value: str) -> str:
 
 def render_recommendation_card(result) -> str:
     detail_label = "Vor Ort" if is_service_poi(result.poi) else "Erlebnis"
+    fit_text = fit_label(result.score.total)
+    score_title = f"Interner Score: {format_score(result.score.total)}"
     notes = notes_for(result)
     notes_html = ""
     if notes:
@@ -155,7 +174,7 @@ def render_recommendation_card(result) -> str:
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">{h(format_category(result.poi.poi_type))}</span>
-          <span class="fit-pill">Passung {h(format_score(result.score.total))}</span>
+          <span class="fit-pill" title="{h(score_title)}">{h(fit_text)}</span>
         </div>
         <h3>{h(result.poi.name)}</h3>
         <p class="why">{h(why_text(result))}</p>
@@ -166,26 +185,32 @@ def render_recommendation_card(result) -> str:
           <div class="detail-label">{h(detail_label)}</div>
           <div class="chip-row detail-row">{details_html}</div>
         </div>
-        {notes_html}
+{notes_html}
       </article>
     """
 
 
-def render_section(key: str, results: list) -> str:
+def render_section(key: str, results: list, active_key: str) -> str:
     title = SECTION_LABELS[key]
+    hidden_attr = "" if key == active_key else " hidden"
+    count_label = f"{len(results)} Treffer" if results else "Keine Treffer"
     if not results:
-        return ""
+        content_html = (
+            '      <p class="empty-state">Für diesen Bereich gibt es gerade keine passenden Treffer.</p>'
+        )
+    else:
+        cards = "\n".join(render_recommendation_card(result) for result in results)
+        content_html = f"""      <div class="cards">
+        {cards}
+      </div>"""
 
-    cards = "\n".join(render_recommendation_card(result) for result in results)
     return f"""
-    <section class="section">
+    <section class="section" data-section="{h(key)}"{hidden_attr}>
       <div class="section-heading">
         <h2>{h(title)}</h2>
-        <span>{h(len(results))} Treffer</span>
+        <span>{h(count_label)}</span>
       </div>
-      <div class="cards">
-        {cards}
-      </div>
+{content_html}
     </section>
     """
 
@@ -198,14 +223,12 @@ def render_html(profile, weather: str, recommendations: list) -> str:
         render_summary_card(key, SUMMARY_LABELS[key], len(grouped[key]))
         for key, _ in RECOMMENDATION_SECTION_ORDER
     )
-    tabs_html = render_tabs(grouped)
+    active_key = DEFAULT_ACTIVE_SECTION
+    tabs_html = render_tabs(grouped, active_key)
     sections_html = "\n".join(
-        render_section(key, grouped[key])
+        render_section(key, grouped[key], active_key)
         for key, _ in RECOMMENDATION_SECTION_ORDER
-        if grouped[key]
     )
-    if not sections_html:
-        sections_html = '<p class="empty">Für diese Demo wurden keine passenden Orte gefunden.</p>'
 
     context = f"{profile.profile_name} · {weather_label(weather)} · {format_number(profile.radius_km)} km"
 
@@ -384,10 +407,16 @@ def render_html(profile, weather: str, recommendations: list) -> str:
       align-items: center;
       min-height: 36px;
       padding: 7px 6px;
+      border: 0;
       border-radius: 999px;
+      appearance: none;
+      background: transparent;
       color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
       font-size: 0.8rem;
       font-weight: 800;
+      transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease;
     }}
 
     .tab.active {{
@@ -396,8 +425,23 @@ def render_html(profile, weather: str, recommendations: list) -> str:
       box-shadow: 0 5px 14px rgba(13, 67, 110, 0.11);
     }}
 
+    .tab:focus-visible {{
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
+    }}
+
+    .tab:disabled {{
+      color: #98aaba;
+      cursor: default;
+      opacity: 0.72;
+    }}
+
     .section {{
       margin: 22px 14px 0;
+    }}
+
+    .section[hidden] {{
+      display: none;
     }}
 
     .section-heading {{
@@ -461,9 +505,9 @@ def render_html(profile, weather: str, recommendations: list) -> str:
     }}
 
     .fit-pill {{
-      background: var(--warm-100);
-      color: var(--warm-700);
-      border: 1px solid #ffd88e;
+      background: var(--mint-100);
+      color: var(--mint-700);
+      border: 1px solid #bde8c8;
       white-space: nowrap;
     }}
 
@@ -562,6 +606,16 @@ def render_html(profile, weather: str, recommendations: list) -> str:
       color: var(--muted);
     }}
 
+    .empty-state {{
+      margin: 0;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--muted);
+      line-height: 1.45;
+    }}
+
     @media (max-width: 760px) {{
       .stage {{
         padding: 0;
@@ -612,6 +666,33 @@ def render_html(profile, weather: str, recommendations: list) -> str:
       <p class="footnote">Diese HTML-Seite wird lokal aus CSV-Testdaten erzeugt. Keine Live-Daten, keine Karte, keine API.</p>
     </div>
   </main>
+  <script>
+    (() => {{
+      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
+      const sections = Array.from(document.querySelectorAll("[data-section]"));
+
+      const showSection = (key) => {{
+        tabs.forEach((tab) => {{
+          const isActive = tab.dataset.tab === key;
+          tab.classList.toggle("active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        }});
+
+        sections.forEach((section) => {{
+          section.hidden = section.dataset.section !== key;
+        }});
+      }};
+
+      tabs.forEach((tab) => {{
+        tab.addEventListener("click", () => {{
+          if (tab.disabled) {{
+            return;
+          }}
+          showSection(tab.dataset.tab);
+        }});
+      }});
+    }})();
+  </script>
 </body>
 </html>
 """

@@ -173,10 +173,16 @@
       align-items: center;
       min-height: 36px;
       padding: 7px 6px;
+      border: 0;
       border-radius: 999px;
+      appearance: none;
+      background: transparent;
       color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
       font-size: 0.8rem;
       font-weight: 800;
+      transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease;
     }
 
     .tab.active {
@@ -185,8 +191,23 @@
       box-shadow: 0 5px 14px rgba(13, 67, 110, 0.11);
     }
 
+    .tab:focus-visible {
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
+    }
+
+    .tab:disabled {
+      color: #98aaba;
+      cursor: default;
+      opacity: 0.72;
+    }
+
     .section {
       margin: 22px 14px 0;
+    }
+
+    .section[hidden] {
+      display: none;
     }
 
     .section-heading {
@@ -250,9 +271,9 @@
     }
 
     .fit-pill {
-      background: var(--warm-100);
-      color: var(--warm-700);
-      border: 1px solid #ffd88e;
+      background: var(--mint-100);
+      color: var(--mint-700);
+      border: 1px solid #bde8c8;
       white-space: nowrap;
     }
 
@@ -351,6 +372,16 @@
       color: var(--muted);
     }
 
+    .empty-state {
+      margin: 0;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
     @media (max-width: 760px) {
       .stage {
         padding: 0;
@@ -410,13 +441,13 @@
       </section>
 
       <nav class="tabs" aria-label="Demo-Bereiche">
-        <span class="tab active">Stellplätze</span>
-<span class="tab active">Services</span>
-<span class="tab active">Ausflüge</span>
+        <button class="tab active" type="button" data-tab="stays" aria-selected="true">Stellplätze</button>
+<button class="tab" type="button" data-tab="camper_services" aria-selected="false">Services</button>
+<button class="tab" type="button" data-tab="experiences" aria-selected="false">Ausflüge</button>
       </nav>
 
       
-    <section class="section">
+    <section class="section" data-section="stays">
       <div class="section-heading">
         <h2>Stellplätze</h2>
         <span>3 Treffer</span>
@@ -426,7 +457,7 @@
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
-          <span class="fit-pill">Passung 13.0</span>
+          <span class="fit-pill" title="Interner Score: 13.0">Sehr gute Passung</span>
         </div>
         <h3>Stellplatz Eichholz</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
@@ -440,14 +471,14 @@
 <span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">Strom</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Stellplatz mit Basisversorgung</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Stellplatz mit Basisversorgung</p>
       </article>
     
 
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
-          <span class="fit-pill">Passung 12.5</span>
+          <span class="fit-pill" title="Interner Score: 12.5">Sehr gute Passung</span>
         </div>
         <h3>Stellplatz Thun Allmend</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
@@ -461,14 +492,14 @@
 <span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">Strom</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Ruhiger Stellplatz nahe Thun</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Ruhiger Stellplatz nahe Thun</p>
       </article>
     
 
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
-          <span class="fit-pill">Passung 9.5</span>
+          <span class="fit-pill" title="Interner Score: 9.5">Gute Passung</span>
         </div>
         <h3>Stellplatz Burgdorf Emme</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz</p>
@@ -480,14 +511,14 @@
           <div class="chip-row detail-row"><span class="chip detail-chip">Camper-Stellplatz</span>
 <span class="chip detail-chip">Frischwasser</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Einfacher Stellplatz am Rand der Altstadt</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Einfacher Stellplatz am Rand der Altstadt</p>
       </article>
     
       </div>
     </section>
     
 
-    <section class="section">
+    <section class="section" data-section="camper_services" hidden>
       <div class="section-heading">
         <h2>Camper-Services</h2>
         <span>6 Treffer</span>
@@ -497,7 +528,7 @@
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Gemischt</span>
-          <span class="fit-pill">Passung 11.5</span>
+          <span class="fit-pill" title="Interner Score: 11.5">Gute Passung</span>
         </div>
         <h3>Uferpark Thun mit WC</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Toilette</p>
@@ -509,14 +540,14 @@
           <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">Toilette</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Schöner Ort mit Toilette am Wasser</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Schöner Ort mit Toilette am Wasser</p>
       </article>
     
 
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
-          <span class="fit-pill">Passung 9.0</span>
+          <span class="fit-pill" title="Interner Score: 9.0">Gute Passung</span>
         </div>
         <h3>Öffentliche Toilette Bahnhof</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
@@ -528,14 +559,14 @@
           <div class="chip-row detail-row"><span class="chip detail-chip">öffentliche Toilette</span>
 <span class="chip detail-chip">Toilette</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Zentral und wettergeschützt</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Zentral und wettergeschützt</p>
       </article>
     
 
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
-          <span class="fit-pill">Passung 9.0</span>
+          <span class="fit-pill" title="Interner Score: 9.0">Gute Passung</span>
         </div>
         <h3>Camper-Service Wankdorf</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
@@ -548,14 +579,14 @@
 <span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">WC-Entsorgung</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung und Frischwasser</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung und Frischwasser</p>
       </article>
     
 
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
-          <span class="fit-pill">Passung 8.5</span>
+          <span class="fit-pill" title="Interner Score: 8.5">Gute Passung</span>
         </div>
         <h3>Camper-Service Thun Aare</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
@@ -567,14 +598,14 @@
           <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
 <span class="chip detail-chip">WC-Entsorgung</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung mit Frischwasser</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung mit Frischwasser</p>
       </article>
     
 
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
-          <span class="fit-pill">Passung 8.0</span>
+          <span class="fit-pill" title="Interner Score: 8.0">Gute Passung</span>
         </div>
         <h3>Dusche und Toilette Belp</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
@@ -586,14 +617,14 @@
           <div class="chip-row detail-row"><span class="chip detail-chip">Dusche</span>
 <span class="chip detail-chip">Toilette</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Einfache Dusche mit Toilette</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Einfache Dusche mit Toilette</p>
       </article>
     
 
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Camper-Service</span>
-          <span class="fit-pill">Passung 7.5</span>
+          <span class="fit-pill" title="Interner Score: 7.5">Solide Option</span>
         </div>
         <h3>Öffentliche Toilette Thun Bahnhof</h3>
         <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
@@ -605,14 +636,14 @@
           <div class="chip-row detail-row"><span class="chip detail-chip">öffentliche Toilette</span>
 <span class="chip detail-chip">Toilette</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Wettergeschützt und zentral</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Wettergeschützt und zentral</p>
       </article>
     
       </div>
     </section>
     
 
-    <section class="section">
+    <section class="section" data-section="experiences" hidden>
       <div class="section-heading">
         <h2>Ausflüge / schöne Orte</h2>
         <span>1 Treffer</span>
@@ -622,7 +653,7 @@
       <article class="place-card">
         <div class="card-topline">
           <span class="category-pill">Ausflug / schöner Ort</span>
-          <span class="fit-pill">Passung 5.5</span>
+          <span class="fit-pill" title="Interner Score: 5.5">Solide Option</span>
         </div>
         <h3>Schloss Burgdorf</h3>
         <p class="why">Trifft deine Interessen: familienfreundlich (1)</p>
@@ -636,7 +667,7 @@
 <span class="chip detail-chip">familienfreundlich</span>
 <span class="chip detail-chip">fotogen</span></div>
         </div>
-        <p class="note-text">Hinweis: Öffnungszeiten prüfen · Kulturort mit Innenräumen</p>
+<p class="note-text">Hinweis: Öffnungszeiten prüfen · Kulturort mit Innenräumen</p>
       </article>
     
       </div>
@@ -646,5 +677,32 @@
       <p class="footnote">Diese HTML-Seite wird lokal aus CSV-Testdaten erzeugt. Keine Live-Daten, keine Karte, keine API.</p>
     </div>
   </main>
+  <script>
+    (() => {
+      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
+      const sections = Array.from(document.querySelectorAll("[data-section]"));
+
+      const showSection = (key) => {
+        tabs.forEach((tab) => {
+          const isActive = tab.dataset.tab === key;
+          tab.classList.toggle("active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        sections.forEach((section) => {
+          section.hidden = section.dataset.section !== key;
+        });
+      };
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          if (tab.disabled) {
+            return;
+          }
+          showSection(tab.dataset.tab);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
