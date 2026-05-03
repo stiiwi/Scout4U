@@ -685,7 +685,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     }}
 
     .phone-shell {{
-      width: min(420px, 100%);
+      width: min(600px, 100%);
       margin: 0 auto;
       background: #f7fbff;
       border: 1px solid rgba(186, 218, 242, 0.9);
@@ -750,7 +750,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
 
     .summary {{
       display: grid;
-      grid-template-columns: repeat(var(--summary-count, 3), minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
       gap: 8px;
       margin: 14px 14px 12px;
     }}
@@ -858,18 +858,19 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     }}
 
     .tabs {{
-      display: grid;
-      grid-template-columns: repeat(var(--tab-count, 3), minmax(0, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 6px;
       margin: 0 14px 18px;
       padding: 5px;
-      border-radius: 999px;
+      border-radius: 22px;
       background: #e6f2fb;
       border: 1px solid #d2e7f6;
     }}
 
     .tab {{
       display: inline-flex;
+      flex: 1 1 108px;
       justify-content: center;
       align-items: center;
       min-height: 36px;
@@ -1103,6 +1104,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     }}
 
     .fact-chip {{
+      flex: 1 1 140px;
       background: var(--blue-100);
       color: var(--blue-900);
       border: 1px solid #cae7fb;
@@ -1115,6 +1117,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     }}
 
     .weather-chip {{
+      flex-basis: 100%;
       background: #edf7ff;
     }}
 
@@ -1194,6 +1197,25 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
 
       .chip {{
         min-height: 38px;
+      }}
+    }}
+
+    @media (max-width: 440px) {{
+      .summary {{
+        grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+      }}
+
+      .place-title-row {{
+        flex-direction: column;
+        align-items: stretch;
+      }}
+
+      .save-button {{
+        align-self: flex-start;
+      }}
+
+      .fact-chip {{
+        flex-basis: 100%;
       }}
     }}
   </style>
