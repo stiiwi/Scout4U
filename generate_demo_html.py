@@ -225,9 +225,10 @@ def render_tabs(grouped: dict, scenario: DemoScenario, active_key: str, section_
     return "\n".join(tabs)
 
 
-def render_tab_script() -> str:
-    return """  <script>
-    (() => {
+def render_page_script(enable_tabs: bool) -> str:
+    tab_setup = ""
+    if enable_tabs:
+        tab_setup = """
       const tabs = Array.from(document.querySelectorAll("[data-tab]"));
       const sections = Array.from(document.querySelectorAll("[data-section]"));
 
@@ -251,8 +252,65 @@ def render_tab_script() -> str:
           showSection(tab.dataset.tab);
         });
       });
+"""
+    return """  <script>
+    (() => {
+__TAB_SETUP__
+      const savedPlaces = new Map();
+      const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));
+      const favoritesList = document.querySelector("[data-favorites-list]");
+      const favoritesEmpty = document.querySelector("[data-favorites-empty]");
+
+      const setButtonState = (button, isSaved) => {
+        const name = button.dataset.placeName;
+        button.classList.toggle("saved", isSaved);
+        button.setAttribute("aria-pressed", isSaved ? "true" : "false");
+        button.setAttribute(
+          "aria-label",
+          isSaved ? `${name} aus Merkliste entfernen` : `${name} merken`
+        );
+        button.textContent = isSaved ? "Gemerkt" : "Merken";
+      };
+
+      const renderFavorites = () => {
+        if (!favoritesList || !favoritesEmpty) {
+          return;
+        }
+
+        favoritesList.textContent = "";
+        favoritesEmpty.hidden = savedPlaces.size > 0;
+
+        saveButtons.forEach((button) => {
+          const id = button.dataset.placeId;
+          if (!savedPlaces.has(id)) {
+            return;
+          }
+
+          const item = document.createElement("li");
+          item.textContent = savedPlaces.get(id);
+          favoritesList.appendChild(item);
+        });
+      };
+
+      saveButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const id = button.dataset.placeId;
+          const name = button.dataset.placeName;
+
+          if (savedPlaces.has(id)) {
+            savedPlaces.delete(id);
+          } else {
+            savedPlaces.set(id, name);
+          }
+
+          setButtonState(button, savedPlaces.has(id));
+          renderFavorites();
+        });
+      });
+
+      renderFavorites();
     })();
-  </script>"""
+  </script>""".replace("__TAB_SETUP__", tab_setup.rstrip())
 
 
 def render_fact_chip(label: str, value: str, class_name: str = "") -> str:
@@ -298,7 +356,10 @@ def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> 
           <span class="category-pill">{h(format_category(result.poi.poi_type))}</span>
           <span class="fit-pill">{h(fit_text)}</span>
         </div>
-        <h3>{h(result.poi.name)}</h3>
+        <div class="place-title-row">
+          <h3>{h(result.poi.name)}</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="{h(result.poi.id)}" data-place-name="{h(result.poi.name)}" aria-pressed="false" aria-label="{h(result.poi.name)} merken">Merken</button>
+        </div>
         <p class="why">{h(why_text(result, scenario))}</p>
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
@@ -391,6 +452,14 @@ def render_bridge(scenario: DemoScenario) -> str:
     return f'      <p class="bridge-text">{h(scenario.bridge_text)}{link_html}</p>'
 
 
+def render_favorites_panel() -> str:
+    return """      <section class="favorites-panel" aria-label="Gemerkte Orte">
+        <div class="favorites-heading">Gemerkte Orte</div>
+        <p class="favorites-empty" data-favorites-empty>Noch keine Orte gemerkt.</p>
+        <ul class="favorites-list" data-favorites-list></ul>
+      </section>"""
+
+
 def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     visible_recommendations = recommendations[: scenario.top]
     grouped = group_recommendations(visible_recommendations)
@@ -407,6 +476,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     )
     intro_html = render_intro(scenario, grouped, section_keys)
     bridge_html = render_bridge(scenario)
+    favorites_html = render_favorites_panel()
 
     section_count = len(section_keys)
     tabs_block_html = ""
@@ -418,7 +488,9 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
         {tabs_html}
       </nav>
 """
-        tab_script_html = render_tab_script()
+        tab_script_html = render_page_script(enable_tabs=True)
+    else:
+        tab_script_html = render_page_script(enable_tabs=False)
 
     context = (
         f"{profile.profile_name} · {weather_label(scenario.weather)} · "
@@ -613,6 +685,41 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
       text-decoration: underline;
     }}
 
+    .favorites-panel {{
+      margin: 0 18px 18px;
+      padding: 12px;
+      border: 1px solid #cfe4f5;
+      border-radius: 18px;
+      background: rgba(244, 250, 255, 0.82);
+    }}
+
+    .favorites-heading {{
+      color: var(--blue-900);
+      font-size: 0.86rem;
+      font-weight: 850;
+      margin-bottom: 6px;
+    }}
+
+    .favorites-empty {{
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }}
+
+    .favorites-list {{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--ink);
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }}
+
+    .favorites-list:empty {{
+      display: none;
+    }}
+
     .tabs {{
       display: grid;
       grid-template-columns: repeat(var(--tab-count, 3), minmax(0, 1fr));
@@ -734,11 +841,49 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
       white-space: nowrap;
     }}
 
+    .place-title-row {{
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }}
+
+    .place-title-row h3 {{
+      flex: 1;
+      min-width: 0;
+    }}
+
     h3 {{
       margin: 0;
       color: var(--blue-950);
       font-size: 1.13rem;
       letter-spacing: 0;
+    }}
+
+    .save-button {{
+      min-height: 32px;
+      padding: 6px 10px;
+      border: 1px solid #b9def8;
+      border-radius: 999px;
+      background: var(--blue-50);
+      color: var(--blue-900);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 850;
+      white-space: nowrap;
+      transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+    }}
+
+    .save-button.saved {{
+      background: var(--blue-700);
+      border-color: var(--blue-700);
+      color: #ffffff;
+    }}
+
+    .save-button:focus-visible {{
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
     }}
 
     .why {{
@@ -882,6 +1027,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
 
 {intro_html}
 {bridge_html}
+{favorites_html}
 
 {tabs_block_html}
       {sections_html}

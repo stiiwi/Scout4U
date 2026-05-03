@@ -186,6 +186,41 @@
       text-decoration: underline;
     }
 
+    .favorites-panel {
+      margin: 0 18px 18px;
+      padding: 12px;
+      border: 1px solid #cfe4f5;
+      border-radius: 18px;
+      background: rgba(244, 250, 255, 0.82);
+    }
+
+    .favorites-heading {
+      color: var(--blue-900);
+      font-size: 0.86rem;
+      font-weight: 850;
+      margin-bottom: 6px;
+    }
+
+    .favorites-empty {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+
+    .favorites-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--ink);
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .favorites-list:empty {
+      display: none;
+    }
+
     .tabs {
       display: grid;
       grid-template-columns: repeat(var(--tab-count, 3), minmax(0, 1fr));
@@ -307,11 +342,49 @@
       white-space: nowrap;
     }
 
+    .place-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .place-title-row h3 {
+      flex: 1;
+      min-width: 0;
+    }
+
     h3 {
       margin: 0;
       color: var(--blue-950);
       font-size: 1.13rem;
       letter-spacing: 0;
+    }
+
+    .save-button {
+      min-height: 32px;
+      padding: 6px 10px;
+      border: 1px solid #b9def8;
+      border-radius: 999px;
+      background: var(--blue-50);
+      color: var(--blue-900);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 850;
+      white-space: nowrap;
+      transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+    }
+
+    .save-button.saved {
+      background: var(--blue-700);
+      border-color: var(--blue-700);
+      color: #ffffff;
+    }
+
+    .save-button:focus-visible {
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
     }
 
     .why {
@@ -472,6 +545,11 @@
 
       <p class="intro-text">Stell dir vor, du bist mit dem Camper rund um Bern unterwegs und es regnet. Scout4U schlägt dir passende Orte vor.</p>
       <p class="bridge-text">Scout4U kann auch allgemeine Ausflugsideen zeigen: <a href="demo_ausflug.html">Natur &amp; Aussicht-Demo ansehen</a></p>
+      <section class="favorites-panel" aria-label="Gemerkte Orte">
+        <div class="favorites-heading">Gemerkte Orte</div>
+        <p class="favorites-empty" data-favorites-empty>Noch keine Orte gemerkt.</p>
+        <ul class="favorites-list" data-favorites-list></ul>
+      </section>
 
 
       <nav class="tabs" style="--tab-count: 3" aria-label="Demo-Bereiche">
@@ -493,7 +571,10 @@
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Sehr gute Passung</span>
         </div>
-        <h3>Stellplatz Eichholz</h3>
+        <div class="place-title-row">
+          <h3>Stellplatz Eichholz</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_eichholz" data-place-name="Stellplatz Eichholz" aria-pressed="false" aria-label="Stellplatz Eichholz merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>4.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 18</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
@@ -514,7 +595,10 @@
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Sehr gute Passung</span>
         </div>
-        <h3>Stellplatz Thun Allmend</h3>
+        <div class="place-title-row">
+          <h3>Stellplatz Thun Allmend</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_thun_allmend" data-place-name="Stellplatz Thun Allmend" aria-pressed="false" aria-label="Stellplatz Thun Allmend merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>23.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 25</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
@@ -535,7 +619,10 @@
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
         </div>
-        <h3>Stellplatz Burgdorf Emme</h3>
+        <div class="place-title-row">
+          <h3>Stellplatz Burgdorf Emme</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_burgdorf_emme" data-place-name="Stellplatz Burgdorf Emme" aria-pressed="false" aria-label="Stellplatz Burgdorf Emme merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>18 km</span><span class="chip fact-chip"><span>Preis</span>CHF 12</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
@@ -564,7 +651,10 @@
           <span class="category-pill">Gemischt</span>
           <span class="fit-pill">Gute Passung</span>
         </div>
-        <h3>Uferpark Thun mit WC</h3>
+        <div class="place-title-row">
+          <h3>Uferpark Thun mit WC</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="uferpark_thun_wc" data-place-name="Uferpark Thun mit WC" aria-pressed="false" aria-label="Uferpark Thun mit WC merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Toilette</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>22 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
@@ -583,7 +673,10 @@
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
         </div>
-        <h3>Öffentliche Toilette Bahnhof</h3>
+        <div class="place-title-row">
+          <h3>Öffentliche Toilette Bahnhof</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="toilette_bahnhof" data-place-name="Öffentliche Toilette Bahnhof" aria-pressed="false" aria-label="Öffentliche Toilette Bahnhof merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>0.8 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
@@ -602,7 +695,10 @@
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
         </div>
-        <h3>Camper-Service Wankdorf</h3>
+        <div class="place-title-row">
+          <h3>Camper-Service Wankdorf</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="camper_service_wankdorf" data-place-name="Camper-Service Wankdorf" aria-pressed="false" aria-label="Camper-Service Wankdorf merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>3.2 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
@@ -622,7 +718,10 @@
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
         </div>
-        <h3>Camper-Service Thun Aare</h3>
+        <div class="place-title-row">
+          <h3>Camper-Service Thun Aare</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="camper_service_thun" data-place-name="Camper-Service Thun Aare" aria-pressed="false" aria-label="Camper-Service Thun Aare merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>22.5 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
@@ -641,7 +740,10 @@
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Gute Passung</span>
         </div>
-        <h3>Dusche und Toilette Belp</h3>
+        <div class="place-title-row">
+          <h3>Dusche und Toilette Belp</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="dusche_belp_sportzentrum" data-place-name="Dusche und Toilette Belp" aria-pressed="false" aria-label="Dusche und Toilette Belp merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>9.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 4</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
@@ -660,7 +762,10 @@
           <span class="category-pill">Camper-Service</span>
           <span class="fit-pill">Solide Option</span>
         </div>
-        <h3>Öffentliche Toilette Thun Bahnhof</h3>
+        <div class="place-title-row">
+          <h3>Öffentliche Toilette Thun Bahnhof</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="toilette_thun_bahnhof" data-place-name="Öffentliche Toilette Thun Bahnhof" aria-pressed="false" aria-label="Öffentliche Toilette Thun Bahnhof merken">Merken</button>
+        </div>
         <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>23 km</span><span class="chip fact-chip"><span>Preis</span>CHF 1</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
@@ -689,7 +794,10 @@
           <span class="category-pill">Ausflug / schöner Ort</span>
           <span class="fit-pill">Solide Option</span>
         </div>
-        <h3>Schloss Burgdorf</h3>
+        <div class="place-title-row">
+          <h3>Schloss Burgdorf</h3>
+          <button class="save-button" type="button" data-save-place data-place-id="schloss_burgdorf" data-place-name="Schloss Burgdorf" aria-pressed="false" aria-label="Schloss Burgdorf merken">Merken</button>
+        </div>
         <p class="why">Trifft deine Interessen: familienfreundlich (1)</p>
         <div class="chip-row fact-row">
           <span class="chip fact-chip"><span>Entfernung</span>18.5 km</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
@@ -713,6 +821,7 @@
   </main>
   <script>
     (() => {
+
       const tabs = Array.from(document.querySelectorAll("[data-tab]"));
       const sections = Array.from(document.querySelectorAll("[data-section]"));
 
@@ -736,6 +845,59 @@
           showSection(tab.dataset.tab);
         });
       });
+      const savedPlaces = new Map();
+      const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));
+      const favoritesList = document.querySelector("[data-favorites-list]");
+      const favoritesEmpty = document.querySelector("[data-favorites-empty]");
+
+      const setButtonState = (button, isSaved) => {
+        const name = button.dataset.placeName;
+        button.classList.toggle("saved", isSaved);
+        button.setAttribute("aria-pressed", isSaved ? "true" : "false");
+        button.setAttribute(
+          "aria-label",
+          isSaved ? `${name} aus Merkliste entfernen` : `${name} merken`
+        );
+        button.textContent = isSaved ? "Gemerkt" : "Merken";
+      };
+
+      const renderFavorites = () => {
+        if (!favoritesList || !favoritesEmpty) {
+          return;
+        }
+
+        favoritesList.textContent = "";
+        favoritesEmpty.hidden = savedPlaces.size > 0;
+
+        saveButtons.forEach((button) => {
+          const id = button.dataset.placeId;
+          if (!savedPlaces.has(id)) {
+            return;
+          }
+
+          const item = document.createElement("li");
+          item.textContent = savedPlaces.get(id);
+          favoritesList.appendChild(item);
+        });
+      };
+
+      saveButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const id = button.dataset.placeId;
+          const name = button.dataset.placeName;
+
+          if (savedPlaces.has(id)) {
+            savedPlaces.delete(id);
+          } else {
+            savedPlaces.set(id, name);
+          }
+
+          setButtonState(button, savedPlaces.has(id));
+          renderFavorites();
+        });
+      });
+
+      renderFavorites();
     })();
   </script>
 </body>
