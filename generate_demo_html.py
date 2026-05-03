@@ -165,10 +165,10 @@ def render_summary_card(key: str, label: str, count: int, is_active: bool) -> st
 
 def fit_label(score: float) -> str:
     if score >= 12:
-        return "Sehr gute Passung"
+        return "Passt sehr gut"
     if score >= 8:
-        return "Gute Passung"
-    return "Solide Option"
+        return "Passt gut"
+    return "Kann passen"
 
 
 def render_page_script() -> str:
