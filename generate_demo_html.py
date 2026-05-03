@@ -58,23 +58,23 @@ CAMPER_SCENARIO = DemoScenario(
     section_order=CAMPER_SECTION_ORDER,
     section_labels={
         "stays": "Übernachten / Stellplätze",
-        "camper_services": "Versorgen / Services",
+        "camper_services": "Services",
         "experiences": "Erleben / Ausflüge",
     },
     summary_labels={
         "stays": "Übernachten",
-        "camper_services": "Versorgen",
+        "camper_services": "Services",
         "experiences": "Erleben",
     },
     tab_labels={
         "stays": "Übernachten",
-        "camper_services": "Versorgen",
+        "camper_services": "Services",
         "experiences": "Erleben",
     },
     default_active_section="stays",
     intro_template=(
         "Stell dir vor, du bist mit dem Camper rund um Bern unterwegs und es regnet. "
-        "Scout4U schlägt dir passende Stopps zum Übernachten, Versorgen und Erleben vor."
+        "Scout4U schlägt dir passende Stopps zum Übernachten, für Services und zum Erleben vor."
     ),
     bridge_text="Für sonnige Tage zeigt Scout4U auch Ausflüge vom Reise-/Campingort aus:",
     bridge_link_text="Natur & Aussicht-Ausflüge ansehen",
@@ -107,7 +107,7 @@ AUSFLUG_SCENARIO = DemoScenario(
         "Stell dir vor, du stehst mit Camper oder Zelt in der Region Bern und möchtest bei Sonne raus. "
         "Scout4U zeigt dir passende Natur- und Aussichtsausflüge vom Reise-/Campingort aus."
     ),
-    bridge_text="Zurück zur Camping-Reisebegleiter-Demo mit Übernachten, Versorgen und Erleben:",
+    bridge_text="Zurück zur Camping-Reisebegleiter-Demo mit Übernachten, Services und Erleben:",
     bridge_link_text="Camping-Demo ansehen",
     bridge_href="demo.html",
 )
