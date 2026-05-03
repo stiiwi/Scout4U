@@ -53,31 +53,31 @@ CAMPER_SCENARIO = DemoScenario(
     profile_id="V",
     weather="rainy",
     top=10,
-    document_title="Scout4U Demo",
-    subtitle="Camper-Vorschläge rund um Bern",
+    document_title="Scout4U Camping-Reisebegleiter",
+    subtitle="Camping-Reisebegleiter rund um Bern",
     section_order=CAMPER_SECTION_ORDER,
     section_labels={
-        "stays": "Stellplätze",
-        "camper_services": "Camper-Services",
-        "experiences": "Ausflüge / schöne Orte",
+        "stays": "Übernachten / Stellplätze",
+        "camper_services": "Versorgen / Services",
+        "experiences": "Erleben / Ausflüge",
     },
     summary_labels={
-        "stays": "Stellplätze",
-        "camper_services": "Services",
-        "experiences": "Ausflug",
+        "stays": "Übernachten",
+        "camper_services": "Versorgen",
+        "experiences": "Erleben",
     },
     tab_labels={
-        "stays": "Stellplätze",
-        "camper_services": "Services",
-        "experiences": "Ausflüge",
+        "stays": "Übernachten",
+        "camper_services": "Versorgen",
+        "experiences": "Erleben",
     },
     default_active_section="stays",
     intro_template=(
         "Stell dir vor, du bist mit dem Camper rund um Bern unterwegs und es regnet. "
-        "Scout4U schlägt dir passende Orte vor."
+        "Scout4U schlägt dir passende Stopps zum Übernachten, Versorgen und Erleben vor."
     ),
-    bridge_text="Scout4U kann auch allgemeine Ausflugsideen zeigen:",
-    bridge_link_text="Natur & Aussicht-Demo ansehen",
+    bridge_text="Für sonnige Tage zeigt Scout4U auch Ausflüge vom Reise-/Campingort aus:",
+    bridge_link_text="Natur & Aussicht-Ausflüge ansehen",
     bridge_href="demo_ausflug.html",
 )
 
@@ -88,27 +88,27 @@ AUSFLUG_SCENARIO = DemoScenario(
     profile_id="A",
     weather="sunny",
     top=10,
-    document_title="Scout4U Natur & Aussicht",
-    subtitle="Natur & Aussicht rund um Bern",
+    document_title="Scout4U Ausflüge",
+    subtitle="Ausflüge vom Reise-/Campingort rund um Bern",
     section_order=("experiences",),
     section_labels={
-        "experiences": "Natur & Aussicht",
+        "experiences": "Erleben / Ausflüge",
     },
     summary_labels={
-        "experiences": "Top-Tipps",
+        "experiences": "Ausflüge",
     },
     tab_labels={
-        "experiences": "Top-Tipps",
+        "experiences": "Ausflüge",
     },
     default_active_section="experiences",
     show_empty_sections=False,
     show_interest_weights=False,
     intro_template=(
-        "Stell dir vor, du möchtest rund um Bern einen schönen Ausflug machen. "
-        "Scout4U zeigt dir passende Natur- und Aussichtstipps."
+        "Stell dir vor, du stehst mit Camper oder Zelt in der Region Bern und möchtest bei Sonne raus. "
+        "Scout4U zeigt dir passende Natur- und Aussichtsausflüge vom Reise-/Campingort aus."
     ),
-    bridge_text="Die Camper-Demo zeigt den ersten geplanten Fokus für Reisen mit dem Camper.",
-    bridge_link_text="Camper-Demo ansehen",
+    bridge_text="Zurück zur Camping-Reisebegleiter-Demo mit Übernachten, Versorgen und Erleben:",
+    bridge_link_text="Camping-Demo ansehen",
     bridge_href="demo.html",
 )
 
