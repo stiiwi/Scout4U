@@ -342,9 +342,122 @@ def render_detail_chip(value: str) -> str:
     return f'<span class="chip detail-chip">{h(value)}</span>'
 
 
+def join_today_reasons(reasons: list[str]) -> str:
+    if len(reasons) == 1:
+        return reasons[0]
+    return " und ".join(reasons)
+
+
+def today_sentence(text: str) -> str:
+    if text:
+        text = text[0].upper() + text[1:]
+    return f"Heute passend: {text}."
+
+
+def focus_pair_text(tags: set[str]) -> str:
+    if "aussicht" in tags and "natur" in tags:
+        return "Aussicht und Natur"
+    if "natur" in tags and "wasser" in tags:
+        return "Natur und Wasser"
+    if "aussicht" in tags:
+        return "Aussicht"
+    if "natur" in tags:
+        return "Natur"
+    return "diesen Ausflug"
+
+
+def sunny_experience_reason(tags: set[str]) -> str:
+    if "aussicht" in tags and "natur" in tags:
+        return "Sonne, Aussicht und Natur passen gut zusammen"
+    if "aussicht" in tags:
+        return "Sonne und Aussicht passen gut zusammen"
+    if "natur" in tags:
+        return "Sonne und Natur passen gut zusammen"
+    return "Sonne passt gut zu diesem Ausflug"
+
+
+def weather_today_reason(poi, weather: str) -> str:
+    if weather == "rainy":
+        if poi.indoor_anteil == 1.0:
+            return "regenfreundlich"
+        if poi.indoor_anteil == 0.5:
+            return "teilweise wettergeschützt"
+        return ""
+    if weather == "sunny" and poi.indoor_anteil == 0.0:
+        return sunny_experience_reason(poi.tags)
+    return ""
+
+
+def distance_today_reason(distance_km: float) -> str:
+    if distance_km <= 5:
+        return f"nur {format_number(distance_km)} km entfernt"
+    if distance_km <= 10:
+        return "kurzer Weg"
+    return ""
+
+
+def interest_today_reason(result) -> str:
+    if not result.score.matched_interests:
+        return ""
+    labels = [display_label(tag) for tag, _weight in result.score.matched_interests[:2]]
+    verb = "passt" if len(labels) == 1 else "passen"
+    return join_today_reasons(labels) + f" {verb} zu deinen Vorlieben"
+
+
+def today_hint_text(result, weather: str) -> str:
+    poi = result.poi
+    score = result.score
+    reasons = []
+    weather_reason = weather_today_reason(poi, weather)
+    distance_reason = distance_today_reason(poi.distance_km)
+    service_reason = "Versorgung vor Ort" if is_service_poi(poi) and score.matched_services else ""
+
+    if poi.overnight_allowed is True:
+        reasons.append("Übernachten möglich")
+        if service_reason:
+            reasons.append(service_reason)
+        elif distance_reason:
+            reasons.append(distance_reason)
+
+    elif is_service_poi(poi):
+        if weather == "rainy" and poi.indoor_anteil == 1.0:
+            reasons.append("regenfreundlich")
+        if distance_reason:
+            reasons.append(distance_reason)
+        if service_reason:
+            reasons.append("gute Versorgung")
+        if not reasons and weather_reason:
+            reasons.append(weather_reason)
+
+    else:
+        if weather == "sunny" and poi.indoor_anteil == 0.0:
+            if poi.distance_km <= 5:
+                return today_sentence(
+                    f"Nur {format_number(poi.distance_km)} km entfernt und ideal für {focus_pair_text(poi.tags)}"
+                )
+            return today_sentence(weather_reason)
+        if weather_reason:
+            reasons.append(weather_reason)
+        if distance_reason:
+            reasons.append(distance_reason)
+        if not weather_reason and len(reasons) < 2:
+            interest_reason = interest_today_reason(result)
+            if interest_reason:
+                reasons.append(interest_reason)
+
+    if weather_reason and not reasons:
+        reasons.append(weather_reason)
+
+    if not reasons:
+        reasons.append("gute Passung zu deinem Reiseszenario")
+
+    return today_sentence(join_today_reasons(reasons[:2]))
+
+
 def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> str:
     detail_label = "Vor Ort" if is_service_poi(result.poi) else "Erlebnis"
     fit_text = fit_label(result.score.total)
+    today_hint = today_hint_text(result, weather)
     notes = notes_for(result)
     notes_html = ""
     if notes:
@@ -379,6 +492,7 @@ def render_recommendation_card(result, weather: str, scenario: DemoScenario) -> 
           <h3>{h(result.poi.name)}</h3>
           <button class="save-button" type="button" data-save-place data-place-id="{h(result.poi.id)}" data-place-name="{h(result.poi.name)}" aria-pressed="false" aria-label="{h(result.poi.name)} merken">Merken</button>
         </div>
+        <p class="today-hint">{h(today_hint)}</p>
         <p class="why">{h(why)}</p>
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
@@ -947,8 +1061,20 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
       font-weight: 700;
     }}
 
+    .today-hint {{
+      margin: 10px 0 8px;
+      padding: 9px 10px;
+      border: 1px solid #c4ead5;
+      border-radius: 15px;
+      background: #f1fbf5;
+      color: #1d6845;
+      line-height: 1.38;
+      font-size: 0.88rem;
+      font-weight: 800;
+    }}
+
     .why {{
-      margin: 9px 0 14px;
+      margin: 0 0 14px;
       color: var(--muted);
       line-height: 1.45;
       font-size: 0.95rem;
