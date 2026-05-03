@@ -39,6 +39,9 @@ class DemoScenario:
     show_empty_sections: bool = True
     show_interest_weights: bool = True
     intro_template: str = ""
+    bridge_text: str = ""
+    bridge_link_text: str = ""
+    bridge_href: str = ""
 
 
 CAMPER_SECTION_ORDER = tuple(key for key, _label in RECOMMENDATION_SECTION_ORDER)
@@ -73,6 +76,9 @@ CAMPER_SCENARIO = DemoScenario(
         "Stell dir vor, du bist mit dem Camper rund um Bern unterwegs und es regnet. "
         "Scout4U schlägt dir passende Orte vor."
     ),
+    bridge_text="Scout4U kann auch allgemeine Ausflugsideen zeigen:",
+    bridge_link_text="Natur & Aussicht-Demo ansehen",
+    bridge_href="demo_ausflug.html",
 )
 
 AUSFLUG_SCENARIO = DemoScenario(
@@ -101,6 +107,9 @@ AUSFLUG_SCENARIO = DemoScenario(
         "Stell dir vor, du möchtest rund um Bern einen schönen Ausflug machen. "
         "Scout4U zeigt dir passende Natur- und Aussichtstipps."
     ),
+    bridge_text="Die Camper-Demo zeigt den ersten geplanten Fokus für Reisen mit dem Camper.",
+    bridge_link_text="Camper-Demo ansehen",
+    bridge_href="demo.html",
 )
 
 SCENARIOS = (
@@ -370,6 +379,18 @@ def render_intro(scenario: DemoScenario, grouped: dict, section_keys: list[str])
     return f'      <p class="intro-text">{h(text)}</p>'
 
 
+def render_bridge(scenario: DemoScenario) -> str:
+    if not scenario.bridge_text:
+        return ""
+    link_html = ""
+    if scenario.bridge_href and scenario.bridge_link_text:
+        link_html = (
+            f' <a href="{h(scenario.bridge_href)}">'
+            f"{h(scenario.bridge_link_text)}</a>"
+        )
+    return f'      <p class="bridge-text">{h(scenario.bridge_text)}{link_html}</p>'
+
+
 def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
     visible_recommendations = recommendations[: scenario.top]
     grouped = group_recommendations(visible_recommendations)
@@ -385,6 +406,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
         for key in section_keys
     )
     intro_html = render_intro(scenario, grouped, section_keys)
+    bridge_html = render_bridge(scenario)
 
     section_count = len(section_keys)
     tabs_block_html = ""
@@ -567,6 +589,28 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
       font-size: 0.95rem;
       font-weight: 700;
       line-height: 1.45;
+    }}
+
+    .bridge-text {{
+      margin: -6px 18px 18px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }}
+
+    .bridge-text a {{
+      color: var(--blue-700);
+      text-decoration: none;
+      white-space: nowrap;
+    }}
+
+    .bridge-text a:hover {{
+      text-decoration: underline;
     }}
 
     .tabs {{
@@ -837,6 +881,7 @@ def render_html(scenario: DemoScenario, profile, recommendations: list) -> str:
       </section>
 
 {intro_html}
+{bridge_html}
 
 {tabs_block_html}
       {sections_html}
