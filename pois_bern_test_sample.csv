@@ -1,0 +1,11 @@
+id,name,lat,lon,distance_km,tags,indoor_anteil,aufwand,oeffnungszeiten_relevant,vermutlich_offen,datenquelle,notes
+beatushoehlen,Beatushöhlen,,,28.5,natur;wasser;fotogen;familienfreundlich;schlechtwetter_geeignet,0.5,mittel,ja,ja,sample,Höhlenweg kann feucht sein
+zentrum_paul_klee,Zentrum Paul Klee,,,4.0,kultur;museum;familienfreundlich;fotogen;schlechtwetter_geeignet,1.0,leicht,ja,ja,sample,Gute Regenoption
+berner_altstadt,Berner Altstadt,,,0.8,altstadt;kultur;markt;touristisch;fotogen,0.5,leicht,nein,nein,sample,Bei Regen gemischt
+shoppyland,Shoppyland,,,11.5,shopping;markt;genuss,1.0,leicht,ja,ja,sample,Shopping-Grenzfall
+swiss_souvenir,Swiss Souvenir Shop,,,1.1,altstadt;markt;shopping;touristenfalle,1.0,leicht,ja,ja,sample,Touristenfalle
+oeschinensee,Oeschinensee,,,55.0,natur;wasser;berg;fotogen,0.0,hoch,nein,nein,sample,Außerhalb Natur-Stephen Radius
+stockhorn,Stockhorn,,,22.0,natur;aussicht;berg;wanderung_schwer;fotogen,0.0,hoch,nein,nein,sample,Schwere Wanderung
+cafe_bahnhof,Café Bahnhof,,,1.2,genuss;cafe;convenience,1.0,leicht,ja,ja,sample,Nur ein Erlebnis-Tag
+gurten_panorama,Gurten Panorama,,,5.5,natur;aussicht;familienfreundlich;fotogen,0.0,mittel,nein,nein,sample,Schön bei trockenem Wetter
+rosengarten,Rosengarten Bern,,,1.5,natur;aussicht;fotogen;familienfreundlich,0.0,leicht,nein,nein,sample,Draußen und fotogen

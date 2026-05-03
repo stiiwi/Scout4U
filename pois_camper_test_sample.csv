@@ -1,0 +1,15 @@
+id,name,lat,lon,distance_km,tags,indoor_anteil,aufwand,oeffnungszeiten_relevant,vermutlich_offen,datenquelle,notes,poi_type,services,price_chf,overnight_allowed
+camper_service_wankdorf,Camper-Service Wankdorf,,,3.2,wc_entsorgung;chemietoilette;kostenlos,0.5,leicht,ja,ja,sample,Entsorgung und Frischwasser,camper_service,wc_entsorgung;chemietoilette;frischwasser,0,nein
+stellplatz_eichholz,Stellplatz Eichholz,,,4.5,camper_stellplatz;strom;frischwasser;abfall,0.5,leicht,ja,ja,sample,Stellplatz mit Basisversorgung,camper_service,camper_stellplatz;strom;frischwasser;abfall,18,ja
+toilette_bahnhof,Öffentliche Toilette Bahnhof,,,0.8,oeffentliche_toilette;kostenlos,1.0,leicht,ja,ja,sample,Zentral und wettergeschützt,camper_service,oeffentliche_toilette;toilette,0,nein
+mixed_bad_wohlensee,Badestelle Wohlensee mit WC,,,8.0,natur;wasser;familienfreundlich;toilette,0.0,leicht,nein,nein,sample,Ausflug plus einfache Toilette,mixed,toilette,,nein
+service_ohne_need,Hundewaschplatz Ost,,,2.0,dusche,0.5,leicht,ja,ja,sample,Kein passender Camper-Need im Testprofil,camper_service,dusche,5,nein
+gurten_erlebnis,Gurten Panorama,,,5.5,natur;aussicht;familienfreundlich;fotogen,0.0,mittel,nein,nein,sample,Klassischer Ausflugsort,experience,,,
+stellplatz_thun_allmend,Stellplatz Thun Allmend,,,23.5,camper_stellplatz;strom;frischwasser;abfall,0.5,leicht,ja,ja,sample,Ruhiger Stellplatz nahe Thun,camper_service,camper_stellplatz;strom;frischwasser;abfall,25,ja
+stellplatz_burgdorf_emme,Stellplatz Burgdorf Emme,,,18.0,camper_stellplatz;frischwasser;kostenpflichtig,0.5,leicht,ja,ja,sample,Einfacher Stellplatz am Rand der Altstadt,camper_service,camper_stellplatz;frischwasser,12,ja
+camper_service_thun,Camper-Service Thun Aare,,,22.5,wc_entsorgung;frischwasser;kostenlos,0.5,leicht,ja,ja,sample,Entsorgung mit Frischwasser,camper_service,wc_entsorgung;frischwasser,0,nein
+toilette_thun_bahnhof,Öffentliche Toilette Thun Bahnhof,,,23.0,oeffentliche_toilette;toilette,1.0,leicht,ja,ja,sample,Wettergeschützt und zentral,camper_service,oeffentliche_toilette;toilette,1,nein
+dusche_belp_sportzentrum,Dusche und Toilette Belp,,,9.5,dusche;toilette,1.0,leicht,ja,ja,sample,Einfache Dusche mit Toilette,camper_service,dusche;toilette,4,nein
+schloss_thun_museum,Schloss Thun Museum,,,23.8,kultur;museum;familienfreundlich;fotogen,1.0,mittel,ja,ja,sample,Gute Regenoption mit Aussicht,experience,,,
+schloss_burgdorf,Schloss Burgdorf,,,18.5,kultur;museum;familienfreundlich;fotogen,1.0,mittel,ja,ja,sample,Kulturort mit Innenräumen,experience,,,
+uferpark_thun_wc,Uferpark Thun mit WC,,,22.0,natur;wasser;familienfreundlich;fotogen;toilette,0.5,leicht,ja,ja,sample,Schöner Ort mit Toilette am Wasser,mixed,toilette;frischwasser,0,nein
