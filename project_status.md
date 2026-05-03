@@ -23,6 +23,8 @@ Scout4U ist ein lokaler Python-CLI-Prototyp für eine spätere mobile App-Idee. 
 - Privates GitHub-Repository: `stiiwi/Scout4U`.
 - Hauptdatei: scout4u_score.py
 - Self-Test funktioniert: `python3 scout4u_score.py --self-test` -> Self-Test OK
+- `.gitignore` ignoriert `.claude/`, damit lokale Tool-Arbeitsdaten nicht ins Repo kommen.
+- `README.md` wurde als kurze Projektübersicht erstellt.
 
 ## Git/GitHub-Stand
 
@@ -40,6 +42,7 @@ Scout4U ist ein lokaler Python-CLI-Prototyp für eine spätere mobile App-Idee. 
 - generate_demo_html.py
 - demo.html
 - demo_ausflug.html
+- README.md
 - pois_bern_test_sample.csv
 - profiles_test_sample.csv
 - pois_camper_test_sample.csv
@@ -100,7 +103,7 @@ Priorität bei Mehrfachzuordnung:
 - `poi_type` wird menschenlesbar als Kategorie angezeigt, z.B. Camper-Service.
 - Wetterzeilen enthalten keine technischen `(indoor ...)` Zusätze mehr.
 - Der Abschlusshinweis ist freundlicher formuliert.
-- Profil V / Camper-Vera mit rainy zeigt aktuell Stellplätze, Camper-Services und Ausflüge / schöne Orte.
+- Profil V / Camper-Reise mit rainy zeigt aktuell Stellplätze, Camper-Services und Ausflüge / schöne Orte.
 - Die Ausgabe ist grundsätzlich zeigbar und nicht mehr debug-lastig.
 
 ## Demo-Daten
@@ -128,16 +131,22 @@ python3 generate_demo_html.py
 - Die CSV-Dateien wurden für die zweite Demo nicht geändert.
 - Die HTML-Demos laden keine externen Ressourcen.
 - Die HTML-Demos enthalten keine Debug-Score-Details.
-- `demo.html` zeigt eine lokale Scout4U-Demo für Profil Camper-Vera, Wetter Regen und Radius 25 km.
+- `demo.html` zeigt eine lokale Scout4U-Demo für Profil Camper-Reise, Wetter Regen und Radius 25 km.
 - Inhalt: Camper-Vorschläge rund um Bern aus den Camper-Beispiel-CSV-Dateien.
 - `demo.html` hat interaktive Tabs für Stellplätze, Services und Ausflüge.
 - Passung wird nutzerfreundlich als Label angezeigt, z.B. Sehr gute Passung, Gute Passung oder Solide Option.
+- Die Demos wurden für eine erste Präsentation an eine Nicht-Tech-Nutzerin vorbereitet.
+- Die sichtbaren Profilnamen wurden neutralisiert:
+  - Camper-Reise
+  - Natur & Aussicht
+- Beide Demos haben freundliche Intro-Sätze in Alltagssprache.
+- Beide Demos verlinken gegenseitig aufeinander, um zu zeigen, dass Scout4U nicht nur Camper-Services abdecken soll.
 
 ## Zweite HTML-Demo
 
 - `demo_ausflug.html` wurde ergänzt.
 - Demo zeigt Natur & Aussicht rund um Bern.
-- Nutzt Profil A / Natur-Stephen, Wetter Sonne und Radius 50 km.
+- Nutzt Profil A / Natur & Aussicht, Wetter Sonne und Radius 50 km.
 - Nutzt bestehende Bern-Testdaten aus `pois_bern_test_sample.csv` und `profiles_test_sample.csv`.
 - Zeigt aktuell 4 Top-Tipps.
 - Die sichtbare Warum-Zeile zeigt keine Gewichtungszahlen in Klammern mehr.
@@ -180,6 +189,20 @@ Optional mit Score-Details:
 python3 scout4u_score.py --pois pois_camper_test_sample.csv --profiles profiles_camper_test_sample.csv --profile V --weather rainy --top 10 --show-filtered --debug-score
 ```
 
+## Letzte geprüfte Tests
+
+```bash
+python3 scout4u_score.py --self-test
+```
+
+Ergebnis: Self-Test OK
+
+```bash
+python3 generate_demo_html.py
+```
+
+Ergebnis: `demo.html` und `demo_ausflug.html` erfolgreich erzeugt.
+
 ## Bestätigter Stand
 
 - Alte Bern-Testprofile A/B/C laufen.
@@ -190,6 +213,9 @@ python3 scout4u_score.py --pois pois_camper_test_sample.csv --profiles profiles_
 - Camper-Demoausgabe ist grundsätzlich zeigbar.
 - HTML-Camper-Demo ist zeigbar und interaktiv.
 - HTML-Ausflugsdemo ist als zweites Szenario ergänzt.
+- Beide HTML-Demos sind für eine erste Nicht-Tech-Vorführung geglättet.
+- Beide HTML-Demos verlinken dezent aufeinander.
+- README.md ist vorhanden.
 - Self-Test war zuletzt grün.
 - Scoring wurde bei der Ausgabe-Politur nicht neu gebaut.
 
@@ -201,7 +227,7 @@ python3 scout4u_score.py --pois pois_camper_test_sample.csv --profiles profiles_
   - Camper-Nutzen für V1.0.
   - Natur-/Ausflugs-Empfehlungen als breiteres Langfristsignal.
 - Nächste sinnvolle Schritte könnten sein:
-  - README ergänzen.
+  - README bei Bedarf später erweitern.
   - Kleine UI-Politur.
   - Demo-Profile schöner benennen.
   - Später responsive Desktop/Mobile weiterdenken.
