@@ -309,14 +309,12 @@ def focus_pair_text(tags: set[str]) -> str:
     return "diesen Ausflug"
 
 
-def sunny_experience_reason(tags: set[str]) -> str:
-    if "aussicht" in tags and "natur" in tags:
-        return "Sonne, Aussicht und Natur passen gut zusammen"
-    if "aussicht" in tags:
-        return "Sonne und Aussicht passen gut zusammen"
-    if "natur" in tags:
-        return "Sonne und Natur passen gut zusammen"
-    return "Sonne passt gut zu diesem Ausflug"
+def dry_window_experience_reason(tags: set[str]) -> str:
+    focus = focus_pair_text(tags)
+    if focus == "diesen Ausflug":
+        return "passt gut, wenn das Wetter kurz aufmacht"
+    verb = "passen" if " und " in focus else "passt"
+    return f"{focus} {verb} gut, wenn das Wetter kurz aufmacht"
 
 
 def weather_today_reason(poi, weather: str) -> str:
@@ -326,9 +324,22 @@ def weather_today_reason(poi, weather: str) -> str:
         if poi.indoor_anteil == 0.5:
             return "teilweise wettergeschützt"
         return ""
-    if weather == "sunny" and poi.indoor_anteil == 0.0:
-        return sunny_experience_reason(poi.tags)
+    if weather == "sunny":
+        if poi.indoor_anteil == 0.0:
+            return dry_window_experience_reason(poi.tags)
+        if poi.indoor_anteil == 0.5:
+            return "teils wettergeschützt für ein trockenes oder sonniges Zeitfenster"
     return ""
+
+
+def weather_chip_text(poi, weather: str) -> str:
+    if weather == "sunny":
+        if poi.indoor_anteil == 1.0:
+            return "Bei trockenem Zeitfenster weniger passend: indoor"
+        if poi.indoor_anteil == 0.5:
+            return "Bei trockenem Zeitfenster neutral: teils wettergeschützt"
+        return "Bei trockenem Zeitfenster ideal: draußen"
+    return weather_sentence(poi, weather)
 
 
 def distance_today_reason(distance_km: float) -> str:
@@ -376,7 +387,7 @@ def today_hint_text(result, weather: str) -> str:
         if weather == "sunny" and poi.indoor_anteil == 0.0:
             if poi.distance_km <= 5:
                 return today_sentence(
-                    f"Nur {format_number(poi.distance_km)} km entfernt und ideal für {focus_pair_text(poi.tags)}"
+                    f"nur {format_number(poi.distance_km)} km entfernt und gut für ein trockenes Zeitfenster"
                 )
             return today_sentence(weather_reason)
         if weather_reason:
@@ -419,7 +430,7 @@ def render_recommendation_card(result, weather: str, show_interest_weights: bool
         )
 
     fact_chips.append(
-        render_fact_chip("Wetter", weather_sentence(result.poi, weather), "weather-chip")
+        render_fact_chip("Wetter", weather_chip_text(result.poi, weather), "weather-chip")
     )
 
     details_html = "\n".join(render_detail_chip(item) for item in details_items(result))
