@@ -404,7 +404,12 @@ def today_hint_text(result, weather: str) -> str:
     return today_sentence(join_today_reasons(reasons[:2]))
 
 
-def render_recommendation_card(result, weather: str, show_interest_weights: bool) -> str:
+def render_recommendation_card(
+    result,
+    weather: str,
+    show_interest_weights: bool,
+    section_key: str,
+) -> str:
     detail_label = "Vor Ort" if is_service_poi(result.poi) else "Erlebnis"
     fit_text = fit_label(result.score.total)
     today_hint = today_hint_text(result, weather)
@@ -438,6 +443,17 @@ def render_recommendation_card(result, weather: str, show_interest_weights: bool
           <div class="chip-row detail-row">{details_html}</div>
         </div>"""
     why = why_text(result, show_interest_weights)
+    explanation_html = notes_html
+    if section_key != "camper_services":
+        explanation_html = f"""        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
+        <div class="explanation-panel" data-explanation-panel hidden>
+          <p class="explanation-text">{h(why)}</p>
+          <div class="detail-block">
+            <div class="detail-label">{h(detail_label)}</div>
+            <div class="chip-row detail-row">{details_html}</div>
+          </div>
+{notes_html}
+        </div>"""
 
     return f"""
       <article class="place-card" data-place-card>
@@ -454,15 +470,7 @@ def render_recommendation_card(result, weather: str, show_interest_weights: bool
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
         </div>
-        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
-        <div class="explanation-panel" data-explanation-panel hidden>
-          <p class="explanation-text">{h(why)}</p>
-          <div class="detail-block">
-            <div class="detail-label">{h(detail_label)}</div>
-            <div class="chip-row detail-row">{details_html}</div>
-          </div>
-{notes_html}
-        </div>
+{explanation_html}
       </article>
 """
 
@@ -484,7 +492,7 @@ def render_section(
         )
     else:
         cards = "\n".join(
-            render_recommendation_card(result, weather, show_interest_weights)
+            render_recommendation_card(result, weather, show_interest_weights, key)
             for result in results
         )
         content_html = f"""      <div class="cards">
