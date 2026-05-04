@@ -13,3 +13,13 @@ dusche_belp_sportzentrum,Dusche und Toilette Belp,,,9.5,dusche;toilette,1.0,leic
 schloss_thun_museum,Schloss Thun Museum,,,23.8,kultur;museum;familienfreundlich;fotogen,1.0,mittel,ja,ja,sample,Gute Regenoption mit Aussicht,experience,,,
 schloss_burgdorf,Schloss Burgdorf,,,18.5,kultur;museum;familienfreundlich;fotogen,1.0,mittel,ja,ja,sample,Kulturort mit Innenräumen,experience,,,
 uferpark_thun_wc,Uferpark Thun mit WC,,,22.0,natur;wasser;familienfreundlich;fotogen;toilette,0.5,leicht,ja,ja,sample,Schöner Ort mit Toilette am Wasser,mixed,toilette;frischwasser,0,nein
+stellplatz_koeniz_eichholz_hoehe,Stellplatz Köniz Eichholz Höhe,,,4.0,camper_stellplatz;frischwasser;abfall;kostenlos,0.5,leicht,ja,ja,demo,Demo-Stellplatz nahe Bern,camper_service,camper_stellplatz;frischwasser;abfall,0,ja
+stellplatz_kiental_panorama,Stellplatz Kiental Panorama,,,35.0,camper_stellplatz;natur;aussicht;fotogen;kostenlos,0.0,mittel,nein,nein,demo,Demo-Beispiel weit entfernt mit Aussicht,mixed,camper_stellplatz;abfall,0,ja
+stellplatz_muensingen_aaretal,Stellplatz Münsingen Aaretal,,,14.0,camper_stellplatz;strom;frischwasser;abfall;dusche,0.5,leicht,ja,ja,demo,Demo-Stellplatz mit voller Versorgung,camper_service,camper_stellplatz;strom;frischwasser;abfall;dusche,28,ja
+frischwasser_niederwangen,Frischwasser Tankstelle Niederwangen,,,4.0,frischwasser;kostenlos,0.5,leicht,ja,ja,demo,Demo-Versorgung Frischwasser,camper_service,frischwasser,0,nein
+service_autobahn_muensingen,Service Autobahnraststätte Münsingen,,,13.0,wc_entsorgung;dusche;frischwasser;strom,0.5,leicht,ja,ja,demo,Demo-Komplettservice an Raststätte,camper_service,wc_entsorgung;dusche;frischwasser;strom,10,nein
+toilette_gantrisch_wandergebiet,Toilettencontainer Gantrisch,,,28.0,oeffentliche_toilette;toilette,1.0,leicht,ja,nein,demo,Einfacher Container im Wandergebiet,camper_service,oeffentliche_toilette;toilette,0,nein
+hoehle_indoor_demo,Schauhöhle Demo Voralpen,,,32.0,natur;kultur;familienfreundlich;fotogen,1.0,mittel,ja,nein,demo,Demo-Schlechtwetter-Option indoor,experience,,,
+aussicht_belpberg,Aussichtspunkt Belpberg,,,10.0,natur;aussicht;fotogen;wanderung_leicht,0.0,leicht,nein,nein,demo,Demo-Aussicht offen am Sonnenhang,experience,,,
+marktgasse_lauben,Marktgasse Bern Lauben,,,3.0,altstadt;genuss;markt;kultur;fotogen,0.5,leicht,ja,ja,demo,Wettergeschützt unter Arkaden,experience,,,
+aareuferweg_muensingen_belp,Aareuferweg Münsingen-Belp,,,12.0,natur;wasser;wanderung_leicht;familienfreundlich;fotogen,0.0,mittel,nein,nein,demo,Demo-Wanderung am Wasser,experience,,,
