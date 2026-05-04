@@ -598,9 +598,12 @@ def calculate_score(poi: POI, profile: Profile, weather: str) -> ScoreBreakdown:
     selected = sorted(selected, key=lambda item: item[0])
     matched_interests = [(tag, weight) for _, tag, weight in selected]
     interest_score = float(sum(weight for _, _, weight in selected))
+    service_poi = is_service_poi(poi)
 
     weather_score = 0.0
-    if weather == "sunny":
+    if service_poi:
+        weather_score = 0.0
+    elif weather == "sunny":
         if poi.indoor_anteil == 1.0:
             weather_score = -2.0
         elif poi.indoor_anteil == 0.5:
@@ -1259,6 +1262,25 @@ def run_self_test() -> int:
             and "wc_entsorgung" in wc_result.score.matched_services
             and len(wc_result.experience_tags) == 0,
             "WC-Entsorgung ohne Erlebnis-Tags scheitert am Erlebnis-Gate",
+        )
+
+        indoor_service = make_self_test_poi(
+            "indoor_service",
+            "Indoor Camper-Service",
+            3.0,
+            {"wc_entsorgung"},
+            1.0,
+            poi_type="camper_service",
+            services={"wc_entsorgung"},
+            price_chf=0.0,
+        )
+        indoor_service_rainy_score = calculate_score(indoor_service, camper_profile, "rainy")
+        indoor_service_sunny_score = calculate_score(indoor_service, camper_profile, "sunny")
+        require_self_test(
+            indoor_service_rainy_score.total == indoor_service_sunny_score.total
+            and indoor_service_rainy_score.weather_score == 0.0
+            and indoor_service_sunny_score.weather_score == 0.0,
+            "Camper-Service wird bei sunny/rainy nicht wetter-neutral bewertet",
         )
 
         mixed_service = make_self_test_poi(
