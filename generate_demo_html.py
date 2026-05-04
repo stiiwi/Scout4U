@@ -249,23 +249,6 @@ def render_page_script() -> str:
 
       renderFavorites();
 
-      const explainButtons = Array.from(document.querySelectorAll("[data-explain-toggle]"));
-
-      explainButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const card = button.closest("[data-place-card]");
-          const panel = card ? card.querySelector("[data-explanation-panel]") : null;
-
-          if (!panel) {
-            return;
-          }
-
-          const isOpen = button.getAttribute("aria-expanded") === "true";
-          panel.hidden = isOpen;
-          button.setAttribute("aria-expanded", isOpen ? "false" : "true");
-          button.textContent = isOpen ? "Warum passt das?" : "Weniger anzeigen";
-        });
-      });
     })();
   </script>"""
 
@@ -404,13 +387,7 @@ def today_hint_text(result, weather: str) -> str:
     return today_sentence(join_today_reasons(reasons[:2]))
 
 
-def render_recommendation_card(
-    result,
-    weather: str,
-    show_interest_weights: bool,
-    section_key: str,
-) -> str:
-    detail_label = "Vor Ort" if is_service_poi(result.poi) else "Erlebnis"
+def render_recommendation_card(result, weather: str, show_interest_weights: bool) -> str:
     fit_text = fit_label(result.score.total)
     today_hint = today_hint_text(result, weather)
     notes = notes_for(result)
@@ -443,17 +420,6 @@ def render_recommendation_card(
           <div class="chip-row detail-row">{details_html}</div>
         </div>"""
     why = why_text(result, show_interest_weights)
-    explanation_html = notes_html
-    if section_key != "camper_services":
-        explanation_html = f"""        <button class="explain-button" type="button" data-explain-toggle aria-expanded="false">Warum passt das?</button>
-        <div class="explanation-panel" data-explanation-panel hidden>
-          <p class="explanation-text">{h(why)}</p>
-          <div class="detail-block">
-            <div class="detail-label">{h(detail_label)}</div>
-            <div class="chip-row detail-row">{details_html}</div>
-          </div>
-{notes_html}
-        </div>"""
 
     return f"""
       <article class="place-card" data-place-card>
@@ -470,7 +436,7 @@ def render_recommendation_card(
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
         </div>
-{explanation_html}
+{notes_html}
       </article>
 """
 
@@ -492,7 +458,7 @@ def render_section(
         )
     else:
         cards = "\n".join(
-            render_recommendation_card(result, weather, show_interest_weights, key)
+            render_recommendation_card(result, weather, show_interest_weights)
             for result in results
         )
         content_html = f"""      <div class="cards">
@@ -946,44 +912,6 @@ def render_html(
       outline-offset: 2px;
     }}
 
-    .explain-button {{
-      min-height: 34px;
-      padding: 7px 11px;
-      border: 1px solid #c6e0f4;
-      border-radius: 999px;
-      background: #ffffff;
-      color: var(--blue-700);
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.82rem;
-      font-weight: 850;
-    }}
-
-    .explain-button:focus-visible {{
-      outline: 2px solid var(--blue-500);
-      outline-offset: 2px;
-    }}
-
-    .explanation-panel {{
-      margin-top: 12px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #f7fbff;
-    }}
-
-    .explanation-panel[hidden] {{
-      display: none;
-    }}
-
-    .explanation-text {{
-      margin: 0;
-      color: var(--ink);
-      font-size: 0.9rem;
-      line-height: 1.45;
-      font-weight: 700;
-    }}
-
     .today-hint {{
       margin: 10px 0 8px;
       padding: 9px 10px;
@@ -1045,10 +973,6 @@ def render_html(
     .weather-chip {{
       flex-basis: 100%;
       background: #edf7ff;
-    }}
-
-    .detail-block {{
-      margin-top: 11px;
     }}
 
     .detail-label {{
