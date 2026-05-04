@@ -68,11 +68,7 @@ CAMPER_SCENARIO = DemoScenario(
         "experiences": "Erleben",
     },
     default_active_section="stays",
-    intro_template=(
-        "Stell dir vor, du bist mit dem Camper rund um Bern unterwegs und es regnet. "
-        "Scout4U schlägt dir passende Stopps zum Übernachten, für Services und zum Erleben vor. "
-        "Unter Erleben findest du Ausflüge vom Reise-/Campingort aus, die besonders für trockene oder sonnige Zeitfenster passen."
-    ),
+    intro_template="Scout4U zeigt dir passende Stopps zum Übernachten, Versorgen und Erleben.",
 )
 
 SCENARIOS = (
