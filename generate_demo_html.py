@@ -197,8 +197,16 @@ def render_page_script() -> str:
 
       const savedPlaces = new Map();
       const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));
+      const favoritesToggle = document.querySelector("[data-favorites-toggle]");
+      const favoritesBody = document.querySelector("[data-favorites-body]");
       const favoritesList = document.querySelector("[data-favorites-list]");
       const favoritesEmpty = document.querySelector("[data-favorites-empty]");
+      const categoryLabels = {
+        stays: "Übernachten",
+        camper_services: "Services",
+        experiences: "Erleben",
+      };
+      const categoryOrder = ["Übernachten", "Services", "Erleben"];
 
       const setButtonState = (button, isSaved) => {
         const name = button.dataset.placeName;
@@ -211,6 +219,25 @@ def render_page_script() -> str:
         button.textContent = isSaved ? "Gemerkt" : "Merken";
       };
 
+      const jumpToPlace = (button) => {
+        const section = button.closest("[data-section]");
+        const card = button.closest("[data-place-card]");
+
+        if (section?.dataset.section) {
+          setFilter(section.dataset.section);
+        }
+
+        if (!card) {
+          return;
+        }
+
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        card.classList.add("favorite-highlight");
+        window.setTimeout(() => {
+          card.classList.remove("favorite-highlight");
+        }, 1400);
+      };
+
       const renderFavorites = () => {
         if (!favoritesList || !favoritesEmpty) {
           return;
@@ -219,15 +246,49 @@ def render_page_script() -> str:
         favoritesList.textContent = "";
         favoritesEmpty.hidden = savedPlaces.size > 0;
 
-        saveButtons.forEach((button) => {
-          const id = button.dataset.placeId;
-          if (!savedPlaces.has(id)) {
+        categoryOrder.forEach((categoryName) => {
+          const groupItems = saveButtons.filter((button) => {
+            const place = savedPlaces.get(button.dataset.placeId);
+            return place?.category === categoryName;
+          });
+
+          if (groupItems.length === 0) {
             return;
           }
 
-          const item = document.createElement("li");
-          item.textContent = savedPlaces.get(id);
-          favoritesList.appendChild(item);
+          const heading = document.createElement("li");
+          heading.className = "favorite-group-heading";
+          heading.textContent = categoryName;
+          favoritesList.appendChild(heading);
+
+          groupItems.forEach((button) => {
+            const id = button.dataset.placeId;
+            const place = savedPlaces.get(id);
+            const item = document.createElement("li");
+            item.className = "favorite-item";
+
+            const jumpButton = document.createElement("button");
+            jumpButton.className = "favorite-jump";
+            jumpButton.type = "button";
+            jumpButton.textContent = place.name;
+            jumpButton.addEventListener("click", () => {
+              jumpToPlace(button);
+            });
+
+            const removeButton = document.createElement("button");
+            removeButton.className = "favorite-remove";
+            removeButton.type = "button";
+            removeButton.textContent = "Entfernen";
+            removeButton.setAttribute("aria-label", `${place.name} aus Merkliste entfernen`);
+            removeButton.addEventListener("click", () => {
+              savedPlaces.delete(id);
+              setButtonState(button, false);
+              renderFavorites();
+            });
+
+            item.append(jumpButton, removeButton);
+            favoritesList.appendChild(item);
+          });
         });
       };
 
@@ -239,13 +300,23 @@ def render_page_script() -> str:
           if (savedPlaces.has(id)) {
             savedPlaces.delete(id);
           } else {
-            savedPlaces.set(id, name);
+            const section = button.closest("[data-section]");
+            const category = categoryLabels[section?.dataset.section] || "";
+            savedPlaces.set(id, { name, category });
           }
 
           setButtonState(button, savedPlaces.has(id));
           renderFavorites();
         });
       });
+
+      if (favoritesToggle && favoritesBody) {
+        favoritesToggle.addEventListener("click", () => {
+          const isExpanded = favoritesToggle.getAttribute("aria-expanded") === "true";
+          favoritesToggle.setAttribute("aria-expanded", isExpanded ? "false" : "true");
+          favoritesBody.hidden = isExpanded;
+        });
+      }
 
       renderFavorites();
 
@@ -511,9 +582,11 @@ def render_intro(scenario: DemoScenario, grouped: dict, section_keys: list[str])
 
 def render_favorites_panel() -> str:
     return """      <section class="favorites-panel" aria-label="Gemerkte Orte">
-        <div class="favorites-heading">Gemerkte Orte</div>
-        <p class="favorites-empty" data-favorites-empty>Noch keine Orte gemerkt.</p>
-        <ul class="favorites-list" data-favorites-list></ul>
+        <button class="favorites-heading" type="button" data-favorites-toggle aria-expanded="true">Gemerkte Orte</button>
+        <div data-favorites-body>
+          <p class="favorites-empty" data-favorites-empty>Noch keine Orte gemerkt.</p>
+          <ul class="favorites-list" data-favorites-list></ul>
+        </div>
       </section>"""
 
 
@@ -766,10 +839,22 @@ def render_html(
     }}
 
     .favorites-heading {{
+      display: inline-flex;
+      align-items: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
       color: var(--blue-900);
+      cursor: pointer;
+      font-family: inherit;
       font-size: 0.86rem;
       font-weight: 850;
       margin-bottom: 6px;
+    }}
+
+    .favorites-heading:focus-visible {{
+      outline: 2px solid var(--blue-500);
+      outline-offset: 3px;
     }}
 
     .favorites-empty {{
@@ -781,15 +866,57 @@ def render_html(
 
     .favorites-list {{
       margin: 0;
-      padding-left: 18px;
+      padding-left: 0;
       color: var(--ink);
       font-size: 0.86rem;
       font-weight: 700;
       line-height: 1.45;
+      list-style: none;
     }}
 
     .favorites-list:empty {{
       display: none;
+    }}
+
+    .favorite-item {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 3px 0 4px;
+    }}
+
+    .favorite-jump {{
+      flex: 0 1 auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: 800;
+      text-align: left;
+    }}
+
+    .favorite-group-heading {{
+      margin: 9px 0 2px;
+      color: var(--blue-700);
+      font-size: 0.72rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }}
+
+    .favorite-remove {{
+      min-height: 24px;
+      padding: 3px 7px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 850;
     }}
 
     .section {{
@@ -833,6 +960,12 @@ def render_html(
       border-radius: 24px;
       padding: 16px;
       box-shadow: 0 12px 28px rgba(13, 67, 110, 0.12);
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }}
+
+    .place-card.favorite-highlight {{
+      border-color: var(--blue-500);
+      box-shadow: 0 0 0 3px rgba(42, 139, 217, 0.18), 0 12px 28px rgba(13, 67, 110, 0.12);
     }}
 
     .card-topline {{
