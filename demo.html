@@ -514,6 +514,16 @@
       line-height: 1.45;
     }
 
+    @media (min-width: 960px) {
+      .phone-shell {
+        width: min(1000px, calc(100% - 48px));
+      }
+
+      .cards {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+    }
+
     @media (max-width: 760px) {
       .stage {
         padding: 0;
