@@ -430,6 +430,13 @@ def render_recommendation_card(result, weather: str, show_interest_weights: bool
     )
 
     details_html = "\n".join(render_detail_chip(item) for item in details_items(result))
+    service_summary_html = ""
+    if is_service_poi(result.poi):
+        service_summary_html = f"""
+        <div class="service-summary">
+          <div class="detail-label">Vor Ort</div>
+          <div class="chip-row detail-row">{details_html}</div>
+        </div>"""
     why = why_text(result, show_interest_weights)
 
     return f"""
@@ -443,7 +450,7 @@ def render_recommendation_card(result, weather: str, show_interest_weights: bool
           <button class="save-button" type="button" data-save-place data-place-id="{h(result.poi.id)}" data-place-name="{h(result.poi.name)}" aria-pressed="false" aria-label="{h(result.poi.name)} merken">Merken</button>
         </div>
         <p class="today-hint">{h(today_hint)}</p>
-        <p class="why">{h(why)}</p>
+        <p class="why">{h(why)}</p>{service_summary_html}
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
         </div>
@@ -995,6 +1002,10 @@ def render_html(
     }}
 
     .fact-row {{
+      margin: 0 0 13px;
+    }}
+
+    .service-summary {{
       margin: 0 0 13px;
     }}
 
