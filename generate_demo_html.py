@@ -582,8 +582,8 @@ def render_intro(scenario: DemoScenario, grouped: dict, section_keys: list[str])
 
 def render_favorites_panel() -> str:
     return """      <section class="favorites-panel" aria-label="Gemerkte Orte">
-        <button class="favorites-heading" type="button" data-favorites-toggle aria-expanded="true">Gemerkte Orte</button>
-        <div data-favorites-body>
+        <button class="favorites-heading" type="button" data-favorites-toggle aria-expanded="false">Gemerkte Orte</button>
+        <div data-favorites-body hidden>
           <p class="favorites-empty" data-favorites-empty>Noch keine Orte gemerkt.</p>
           <ul class="favorites-list" data-favorites-list></ul>
         </div>
