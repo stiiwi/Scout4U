@@ -41,10 +41,6 @@ class DemoScenario:
 
 
 CAMPER_SECTION_ORDER = tuple(key for key, _label in RECOMMENDATION_SECTION_ORDER)
-EXPERIENCE_POIS_PATH = Path("pois_bern_test_sample.csv")
-EXPERIENCE_PROFILES_PATH = Path("profiles_test_sample.csv")
-EXPERIENCE_PROFILE_ID = "A"
-EXPERIENCE_WEATHER = "sunny"
 EXPERIENCE_TOP = 4
 
 CAMPER_SCENARIO = DemoScenario(
@@ -604,8 +600,6 @@ def render_html(
     }
     if experience_recommendations is not None:
         grouped["experiences"] = experience_recommendations[:EXPERIENCE_TOP]
-        section_weather["experiences"] = EXPERIENCE_WEATHER
-        section_interest_weights["experiences"] = False
 
     section_keys = visible_section_keys(grouped, scenario)
     active_key = active_section_key(grouped, scenario, section_keys)
@@ -1249,14 +1243,14 @@ def load_recommendations(pois_path: Path, profiles_path: Path, profile_id: str, 
     return profile, recommendations
 
 
-def build_experience_recommendations() -> list:
+def build_experience_recommendations(scenario: DemoScenario) -> list:
     _profile, recommendations = load_recommendations(
-        EXPERIENCE_POIS_PATH,
-        EXPERIENCE_PROFILES_PATH,
-        EXPERIENCE_PROFILE_ID,
-        EXPERIENCE_WEATHER,
+        scenario.pois_path,
+        scenario.profiles_path,
+        scenario.profile_id,
+        scenario.weather,
     )
-    return recommendations[:EXPERIENCE_TOP]
+    return group_recommendations(recommendations)["experiences"][:EXPERIENCE_TOP]
 
 
 def build_demo(scenario: DemoScenario) -> None:
@@ -1266,7 +1260,7 @@ def build_demo(scenario: DemoScenario) -> None:
         scenario.profile_id,
         scenario.weather,
     )
-    experience_recommendations = build_experience_recommendations()
+    experience_recommendations = build_experience_recommendations(scenario)
     html = render_html(scenario, profile, recommendations, experience_recommendations)
     scenario.output_path.write_text(html, encoding="utf-8")
     print(f"HTML-Demo erzeugt: {scenario.output_path}")
