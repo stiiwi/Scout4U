@@ -1,14 +1,11 @@
 # Scout4U Backlog
 
 ## Next
-- [ ] Service-Karten klarer machen: Frischwasser, WC, Entsorgung, Dusche, Strom, Kosten, Öffnungszeiten sichtbarer darstellen.
 - [ ] Demo-Erleben prüfen: Wettereffekt klarer zeigen, ohne Services wetterabhängig wirken zu lassen.
-- [ ] Radius/Standort später als echte Auswahl prüfen.
 
 ## Later
 - [ ] Radius-Schalter 25 km / 40 km prüfen.
 - [ ] Standortauswahl als statische Demo-Variante prüfen.
-- [ ] Maps-Link oder externe Navigation prüfen.
 - [ ] Weitere Profile sichtbar machen, z. B. Servicefokus oder kurz & praktisch.
 - [ ] Datenmodell für echte Orte und Services entwerfen.
 - [ ] Mobile-App-Option erst prüfen, wenn HTML-/Produktprototyp ausgereizt ist.
@@ -23,12 +20,15 @@
 - [x] Regen/Sonne-Schalter als statische Demo-Szenarien einbauen.
 - [x] Services in der Demo wetter-neutral halten.
 - [x] Standort-/Radius-Hinweis in der Demo ergänzen.
+- [x] Karten-Upgrade V1: Typ-Pills, feste Service-Reihe, kompakte Entscheidungszeile, Faktenzeile und Inline-Details ergänzen.
+- [x] Externe Route-Aktion bedingt vorbereiten, nur wenn lat/lon in den Daten vorhanden sind.
 
 ## Not now
 - [ ] Login.
 - [ ] Datenbank.
 - [ ] API.
 - [ ] GPS/Karte.
+- [ ] Google Maps API / Places API / eingebettete Karte.
 - [ ] echte Android-/iOS-App.
 - [ ] Monetarisierung.
 - [ ] Umbenennung von Scout4U.

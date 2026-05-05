@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import csv
 from dataclasses import dataclass, replace
 from html import escape
 from pathlib import Path
@@ -8,16 +9,14 @@ from scout4u_score import (
     display_label,
     display_labels,
     evaluate_pois,
-    format_bool_de,
-    format_category,
     format_number,
-    format_price,
     group_recommendations,
     is_service_poi,
     parse_pois,
     parse_profiles,
     recommendation_section,
     select_profile,
+    service_terms_for,
     weather_sentence,
 )
 
@@ -165,6 +164,246 @@ def fit_label(score: float) -> str:
     if score >= 8:
         return "Passt gut"
     return "Kann passen"
+
+
+OPTIONAL_POI_DETAIL_FIELDS = ("direction", "website_url", "last_checked", "source")
+SERVICE_ROW = (
+    ("frischwasser", "Wasser", {"frischwasser", "wasser"}),
+    ("wc", "WC", {"toilette", "oeffentliche_toilette"}),
+    ("entsorgung", "Entsorgung", {"wc_entsorgung", "chemietoilette", "grauwasser"}),
+    ("dusche", "Dusche", {"dusche"}),
+    ("strom", "Strom", {"strom"}),
+)
+
+
+def read_optional_poi_fields(path: Path) -> dict[str, dict[str, str]]:
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        if not reader.fieldnames:
+            return {}
+        known_fields = set(reader.fieldnames)
+        optional_fields = [field for field in OPTIONAL_POI_DETAIL_FIELDS if field in known_fields]
+        if not optional_fields:
+            return {}
+        extras = {}
+        for row in reader:
+            poi_id = (row.get("id") or "").strip()
+            if not poi_id:
+                continue
+            values = {
+                field: (row.get(field) or "").strip()
+                for field in optional_fields
+            }
+            extras[poi_id] = values
+        return extras
+
+
+def attach_optional_poi_fields(pois: list, path: Path) -> None:
+    extras = read_optional_poi_fields(path)
+    for poi in pois:
+        for field in OPTIONAL_POI_DETAIL_FIELDS:
+            setattr(poi, field, extras.get(poi.id, {}).get(field, ""))
+
+
+def card_type(result) -> tuple[str, str]:
+    poi = result.poi
+    terms = service_terms_for(poi)
+    if poi.poi_type == "mixed":
+        if terms & {"camper_stellplatz", "stellplatz", "overnight"} or poi.overnight_allowed is True:
+            return "Stellplatz + Service", "mixed"
+        return "Ausflug + Service", "mixed"
+    if terms & {"camper_stellplatz", "stellplatz", "overnight"} or poi.overnight_allowed is True:
+        return "Stellplatz", "stay"
+    supply_terms = {"frischwasser", "wc_entsorgung", "chemietoilette", "grauwasser", "strom", "dusche"}
+    toilet_terms = {"toilette", "oeffentliche_toilette"}
+    if terms & toilet_terms and not (terms & supply_terms):
+        return "Toilette", "toilet"
+    if terms & (supply_terms | toilet_terms):
+        return "Versorgung", "supply"
+    return "Ausflug", "experience"
+
+
+def render_type_pill(result) -> str:
+    label, class_key = card_type(result)
+    return f'<span class="type-pill type-{h(class_key)}">{h(label)}</span>'
+
+
+def active_service_labels(result) -> list[str]:
+    terms = service_terms_for(result.poi)
+    labels = []
+    for _key, label, active_terms in SERVICE_ROW:
+        if terms & active_terms:
+            labels.append(label)
+    return labels
+
+
+def natural_list_de(items: list[str]) -> str:
+    if len(items) <= 1:
+        return "".join(items)
+    return ", ".join(items[:-1]) + " und " + items[-1]
+
+
+def render_service_detail_list(result) -> str:
+    label, _class_key = card_type(result)
+    if label == "Ausflug":
+        return ""
+
+    terms = service_terms_for(result.poi)
+    items = []
+    for _key, label, active_terms in SERVICE_ROW:
+        status = "vorhanden" if terms & active_terms else "nicht vorhanden"
+        items.append(
+            f"""<div class="service-detail-item">
+              <dt>{h(label)}</dt>
+              <dd>{h(status)}</dd>
+            </div>"""
+        )
+    return f'<dl class="service-detail-list">{"".join(items)}</dl>'
+
+
+def strip_today_prefix(text: str) -> str:
+    prefix = "Heute passend: "
+    if text.startswith(prefix):
+        text = text[len(prefix):]
+    return text.rstrip(".")
+
+
+def decision_line_text(result, weather: str, show_interest_weights: bool) -> str:
+    poi = result.poi
+    type_label, _class_key = card_type(result)
+    service_labels = active_service_labels(result)
+    service_text = natural_list_de(service_labels)
+
+    if type_label == "Stellplatz":
+        if service_labels:
+            return f"Stellplatz mit {service_text}"
+        return poi.notes or "Übernachten möglich."
+
+    if type_label == "Toilette":
+        if service_labels:
+            return f"Toilette mit {service_text}"
+        return "Naher WC-Stopp."
+
+    if type_label == "Versorgung":
+        if service_labels:
+            return f"Service mit {service_text}"
+        return "Praktischer Service-Stopp."
+
+    if type_label == "Stellplatz + Service":
+        if service_labels:
+            return f"Stellplatz mit {service_text}"
+        return poi.notes or strip_today_prefix(today_hint_text(result, weather))
+
+    if type_label == "Ausflug + Service":
+        if service_labels:
+            return f"Ausflug mit {service_text} vor Ort"
+        return poi.notes or strip_today_prefix(today_hint_text(result, weather))
+
+    if result.score.matched_interests:
+        labels = [display_label(tag) for tag, _weight in result.score.matched_interests[:2]]
+        return strip_today_prefix(today_hint_text(result, weather)) + " · " + ", ".join(labels)
+
+    return matched_interests_text(result, show_interest_weights)
+
+
+def distance_fact_text(result) -> str:
+    text = f"{format_number(result.poi.distance_km)} km"
+    direction = getattr(result.poi, "direction", "")
+    if direction:
+        text += f" · {direction_short_label(direction)}"
+    return text
+
+
+def direction_short_label(direction: str) -> str:
+    labels = {
+        "nord": "N",
+        "nordost": "NO",
+        "ost": "O",
+        "südost": "SO",
+        "suedost": "SO",
+        "süd": "S",
+        "sued": "S",
+        "südwest": "SW",
+        "suedwest": "SW",
+        "west": "W",
+        "nordwest": "NW",
+        "zentrum": "Zentrum",
+    }
+    normalized = direction.strip().lower()
+    return labels.get(normalized, direction.strip())
+
+
+def is_free(result) -> bool:
+    poi = result.poi
+    return (
+        poi.price_chf == 0.0
+        or "kostenlos" in poi.tags
+        or "kostenlos" in poi.services
+    )
+
+
+def price_fact_text(result) -> str:
+    poi = result.poi
+    if is_free(result):
+        return "kostenlos"
+    if poi.price_chf is None:
+        return ""
+    price = f"CHF {format_number(poi.price_chf)}"
+    if poi.overnight_allowed is True:
+        return f"{price} / Nacht"
+    if "dusche" in poi.services and "dusche" in poi.name.lower():
+        return f"{price} / Dusche"
+    return price
+
+
+def route_url(poi) -> str:
+    lat = (poi.lat or "").strip()
+    lon = (poi.lon or "").strip()
+    if not lat or not lon:
+        return ""
+    return f"https://www.google.com/maps/dir/?api=1&destination={h(lat)},{h(lon)}"
+
+
+def render_detail_box(result, weather: str) -> str:
+    poi = result.poi
+    rows = []
+    service_detail_html = render_service_detail_list(result)
+    if poi.notes and not service_detail_html:
+        rows.append(f"<p>{h(poi.notes)}</p>")
+    if service_detail_html:
+        rows.append(service_detail_html)
+    if poi.oeffnungszeiten_relevant:
+        rows.append("<p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p>")
+
+    website_url = getattr(poi, "website_url", "")
+    if website_url:
+        rows.append(
+            f'<p><a href="{h(website_url)}" target="_blank" rel="noopener noreferrer">Website öffnen</a></p>'
+        )
+
+    maps_url = route_url(poi)
+    if maps_url:
+        rows.append(
+            f'<p><a href="{maps_url}" target="_blank" rel="noopener noreferrer">Route in Google Maps öffnen</a></p>'
+        )
+
+    source = getattr(poi, "source", "") or poi.datenquelle
+    last_checked = getattr(poi, "last_checked", "")
+    source_parts = []
+    if source:
+        source_parts.append(f"Quelle: {source}")
+    if last_checked:
+        source_parts.append(f"Prüfstand: {last_checked}")
+    if source_parts:
+        rows.append(f'<p class="source-line">{h(" · ".join(source_parts))}</p>')
+
+    if not rows:
+        rows.append("<p>Keine weiteren Details in den Demo-Daten.</p>")
+
+    return f"""
+          <div class="detail-box">
+            {"".join(rows)}
+          </div>"""
 
 
 def render_page_script() -> str:
@@ -498,54 +737,48 @@ def today_hint_text(result, weather: str) -> str:
 
 def render_recommendation_card(result, weather: str, show_interest_weights: bool) -> str:
     fit_text = fit_label(result.score.total)
-    today_hint = today_hint_text(result, weather)
-    notes = notes_for(result)
-    notes_html = ""
-    if notes:
-        notes_html = '<p class="note-text">Hinweis: ' + h(" · ".join(notes)) + "</p>"
+    decision_line = decision_line_text(result, weather, show_interest_weights)
 
     fact_chips = [
-        render_fact_chip("Entfernung", f"{format_number(result.poi.distance_km)} km"),
+        render_fact_chip("Distanz", distance_fact_text(result)),
     ]
 
-    if is_service_poi(result.poi) or result.poi.price_chf is not None:
-        fact_chips.append(render_fact_chip("Preis", format_price(result.poi.price_chf)))
+    price_text = price_fact_text(result)
+    if price_text:
+        fact_chips.append(render_fact_chip("Preis", price_text))
 
-    if result.poi.overnight_allowed is not None:
+    if not is_service_poi(result.poi):
         fact_chips.append(
-            render_fact_chip("Übernachten", format_bool_de(result.poi.overnight_allowed))
+            render_fact_chip("Wetter", weather_chip_text(result.poi, weather), "weather-chip")
         )
 
-    fact_chips.append(
-        render_fact_chip("Wetter", weather_chip_text(result.poi, weather), "weather-chip")
-    )
-
-    details_html = "\n".join(render_detail_chip(item) for item in details_items(result))
-    service_summary_html = ""
-    if is_service_poi(result.poi):
-        service_summary_html = f"""
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row">{details_html}</div>
-        </div>"""
-    why = why_text(result, show_interest_weights)
+    details_box_html = render_detail_box(result, weather)
+    maps_url = route_url(result.poi)
+    route_link_html = ""
+    if maps_url:
+        route_link_html = f'<a class="action-link route-link" href="{maps_url}" target="_blank" rel="noopener noreferrer">Route</a>'
 
     return f"""
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">{h(format_category(result.poi.poi_type))}</span>
+          {render_type_pill(result)}
           <span class="fit-pill">{h(fit_text)}</span>
         </div>
         <div class="place-title-row">
           <h3>{h(result.poi.name)}</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="{h(result.poi.id)}" data-place-name="{h(result.poi.name)}" aria-pressed="false" aria-label="{h(result.poi.name)} merken">Merken</button>
         </div>
-        <p class="today-hint">{h(today_hint)}</p>
-        <p class="why">{h(why)}</p>{service_summary_html}
+        <p class="decision-line">{h(decision_line)}</p>
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
         </div>
-{notes_html}
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+            {details_box_html}
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="{h(result.poi.id)}" data-place-name="{h(result.poi.name)}" aria-pressed="false" aria-label="{h(result.poi.name)} merken">Merken</button>
+          {route_link_html}
+        </div>
       </article>
 """
 
@@ -1124,7 +1357,7 @@ def render_html(
       flex-wrap: wrap;
     }}
 
-    .category-pill,
+    .type-pill,
     .fit-pill {{
       display: inline-flex;
       align-items: center;
@@ -1133,11 +1366,42 @@ def render_html(
       border-radius: 999px;
       font-size: 0.8rem;
       font-weight: 800;
+      white-space: nowrap;
     }}
 
-    .category-pill {{
+    .type-pill {{
       background: var(--blue-100);
       color: var(--blue-900);
+    }}
+
+    .type-stay {{
+      background: #e8f4ff;
+      color: var(--blue-900);
+      border: 1px solid #b9def8;
+    }}
+
+    .type-supply {{
+      background: #dcfbf5;
+      color: #0f6d65;
+      border: 1px solid #aee8d6;
+    }}
+
+    .type-toilet {{
+      background: #fff3d6;
+      color: #8a4e00;
+      border: 1px solid #f0ce86;
+    }}
+
+    .type-experience {{
+      background: #eef5ff;
+      color: #345d9d;
+      border: 1px solid #c7dcff;
+    }}
+
+    .type-mixed {{
+      background: #f1edff;
+      color: #5b3d9b;
+      border: 1px solid #d6c9ff;
     }}
 
     .fit-pill {{
@@ -1192,14 +1456,14 @@ def render_html(
       outline-offset: 2px;
     }}
 
-    .today-hint {{
-      margin: 10px 0 8px;
-      padding: 9px 10px;
+    .decision-line {{
+      margin: 9px 0 9px;
+      padding: 8px 10px;
       border: 1px solid #c4ead5;
-      border-radius: 15px;
+      border-radius: 12px;
       background: #f1fbf5;
       color: #1d6845;
-      line-height: 1.38;
+      line-height: 1.3;
       font-size: 0.88rem;
       font-weight: 800;
     }}
@@ -1218,7 +1482,124 @@ def render_html(
     }}
 
     .fact-row {{
-      margin: 0 0 13px;
+      margin: 0 0 11px;
+    }}
+
+    .action-row {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }}
+
+    .inline-details {{
+      display: contents;
+    }}
+
+    .inline-details summary,
+    .action-link {{
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border: 1px solid #b9def8;
+      border-radius: 999px;
+      background: var(--blue-50);
+      color: var(--blue-900);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 850;
+      line-height: 1.2;
+      text-decoration: none;
+      white-space: nowrap;
+    }}
+
+    .inline-details summary {{
+      list-style: none;
+    }}
+
+    .inline-details summary::-webkit-details-marker {{
+      display: none;
+    }}
+
+    .inline-details[open] summary {{
+      background: #edf7ff;
+      border-color: var(--blue-500);
+      color: var(--blue-900);
+    }}
+
+    .inline-details summary:focus-visible,
+    .action-link:focus-visible {{
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
+    }}
+
+    .detail-box {{
+      flex: 1 0 100%;
+      order: 2;
+      margin-top: 2px;
+      padding: 12px;
+      border: 1px solid #d8e6f2;
+      border-radius: 12px;
+      background: #fbfdff;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 650;
+      line-height: 1.42;
+    }}
+
+    .detail-box p {{
+      margin: 0 0 8px;
+    }}
+
+    .detail-box p:last-child {{
+      margin-bottom: 0;
+    }}
+
+    .detail-box a {{
+      color: var(--blue-700);
+      font-weight: 850;
+    }}
+
+    .service-detail-list {{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      gap: 6px;
+      margin: 0 0 10px;
+    }}
+
+    .service-detail-item {{
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 8px;
+      border: 1px solid #e1edf7;
+      border-radius: 10px;
+      background: #ffffff;
+    }}
+
+    .service-detail-item dt,
+    .service-detail-item dd {{
+      margin: 0;
+    }}
+
+    .service-detail-item dt {{
+      color: var(--ink);
+      font-weight: 850;
+    }}
+
+    .service-detail-item dd {{
+      color: var(--muted);
+      font-weight: 750;
+      text-align: right;
+    }}
+
+    .source-line {{
+      color: #6f8192;
+      font-size: 0.78rem;
     }}
 
     .service-summary {{
@@ -1228,20 +1609,20 @@ def render_html(
     .chip {{
       display: inline-flex;
       align-items: center;
-      min-height: 35px;
-      border-radius: 999px;
+      min-height: 31px;
+      border-radius: 10px;
       font-size: 0.82rem;
       line-height: 1.2;
       font-weight: 750;
-      padding: 8px 10px;
+      padding: 6px 9px;
       max-width: 100%;
     }}
 
     .fact-chip {{
       flex: 1 1 140px;
-      background: var(--blue-100);
+      background: #f8fbfe;
       color: var(--blue-900);
-      border: 1px solid #cae7fb;
+      border: 1px solid #e0edf7;
       gap: 6px;
     }}
 
@@ -1252,7 +1633,7 @@ def render_html(
 
     .weather-chip {{
       flex-basis: 100%;
-      background: #edf7ff;
+      background: #f4faff;
     }}
 
     .detail-label {{
@@ -1384,6 +1765,7 @@ def render_html(
 
 def load_recommendations(pois_path: Path, profiles_path: Path, profile_id: str, weather: str):
     pois = parse_pois(pois_path)
+    attach_optional_poi_fields(pois, pois_path)
     profiles = parse_profiles(profiles_path)
     profile = select_profile(profiles, profile_id)
     recommendations, filtered = evaluate_pois(pois, profile, weather)

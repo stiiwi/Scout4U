@@ -9,6 +9,7 @@ Codex soll pro Arbeitspaket schnell erkennen, worum es geht, welche Dateien rele
 ## Aktueller Stand
 - Scout4U ist ein früher Python-/HTML-Prototyp für einen smarten Reisebegleiter für Camper.
 - Aktuelle Demo liegt in demo.html und wird über generate_demo_html.py erzeugt.
+- Ergebniskarten zeigen Typ-Pills, feste Camper-Service-Reihe, kompakte Entscheidungszeile, Fakten und Inline-Details.
 - Kernlogik liegt in scout4u_score.py.
 - GitHub Pages nutzt demo.html.
 - main ist aktuell sauber und synchron, sofern nicht anders im Chat genannt.

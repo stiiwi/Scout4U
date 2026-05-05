@@ -387,7 +387,7 @@
       flex-wrap: wrap;
     }
 
-    .category-pill,
+    .type-pill,
     .fit-pill {
       display: inline-flex;
       align-items: center;
@@ -396,11 +396,42 @@
       border-radius: 999px;
       font-size: 0.8rem;
       font-weight: 800;
+      white-space: nowrap;
     }
 
-    .category-pill {
+    .type-pill {
       background: var(--blue-100);
       color: var(--blue-900);
+    }
+
+    .type-stay {
+      background: #e8f4ff;
+      color: var(--blue-900);
+      border: 1px solid #b9def8;
+    }
+
+    .type-supply {
+      background: #dcfbf5;
+      color: #0f6d65;
+      border: 1px solid #aee8d6;
+    }
+
+    .type-toilet {
+      background: #fff3d6;
+      color: #8a4e00;
+      border: 1px solid #f0ce86;
+    }
+
+    .type-experience {
+      background: #eef5ff;
+      color: #345d9d;
+      border: 1px solid #c7dcff;
+    }
+
+    .type-mixed {
+      background: #f1edff;
+      color: #5b3d9b;
+      border: 1px solid #d6c9ff;
     }
 
     .fit-pill {
@@ -455,14 +486,14 @@
       outline-offset: 2px;
     }
 
-    .today-hint {
-      margin: 10px 0 8px;
-      padding: 9px 10px;
+    .decision-line {
+      margin: 9px 0 9px;
+      padding: 8px 10px;
       border: 1px solid #c4ead5;
-      border-radius: 15px;
+      border-radius: 12px;
       background: #f1fbf5;
       color: #1d6845;
-      line-height: 1.38;
+      line-height: 1.3;
       font-size: 0.88rem;
       font-weight: 800;
     }
@@ -481,7 +512,124 @@
     }
 
     .fact-row {
-      margin: 0 0 13px;
+      margin: 0 0 11px;
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .inline-details {
+      display: contents;
+    }
+
+    .inline-details summary,
+    .action-link {
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border: 1px solid #b9def8;
+      border-radius: 999px;
+      background: var(--blue-50);
+      color: var(--blue-900);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 850;
+      line-height: 1.2;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .inline-details summary {
+      list-style: none;
+    }
+
+    .inline-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .inline-details[open] summary {
+      background: #edf7ff;
+      border-color: var(--blue-500);
+      color: var(--blue-900);
+    }
+
+    .inline-details summary:focus-visible,
+    .action-link:focus-visible {
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
+    }
+
+    .detail-box {
+      flex: 1 0 100%;
+      order: 2;
+      margin-top: 2px;
+      padding: 12px;
+      border: 1px solid #d8e6f2;
+      border-radius: 12px;
+      background: #fbfdff;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 650;
+      line-height: 1.42;
+    }
+
+    .detail-box p {
+      margin: 0 0 8px;
+    }
+
+    .detail-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .detail-box a {
+      color: var(--blue-700);
+      font-weight: 850;
+    }
+
+    .service-detail-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      gap: 6px;
+      margin: 0 0 10px;
+    }
+
+    .service-detail-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 8px;
+      border: 1px solid #e1edf7;
+      border-radius: 10px;
+      background: #ffffff;
+    }
+
+    .service-detail-item dt,
+    .service-detail-item dd {
+      margin: 0;
+    }
+
+    .service-detail-item dt {
+      color: var(--ink);
+      font-weight: 850;
+    }
+
+    .service-detail-item dd {
+      color: var(--muted);
+      font-weight: 750;
+      text-align: right;
+    }
+
+    .source-line {
+      color: #6f8192;
+      font-size: 0.78rem;
     }
 
     .service-summary {
@@ -491,20 +639,20 @@
     .chip {
       display: inline-flex;
       align-items: center;
-      min-height: 35px;
-      border-radius: 999px;
+      min-height: 31px;
+      border-radius: 10px;
       font-size: 0.82rem;
       line-height: 1.2;
       font-weight: 750;
-      padding: 8px 10px;
+      padding: 6px 9px;
       max-width: 100%;
     }
 
     .fact-chip {
       flex: 1 1 140px;
-      background: var(--blue-100);
+      background: #f8fbfe;
       color: var(--blue-900);
-      border: 1px solid #cae7fb;
+      border: 1px solid #e0edf7;
       gap: 6px;
     }
 
@@ -515,7 +663,7 @@
 
     .weather-chip {
       flex-basis: 100%;
-      background: #edf7ff;
+      background: #f4faff;
     }
 
     .detail-label {
@@ -679,124 +827,206 @@
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt sehr gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Eichholz</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_eichholz" data-place-name="Stellplatz Eichholz" aria-pressed="false" aria-label="Stellplatz Eichholz merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
-<span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Strom</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser und Strom</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>4.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 18</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>4.5 km · S</span><span class="chip fact-chip"><span>Preis</span>CHF 18 / Nacht</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Stellplatz mit Basisversorgung</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_eichholz" data-place-name="Stellplatz Eichholz" aria-pressed="false" aria-label="Stellplatz Eichholz merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt sehr gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Münsingen Aaretal</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_muensingen_aaretal" data-place-name="Stellplatz Münsingen Aaretal" aria-pressed="false" aria-label="Stellplatz Münsingen Aaretal merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
-<span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Dusche</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Strom</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser, Dusche und Strom</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>14 km</span><span class="chip fact-chip"><span>Preis</span>CHF 28</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>14 km · SO</span><span class="chip fact-chip"><span>Preis</span>CHF 28 / Nacht</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Demo-Stellplatz mit voller Versorgung</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_muensingen_aaretal" data-place-name="Stellplatz Münsingen Aaretal" aria-pressed="false" aria-label="Stellplatz Münsingen Aaretal merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt sehr gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Thun Allmend</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_thun_allmend" data-place-name="Stellplatz Thun Allmend" aria-pressed="false" aria-label="Stellplatz Thun Allmend merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
-<span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Strom</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser und Strom</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>23.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 25</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>23.5 km · SO</span><span class="chip fact-chip"><span>Preis</span>CHF 25 / Nacht</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Ruhiger Stellplatz nahe Thun</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_thun_allmend" data-place-name="Stellplatz Thun Allmend" aria-pressed="false" aria-label="Stellplatz Thun Allmend merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Köniz Eichholz Höhe</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_koeniz_eichholz_hoehe" data-place-name="Stellplatz Köniz Eichholz Höhe" aria-pressed="false" aria-label="Stellplatz Köniz Eichholz Höhe merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
-<span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Frischwasser</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>4 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>4 km · S</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Demo-Stellplatz nahe Bern</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_koeniz_eichholz_hoehe" data-place-name="Stellplatz Köniz Eichholz Höhe" aria-pressed="false" aria-label="Stellplatz Köniz Eichholz Höhe merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Burgdorf Emme</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_burgdorf_emme" data-place-name="Stellplatz Burgdorf Emme" aria-pressed="false" aria-label="Stellplatz Burgdorf Emme merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Frischwasser</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>18 km</span><span class="chip fact-chip"><span>Preis</span>CHF 12</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>18 km · NO</span><span class="chip fact-chip"><span>Preis</span>CHF 12 / Nacht</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Einfacher Stellplatz am Rand der Altstadt</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_burgdorf_emme" data-place-name="Stellplatz Burgdorf Emme" aria-pressed="false" aria-label="Stellplatz Burgdorf Emme merken">Merken</button>
+
+        </div>
       </article>
 
       </div>
@@ -812,163 +1042,288 @@
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Gemischt</span>
+          <span class="type-pill type-mixed">Ausflug + Service</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Uferpark Thun mit WC</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="uferpark_thun_wc" data-place-name="Uferpark Thun mit WC" aria-pressed="false" aria-label="Uferpark Thun mit WC merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Toilette</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Toilette</span></div>
-        </div>
+        <p class="decision-line">Ausflug mit Wasser und WC vor Ort</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>22 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>22 km · SO</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Schöner Ort mit Toilette am Wasser</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="uferpark_thun_wc" data-place-name="Uferpark Thun mit WC" aria-pressed="false" aria-label="Uferpark Thun mit WC merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-supply">Versorgung</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Service Autobahnraststätte Münsingen</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="service_autobahn_muensingen" data-place-name="Service Autobahnraststätte Münsingen" aria-pressed="false" aria-label="Service Autobahnraststätte Münsingen merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Strom, WC-Entsorgung</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Dusche</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Strom</span>
-<span class="chip detail-chip">WC-Entsorgung</span></div>
-        </div>
+        <p class="decision-line">Service mit Wasser, Entsorgung, Dusche und Strom</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>13 km</span><span class="chip fact-chip"><span>Preis</span>CHF 10</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>13 km · SO</span><span class="chip fact-chip"><span>Preis</span>CHF 10</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Demo-Komplettservice an Raststätte</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="service_autobahn_muensingen" data-place-name="Service Autobahnraststätte Münsingen" aria-pressed="false" aria-label="Service Autobahnraststätte Münsingen merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-supply">Versorgung</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Camper-Service Wankdorf</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="camper_service_wankdorf" data-place-name="Camper-Service Wankdorf" aria-pressed="false" aria-label="Camper-Service Wankdorf merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Nur 3.2 km entfernt und gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Chemietoilette</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">WC-Entsorgung</span></div>
-        </div>
+        <p class="decision-line">Service mit Wasser und Entsorgung</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>3.2 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>3.2 km · NO</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung und Frischwasser</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="camper_service_wankdorf" data-place-name="Camper-Service Wankdorf" aria-pressed="false" aria-label="Camper-Service Wankdorf merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-supply">Versorgung</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Camper-Service Thun Aare</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="camper_service_thun" data-place-name="Camper-Service Thun Aare" aria-pressed="false" aria-label="Camper-Service Thun Aare merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">WC-Entsorgung</span></div>
-        </div>
+        <p class="decision-line">Service mit Wasser und Entsorgung</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>22.5 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>22.5 km · SO</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung mit Frischwasser</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="camper_service_thun" data-place-name="Camper-Service Thun Aare" aria-pressed="false" aria-label="Camper-Service Thun Aare merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Gemischt</span>
+          <span class="type-pill type-mixed">Ausflug + Service</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Badestelle Wohlensee mit WC</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="mixed_bad_wohlensee" data-place-name="Badestelle Wohlensee mit WC" aria-pressed="false" aria-label="Badestelle Wohlensee mit WC merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Kurzer Weg und gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Toilette</span></div>
-        </div>
+        <p class="decision-line">Ausflug mit WC vor Ort</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>8 km</span><span class="chip fact-chip"><span>Preis</span>unbekannt</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen schwach: draußen</span>
+          <span class="chip fact-chip"><span>Distanz</span>8 km · W</span>
         </div>
-<p class="note-text">Hinweis: Ausflug plus einfache Toilette</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="mixed_bad_wohlensee" data-place-name="Badestelle Wohlensee mit WC" aria-pressed="false" aria-label="Badestelle Wohlensee mit WC merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-toilet">Toilette</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Öffentliche Toilette Bahnhof</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="toilette_bahnhof" data-place-name="Öffentliche Toilette Bahnhof" aria-pressed="false" aria-label="Öffentliche Toilette Bahnhof merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Regenfreundlich und nur 0.8 km entfernt.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">öffentliche Toilette</span>
-<span class="chip detail-chip">Toilette</span></div>
-        </div>
+        <p class="decision-line">Toilette mit WC</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>0.8 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>0.8 km · Zentrum</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Zentral und wettergeschützt</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="toilette_bahnhof" data-place-name="Öffentliche Toilette Bahnhof" aria-pressed="false" aria-label="Öffentliche Toilette Bahnhof merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-supply">Versorgung</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Frischwasser Tankstelle Niederwangen</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="frischwasser_niederwangen" data-place-name="Frischwasser Tankstelle Niederwangen" aria-pressed="false" aria-label="Frischwasser Tankstelle Niederwangen merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Nur 4 km entfernt und gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span></div>
-        </div>
+        <p class="decision-line">Service mit Wasser</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>4 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen neutral: teilweise wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>4 km · SW</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Demo-Versorgung Frischwasser</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="frischwasser_niederwangen" data-place-name="Frischwasser Tankstelle Niederwangen" aria-pressed="false" aria-label="Frischwasser Tankstelle Niederwangen merken">Merken</button>
+
+        </div>
       </article>
 
       </div>
@@ -985,37 +1340,53 @@
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Ausflug / schöner Ort</span>
+          <span class="type-pill type-experience">Ausflug</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Schloss Burgdorf</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="schloss_burgdorf" data-place-name="Schloss Burgdorf" aria-pressed="false" aria-label="Schloss Burgdorf merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Regenfreundlich.</p>
-        <p class="why">Trifft deine Interessen: familienfreundlich (1)</p>
+        <p class="decision-line">Regenfreundlich · familienfreundlich</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>18.5 km</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>18.5 km · NO</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Kulturort mit Innenräumen</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <p>Kulturort mit Innenräumen</p><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="schloss_burgdorf" data-place-name="Schloss Burgdorf" aria-pressed="false" aria-label="Schloss Burgdorf merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Ausflug / schöner Ort</span>
+          <span class="type-pill type-experience">Ausflug</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Schloss Thun Museum</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="schloss_thun_museum" data-place-name="Schloss Thun Museum" aria-pressed="false" aria-label="Schloss Thun Museum merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Regenfreundlich.</p>
-        <p class="why">Trifft deine Interessen: familienfreundlich (1)</p>
+        <p class="decision-line">Regenfreundlich · familienfreundlich</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>23.8 km</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>23.8 km · SO</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei Regen ideal: gut wettergeschützt</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Gute Regenoption mit Aussicht</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <p>Gute Regenoption mit Aussicht</p><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="schloss_thun_museum" data-place-name="Schloss Thun Museum" aria-pressed="false" aria-label="Schloss Thun Museum merken">Merken</button>
+
+        </div>
       </article>
 
       </div>
@@ -1065,124 +1436,206 @@
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt sehr gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Eichholz</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_eichholz" data-place-name="Stellplatz Eichholz" aria-pressed="false" aria-label="Stellplatz Eichholz merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
-<span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Strom</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser und Strom</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>4.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 18</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>4.5 km · S</span><span class="chip fact-chip"><span>Preis</span>CHF 18 / Nacht</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Stellplatz mit Basisversorgung</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_eichholz" data-place-name="Stellplatz Eichholz" aria-pressed="false" aria-label="Stellplatz Eichholz merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt sehr gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Münsingen Aaretal</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_muensingen_aaretal" data-place-name="Stellplatz Münsingen Aaretal" aria-pressed="false" aria-label="Stellplatz Münsingen Aaretal merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
-<span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Dusche</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Strom</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser, Dusche und Strom</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>14 km</span><span class="chip fact-chip"><span>Preis</span>CHF 28</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>14 km · SO</span><span class="chip fact-chip"><span>Preis</span>CHF 28 / Nacht</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Demo-Stellplatz mit voller Versorgung</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_muensingen_aaretal" data-place-name="Stellplatz Münsingen Aaretal" aria-pressed="false" aria-label="Stellplatz Münsingen Aaretal merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt sehr gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Thun Allmend</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_thun_allmend" data-place-name="Stellplatz Thun Allmend" aria-pressed="false" aria-label="Stellplatz Thun Allmend merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz, Strom</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
-<span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Strom</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser und Strom</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>23.5 km</span><span class="chip fact-chip"><span>Preis</span>CHF 25</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>23.5 km · SO</span><span class="chip fact-chip"><span>Preis</span>CHF 25 / Nacht</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Ruhiger Stellplatz nahe Thun</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_thun_allmend" data-place-name="Stellplatz Thun Allmend" aria-pressed="false" aria-label="Stellplatz Thun Allmend merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Köniz Eichholz Höhe</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_koeniz_eichholz_hoehe" data-place-name="Stellplatz Köniz Eichholz Höhe" aria-pressed="false" aria-label="Stellplatz Köniz Eichholz Höhe merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Abfall</span>
-<span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Frischwasser</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>4 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>4 km · S</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Demo-Stellplatz nahe Bern</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_koeniz_eichholz_hoehe" data-place-name="Stellplatz Köniz Eichholz Höhe" aria-pressed="false" aria-label="Stellplatz Köniz Eichholz Höhe merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-stay">Stellplatz</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Stellplatz Burgdorf Emme</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_burgdorf_emme" data-place-name="Stellplatz Burgdorf Emme" aria-pressed="false" aria-label="Stellplatz Burgdorf Emme merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Übernachten möglich und Versorgung vor Ort.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Stellplatz</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Camper-Stellplatz</span>
-<span class="chip detail-chip">Frischwasser</span></div>
-        </div>
+        <p class="decision-line">Stellplatz mit Wasser</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>18 km</span><span class="chip fact-chip"><span>Preis</span>CHF 12</span><span class="chip fact-chip"><span>Übernachten</span>ja</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>18 km · NO</span><span class="chip fact-chip"><span>Preis</span>CHF 12 / Nacht</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Einfacher Stellplatz am Rand der Altstadt</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="stellplatz_burgdorf_emme" data-place-name="Stellplatz Burgdorf Emme" aria-pressed="false" aria-label="Stellplatz Burgdorf Emme merken">Merken</button>
+
+        </div>
       </article>
 
       </div>
@@ -1198,163 +1651,288 @@
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Gemischt</span>
+          <span class="type-pill type-mixed">Ausflug + Service</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Uferpark Thun mit WC</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="uferpark_thun_wc" data-place-name="Uferpark Thun mit WC" aria-pressed="false" aria-label="Uferpark Thun mit WC merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Toilette</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Toilette</span></div>
-        </div>
+        <p class="decision-line">Ausflug mit Wasser und WC vor Ort</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>22 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>22 km · SO</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Schöner Ort mit Toilette am Wasser</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="uferpark_thun_wc" data-place-name="Uferpark Thun mit WC" aria-pressed="false" aria-label="Uferpark Thun mit WC merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-supply">Versorgung</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Service Autobahnraststätte Münsingen</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="service_autobahn_muensingen" data-place-name="Service Autobahnraststätte Münsingen" aria-pressed="false" aria-label="Service Autobahnraststätte Münsingen merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, Strom, WC-Entsorgung</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Dusche</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">Strom</span>
-<span class="chip detail-chip">WC-Entsorgung</span></div>
-        </div>
+        <p class="decision-line">Service mit Wasser, Entsorgung, Dusche und Strom</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>13 km</span><span class="chip fact-chip"><span>Preis</span>CHF 10</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>13 km · SO</span><span class="chip fact-chip"><span>Preis</span>CHF 10</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Demo-Komplettservice an Raststätte</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="service_autobahn_muensingen" data-place-name="Service Autobahnraststätte Münsingen" aria-pressed="false" aria-label="Service Autobahnraststätte Münsingen merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-supply">Versorgung</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Camper-Service Wankdorf</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="camper_service_wankdorf" data-place-name="Camper-Service Wankdorf" aria-pressed="false" aria-label="Camper-Service Wankdorf merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Nur 3.2 km entfernt und gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Chemietoilette</span>
-<span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">WC-Entsorgung</span></div>
-        </div>
+        <p class="decision-line">Service mit Wasser und Entsorgung</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>3.2 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>3.2 km · NO</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung und Frischwasser</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="camper_service_wankdorf" data-place-name="Camper-Service Wankdorf" aria-pressed="false" aria-label="Camper-Service Wankdorf merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-supply">Versorgung</span>
           <span class="fit-pill">Passt gut</span>
         </div>
         <div class="place-title-row">
           <h3>Camper-Service Thun Aare</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="camper_service_thun" data-place-name="Camper-Service Thun Aare" aria-pressed="false" aria-label="Camper-Service Thun Aare merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser, WC-Entsorgung</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span>
-<span class="chip detail-chip">WC-Entsorgung</span></div>
-        </div>
+        <p class="decision-line">Service mit Wasser und Entsorgung</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>22.5 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>22.5 km · SO</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Entsorgung mit Frischwasser</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="camper_service_thun" data-place-name="Camper-Service Thun Aare" aria-pressed="false" aria-label="Camper-Service Thun Aare merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Gemischt</span>
+          <span class="type-pill type-mixed">Ausflug + Service</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Badestelle Wohlensee mit WC</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="mixed_bad_wohlensee" data-place-name="Badestelle Wohlensee mit WC" aria-pressed="false" aria-label="Badestelle Wohlensee mit WC merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Kurzer Weg und gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Toilette</span></div>
-        </div>
+        <p class="decision-line">Ausflug mit WC vor Ort</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>8 km</span><span class="chip fact-chip"><span>Preis</span>unbekannt</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster ideal: draußen</span>
+          <span class="chip fact-chip"><span>Distanz</span>8 km · W</span>
         </div>
-<p class="note-text">Hinweis: Ausflug plus einfache Toilette</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="mixed_bad_wohlensee" data-place-name="Badestelle Wohlensee mit WC" aria-pressed="false" aria-label="Badestelle Wohlensee mit WC merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-toilet">Toilette</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Öffentliche Toilette Bahnhof</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="toilette_bahnhof" data-place-name="Öffentliche Toilette Bahnhof" aria-pressed="false" aria-label="Öffentliche Toilette Bahnhof merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Nur 0.8 km entfernt und gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Toilette</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">öffentliche Toilette</span>
-<span class="chip detail-chip">Toilette</span></div>
-        </div>
+        <p class="decision-line">Toilette mit WC</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>0.8 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster weniger passend: indoor</span>
+          <span class="chip fact-chip"><span>Distanz</span>0.8 km · Zentrum</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Zentral und wettergeschützt</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="toilette_bahnhof" data-place-name="Öffentliche Toilette Bahnhof" aria-pressed="false" aria-label="Öffentliche Toilette Bahnhof merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Camper-Service</span>
+          <span class="type-pill type-supply">Versorgung</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Frischwasser Tankstelle Niederwangen</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="frischwasser_niederwangen" data-place-name="Frischwasser Tankstelle Niederwangen" aria-pressed="false" aria-label="Frischwasser Tankstelle Niederwangen merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Nur 4 km entfernt und gute Versorgung.</p>
-        <p class="why">Passt zu deinen Bedürfnissen: Frischwasser</p>
-        <div class="service-summary">
-          <div class="detail-label">Vor Ort</div>
-          <div class="chip-row detail-row"><span class="chip detail-chip">Frischwasser</span></div>
-        </div>
+        <p class="decision-line">Service mit Wasser</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>4 km</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span><span class="chip fact-chip"><span>Übernachten</span>nein</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster neutral: teils wettergeschützt</span>
+          <span class="chip fact-chip"><span>Distanz</span>4 km · SW</span><span class="chip fact-chip"><span>Preis</span>kostenlos</span>
         </div>
-<p class="note-text">Hinweis: Öffnungszeiten prüfen · Demo-Versorgung Frischwasser</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <dl class="service-detail-list"><div class="service-detail-item">
+              <dt>Wasser</dt>
+              <dd>vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>WC</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Entsorgung</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Dusche</dt>
+              <dd>nicht vorhanden</dd>
+            </div><div class="service-detail-item">
+              <dt>Strom</dt>
+              <dd>nicht vorhanden</dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="frischwasser_niederwangen" data-place-name="Frischwasser Tankstelle Niederwangen" aria-pressed="false" aria-label="Frischwasser Tankstelle Niederwangen merken">Merken</button>
+
+        </div>
       </article>
 
       </div>
@@ -1371,37 +1949,53 @@
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Ausflug / schöner Ort</span>
+          <span class="type-pill type-experience">Ausflug</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Gurten Panorama</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="gurten_erlebnis" data-place-name="Gurten Panorama" aria-pressed="false" aria-label="Gurten Panorama merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Aussicht und Natur passen gut, wenn das Wetter kurz aufmacht.</p>
-        <p class="why">Trifft deine Interessen: Natur (2), Aussicht (2), familienfreundlich (1)</p>
+        <p class="decision-line">Aussicht und Natur passen gut, wenn das Wetter kurz aufmacht · Natur, Aussicht</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>5.5 km</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster ideal: draußen</span>
+          <span class="chip fact-chip"><span>Distanz</span>5.5 km · S</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster ideal: draußen</span>
         </div>
-<p class="note-text">Hinweis: Klassischer Ausflugsort</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <p>Klassischer Ausflugsort</p><p class="source-line">Quelle: sample</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="gurten_erlebnis" data-place-name="Gurten Panorama" aria-pressed="false" aria-label="Gurten Panorama merken">Merken</button>
+
+        </div>
       </article>
 
 
       <article class="place-card" data-place-card>
         <div class="card-topline">
-          <span class="category-pill">Ausflug / schöner Ort</span>
+          <span class="type-pill type-experience">Ausflug</span>
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
           <h3>Aussichtspunkt Belpberg</h3>
-          <button class="save-button" type="button" data-save-place data-place-id="aussicht_belpberg" data-place-name="Aussichtspunkt Belpberg" aria-pressed="false" aria-label="Aussichtspunkt Belpberg merken">Merken</button>
         </div>
-        <p class="today-hint">Heute passend: Aussicht und Natur passen gut, wenn das Wetter kurz aufmacht.</p>
-        <p class="why">Trifft deine Interessen: Natur (2), Aussicht (2)</p>
+        <p class="decision-line">Aussicht und Natur passen gut, wenn das Wetter kurz aufmacht · Natur, Aussicht</p>
         <div class="chip-row fact-row">
-          <span class="chip fact-chip"><span>Entfernung</span>10 km</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster ideal: draußen</span>
+          <span class="chip fact-chip"><span>Distanz</span>10 km · S</span><span class="chip fact-chip weather-chip"><span>Wetter</span>Bei trockenem Zeitfenster ideal: draußen</span>
         </div>
-<p class="note-text">Hinweis: Demo-Aussicht offen am Sonnenhang</p>
+        <div class="action-row">
+          <details class="inline-details">
+            <summary>Details</summary>
+
+          <div class="detail-box">
+            <p>Demo-Aussicht offen am Sonnenhang</p><p class="source-line">Quelle: demo</p>
+          </div>
+          </details>
+          <button class="save-button" type="button" data-save-place data-place-id="aussicht_belpberg" data-place-name="Aussichtspunkt Belpberg" aria-pressed="false" aria-label="Aussichtspunkt Belpberg merken">Merken</button>
+
+        </div>
       </article>
 
       </div>
