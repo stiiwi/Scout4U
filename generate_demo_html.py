@@ -364,6 +364,17 @@ def route_url(poi) -> str:
     return f"https://www.google.com/maps/dir/?api=1&destination={h(lat)},{h(lon)}"
 
 
+def render_place_title(poi) -> str:
+    title = h(poi.name)
+    website_url = (getattr(poi, "website_url", "") or "").strip()
+    if not website_url:
+        return f"<h3>{title}</h3>"
+    return (
+        f'<h3><a class="place-title-link" href="{h(website_url)}" '
+        f'target="_blank" rel="noopener noreferrer">{title}</a></h3>'
+    )
+
+
 def render_detail_box(result, weather: str) -> str:
     poi = result.poi
     rows = []
@@ -375,7 +386,7 @@ def render_detail_box(result, weather: str) -> str:
     if poi.oeffnungszeiten_relevant:
         rows.append("<p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p>")
 
-    website_url = getattr(poi, "website_url", "")
+    website_url = (getattr(poi, "website_url", "") or "").strip()
     if website_url:
         rows.append(
             f'<p><a href="{h(website_url)}" target="_blank" rel="noopener noreferrer">Website öffnen</a></p>'
@@ -765,7 +776,7 @@ def render_recommendation_card(result, weather: str, show_interest_weights: bool
           <span class="fit-pill">{h(fit_text)}</span>
         </div>
         <div class="place-title-row">
-          <h3>{h(result.poi.name)}</h3>
+          {render_place_title(result.poi)}
         </div>
         <p class="decision-line">{h(decision_line)}</p>
         <div class="chip-row fact-row">
@@ -1428,6 +1439,22 @@ def render_html(
       color: var(--blue-950);
       font-size: 1.13rem;
       letter-spacing: 0;
+    }}
+
+    .place-title-link {{
+      color: inherit;
+      text-decoration: none;
+      text-underline-offset: 3px;
+    }}
+
+    .place-title-link:hover {{
+      text-decoration: underline;
+    }}
+
+    .place-title-link:focus-visible {{
+      outline: 2px solid var(--blue-500);
+      outline-offset: 3px;
+      border-radius: 4px;
     }}
 
     .save-button {{
