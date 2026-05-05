@@ -668,7 +668,7 @@ def render_scenario_view(
     section_notes = {}
     if outside_radius_experiences:
         section_notes["experiences"] = (
-            f"Einige Ausflüge liegen außerhalb deines "
+            f"Weitere passende Ausflüge liegen außerhalb deines "
             f"{format_number(profile.radius_km)}-km-Radius."
         )
 
