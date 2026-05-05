@@ -251,11 +251,14 @@ def render_service_detail_list(result) -> str:
     terms = service_terms_for(result.poi)
     items = []
     for _key, label, active_terms in SERVICE_ROW:
-        status = "vorhanden" if terms & active_terms else "nicht vorhanden"
+        is_available = bool(terms & active_terms)
+        status_label = "vorhanden" if is_available else "nicht vorhanden"
+        status_symbol = "✓" if is_available else "✕"
+        status_class = "available" if is_available else "missing"
         items.append(
             f"""<div class="service-detail-item">
               <dt>{h(label)}</dt>
-              <dd>{h(status)}</dd>
+              <dd><span class="service-status service-status-{status_class}" title="{h(status_label)}" aria-label="{h(status_label)}">{h(status_symbol)}</span></dd>
             </div>"""
         )
     return f'<dl class="service-detail-list">{"".join(items)}</dl>'
@@ -385,18 +388,6 @@ def render_detail_box(result, weather: str) -> str:
         rows.append(service_detail_html)
     if poi.oeffnungszeiten_relevant:
         rows.append("<p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p>")
-
-    website_url = (getattr(poi, "website_url", "") or "").strip()
-    if website_url:
-        rows.append(
-            f'<p><a href="{h(website_url)}" target="_blank" rel="noopener noreferrer">Website öffnen</a></p>'
-        )
-
-    maps_url = route_url(poi)
-    if maps_url:
-        rows.append(
-            f'<p><a href="{maps_url}" target="_blank" rel="noopener noreferrer">Route in Google Maps öffnen</a></p>'
-        )
 
     source = getattr(poi, "source", "") or poi.datenquelle
     last_checked = getattr(poi, "last_checked", "")
@@ -1593,7 +1584,7 @@ def render_html(
 
     .service-detail-list {{
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
       gap: 6px;
       margin: 0 0 10px;
     }}
@@ -1601,8 +1592,9 @@ def render_html(
     .service-detail-item {{
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 8px;
-      padding: 7px 8px;
+      padding: 6px 8px;
       border: 1px solid #e1edf7;
       border-radius: 10px;
       background: #ffffff;
@@ -1622,6 +1614,28 @@ def render_html(
       color: var(--muted);
       font-weight: 750;
       text-align: right;
+    }}
+
+    .service-status {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      line-height: 1;
+      font-weight: 950;
+    }}
+
+    .service-status-available {{
+      background: #e5f7ed;
+      color: #157a43;
+    }}
+
+    .service-status-missing {{
+      background: #fff1f0;
+      color: #b42318;
     }}
 
     .source-line {{

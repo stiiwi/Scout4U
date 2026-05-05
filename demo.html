@@ -612,7 +612,7 @@
 
     .service-detail-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
       gap: 6px;
       margin: 0 0 10px;
     }
@@ -620,8 +620,9 @@
     .service-detail-item {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 8px;
-      padding: 7px 8px;
+      padding: 6px 8px;
       border: 1px solid #e1edf7;
       border-radius: 10px;
       background: #ffffff;
@@ -641,6 +642,28 @@
       color: var(--muted);
       font-weight: 750;
       text-align: right;
+    }
+
+    .service-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .service-status-available {
+      background: #e5f7ed;
+      color: #157a43;
+    }
+
+    .service-status-missing {
+      background: #fff1f0;
+      color: #b42318;
     }
 
     .source-line {
@@ -847,7 +870,7 @@
           <span class="fit-pill">Passt sehr gut</span>
         </div>
         <div class="place-title-row">
-          <h3>Stellplatz Eichholz</h3>
+          <h3><a class="place-title-link" href="https://www.campingeichholz.ch/" target="_blank" rel="noopener noreferrer">Stellplatz Eichholz</a></h3>
         </div>
         <p class="decision-line">Stellplatz mit Wasser und Strom</p>
         <div class="chip-row fact-row">
@@ -860,24 +883,24 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>vorhanden</dd>
-            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: official_site+pincamp_coords · Prüfstand: 2026-05-05</p>
           </div>
           </details>
           <button class="save-button" type="button" data-save-place data-place-id="stellplatz_eichholz" data-place-name="Stellplatz Eichholz" aria-pressed="false" aria-label="Stellplatz Eichholz merken">Merken</button>
-
+          <a class="action-link route-link" href="https://www.google.com/maps/dir/?api=1&destination=46.93303333,7.45575" target="_blank" rel="noopener noreferrer">Route</a>
         </div>
       </article>
 
@@ -901,19 +924,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
           </div>
           </details>
@@ -942,19 +965,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -983,19 +1006,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
           </div>
           </details>
@@ -1024,19 +1047,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1075,19 +1098,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1116,19 +1139,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
           </div>
           </details>
@@ -1157,19 +1180,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1198,19 +1221,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1239,19 +1262,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1280,19 +1303,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1321,19 +1344,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
           </div>
           </details>
@@ -1360,7 +1383,7 @@
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
-          <h3>Schloss Burgdorf</h3>
+          <h3><a class="place-title-link" href="https://schloss-burgdorf.ch/en/" target="_blank" rel="noopener noreferrer">Schloss Burgdorf</a></h3>
         </div>
         <p class="decision-line">Regenfreundlich · familienfreundlich</p>
         <div class="chip-row fact-row">
@@ -1371,11 +1394,11 @@
             <summary>Details</summary>
 
           <div class="detail-box">
-            <p>Kulturort mit Innenräumen</p><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+            <p>Kulturort mit Innenräumen</p><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: official_site+wikimedia_coords · Prüfstand: 2026-05-05</p>
           </div>
           </details>
           <button class="save-button" type="button" data-save-place data-place-id="schloss_burgdorf" data-place-name="Schloss Burgdorf" aria-pressed="false" aria-label="Schloss Burgdorf merken">Merken</button>
-
+          <a class="action-link route-link" href="https://www.google.com/maps/dir/?api=1&destination=47.055,7.629167" target="_blank" rel="noopener noreferrer">Route</a>
         </div>
       </article>
 
@@ -1386,7 +1409,7 @@
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
-          <h3>Schloss Thun Museum</h3>
+          <h3><a class="place-title-link" href="https://schlossthun.ch/" target="_blank" rel="noopener noreferrer">Schloss Thun Museum</a></h3>
         </div>
         <p class="decision-line">Regenfreundlich · familienfreundlich</p>
         <div class="chip-row fact-row">
@@ -1397,11 +1420,11 @@
             <summary>Details</summary>
 
           <div class="detail-box">
-            <p>Gute Regenoption mit Aussicht</p><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+            <p>Gute Regenoption mit Aussicht</p><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: official_site+vitrosearch_coords · Prüfstand: 2026-05-05</p>
           </div>
           </details>
           <button class="save-button" type="button" data-save-place data-place-id="schloss_thun_museum" data-place-name="Schloss Thun Museum" aria-pressed="false" aria-label="Schloss Thun Museum merken">Merken</button>
-
+          <a class="action-link route-link" href="https://www.google.com/maps/dir/?api=1&destination=46.7601,7.62989" target="_blank" rel="noopener noreferrer">Route</a>
         </div>
       </article>
 
@@ -1456,7 +1479,7 @@
           <span class="fit-pill">Passt sehr gut</span>
         </div>
         <div class="place-title-row">
-          <h3>Stellplatz Eichholz</h3>
+          <h3><a class="place-title-link" href="https://www.campingeichholz.ch/" target="_blank" rel="noopener noreferrer">Stellplatz Eichholz</a></h3>
         </div>
         <p class="decision-line">Stellplatz mit Wasser und Strom</p>
         <div class="chip-row fact-row">
@@ -1469,24 +1492,24 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>vorhanden</dd>
-            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
+            </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: official_site+pincamp_coords · Prüfstand: 2026-05-05</p>
           </div>
           </details>
           <button class="save-button" type="button" data-save-place data-place-id="stellplatz_eichholz" data-place-name="Stellplatz Eichholz" aria-pressed="false" aria-label="Stellplatz Eichholz merken">Merken</button>
-
+          <a class="action-link route-link" href="https://www.google.com/maps/dir/?api=1&destination=46.93303333,7.45575" target="_blank" rel="noopener noreferrer">Route</a>
         </div>
       </article>
 
@@ -1510,19 +1533,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
           </div>
           </details>
@@ -1551,19 +1574,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1592,19 +1615,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
           </div>
           </details>
@@ -1633,19 +1656,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1684,19 +1707,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1725,19 +1748,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
           </div>
           </details>
@@ -1766,19 +1789,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1807,19 +1830,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1848,19 +1871,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1889,19 +1912,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: sample</p>
           </div>
           </details>
@@ -1930,19 +1953,19 @@
           <div class="detail-box">
             <dl class="service-detail-list"><div class="service-detail-item">
               <dt>Wasser</dt>
-              <dd>vorhanden</dd>
+              <dd><span class="service-status service-status-available" title="vorhanden" aria-label="vorhanden">✓</span></dd>
             </div><div class="service-detail-item">
               <dt>WC</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Entsorgung</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Dusche</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div><div class="service-detail-item">
               <dt>Strom</dt>
-              <dd>nicht vorhanden</dd>
+              <dd><span class="service-status service-status-missing" title="nicht vorhanden" aria-label="nicht vorhanden">✕</span></dd>
             </div></dl><p><strong>Öffnungszeiten:</strong> Bitte vor Ort prüfen.</p><p class="source-line">Quelle: demo</p>
           </div>
           </details>
@@ -1969,7 +1992,7 @@
           <span class="fit-pill">Kann passen</span>
         </div>
         <div class="place-title-row">
-          <h3>Gurten Panorama</h3>
+          <h3><a class="place-title-link" href="https://www.gurtenpark.ch/" target="_blank" rel="noopener noreferrer">Gurten Panorama</a></h3>
         </div>
         <p class="decision-line">Aussicht und Natur passen gut, wenn das Wetter kurz aufmacht · Natur, Aussicht</p>
         <div class="chip-row fact-row">
@@ -1980,11 +2003,11 @@
             <summary>Details</summary>
 
           <div class="detail-box">
-            <p>Klassischer Ausflugsort</p><p class="source-line">Quelle: sample</p>
+            <p>Klassischer Ausflugsort</p><p class="source-line">Quelle: official_site+wikimedia_coords · Prüfstand: 2026-05-05</p>
           </div>
           </details>
           <button class="save-button" type="button" data-save-place data-place-id="gurten_erlebnis" data-place-name="Gurten Panorama" aria-pressed="false" aria-label="Gurten Panorama merken">Merken</button>
-
+          <a class="action-link route-link" href="https://www.google.com/maps/dir/?api=1&destination=46.917222,7.443611" target="_blank" rel="noopener noreferrer">Route</a>
         </div>
       </article>
 
