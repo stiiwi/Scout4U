@@ -557,10 +557,14 @@ def render_section(
     active_key: str,
     weather: str,
     show_interest_weights: bool,
+    section_note: str = "",
 ) -> str:
     title = scenario.section_labels[key]
     hidden_attr = "" if key == active_key else " hidden"
     count_label = f"{len(results)} Treffer" if results else "Keine Treffer"
+    section_note_html = ""
+    if section_note:
+        section_note_html = f'      <p class="section-note">{h(section_note)}</p>\n'
     if not results:
         content_html = (
             '      <p class="empty-state">Für diesen Bereich gibt es gerade keine passenden Treffer.</p>'
@@ -580,7 +584,7 @@ def render_section(
         <h2>{h(title)}</h2>
         <span>{h(count_label)}</span>
       </div>
-{content_html}
+{section_note_html}{content_html}
     </section>
     """
 
@@ -631,7 +635,7 @@ def render_favorites_panel() -> str:
 def scenario_context(profile, scenario: DemoScenario) -> str:
     return (
         f"{profile.profile_name} · {weather_label(scenario.weather)} · "
-        f"{format_number(profile.radius_km)} km"
+        f"Standort-Demo: Bern Umgebung · Radius: {format_number(profile.radius_km)} km"
     )
 
 
@@ -639,6 +643,7 @@ def render_scenario_view(
     scenario: DemoScenario,
     profile,
     recommendations: list,
+    filtered_results: list,
     experience_recommendations=None,
     is_active: bool = False,
 ) -> str:
@@ -654,6 +659,18 @@ def render_scenario_view(
     }
     if experience_recommendations is not None:
         grouped["experiences"] = experience_recommendations[:EXPERIENCE_TOP]
+    outside_radius_experiences = [
+        result
+        for result in filtered_results
+        if result.reason == "outside_radius"
+        and recommendation_section(result) == "experiences"
+    ]
+    section_notes = {}
+    if outside_radius_experiences:
+        section_notes["experiences"] = (
+            f"Einige Ausflüge liegen außerhalb deines "
+            f"{format_number(profile.radius_km)}-km-Radius."
+        )
 
     section_keys = visible_section_keys(grouped, scenario)
     active_key = active_section_key(grouped, scenario, section_keys)
@@ -675,6 +692,7 @@ def render_scenario_view(
             active_key,
             section_weather[key],
             section_interest_weights[key],
+            section_notes.get(key, ""),
         )
         for key in section_keys
     )
@@ -820,7 +838,8 @@ def render_html(
     }}
 
     .context {{
-      display: inline-flex;
+      display: inline-block;
+      max-width: 100%;
       margin-top: 16px;
       padding: 8px 11px;
       border: 1px solid rgba(255, 255, 255, 0.28);
@@ -829,6 +848,7 @@ def render_html(
       color: #f5fbff;
       font-size: 0.88rem;
       font-weight: 650;
+      line-height: 1.35;
     }}
 
     .scenario-toggle {{
@@ -1061,6 +1081,18 @@ def render_html(
       color: var(--blue-700);
       font-weight: 750;
       white-space: nowrap;
+    }}
+
+    .section-note {{
+      margin: -2px 0 12px;
+      padding: 10px 11px;
+      border: 1px solid #d8e6f2;
+      border-radius: 14px;
+      background: #f4faff;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 750;
+      line-height: 1.4;
     }}
 
     .cards {{
@@ -1354,12 +1386,12 @@ def load_recommendations(pois_path: Path, profiles_path: Path, profile_id: str, 
     pois = parse_pois(pois_path)
     profiles = parse_profiles(profiles_path)
     profile = select_profile(profiles, profile_id)
-    recommendations, _filtered = evaluate_pois(pois, profile, weather)
-    return profile, recommendations
+    recommendations, filtered = evaluate_pois(pois, profile, weather)
+    return profile, recommendations, filtered
 
 
 def build_experience_recommendations(scenario: DemoScenario) -> list:
-    _profile, recommendations = load_recommendations(
+    _profile, recommendations, _filtered = load_recommendations(
         scenario.pois_path,
         scenario.profiles_path,
         scenario.profile_id,
@@ -1373,7 +1405,7 @@ def build_demo(scenarios: tuple[DemoScenario, ...]) -> None:
     contexts = {}
     scenario_views = []
     for scenario in scenarios:
-        profile, recommendations = load_recommendations(
+        profile, recommendations, filtered = load_recommendations(
             scenario.pois_path,
             scenario.profiles_path,
             scenario.profile_id,
@@ -1386,6 +1418,7 @@ def build_demo(scenarios: tuple[DemoScenario, ...]) -> None:
                 scenario,
                 profile,
                 recommendations,
+                filtered,
                 experience_recommendations,
                 is_active=scenario == active_scenario,
             )

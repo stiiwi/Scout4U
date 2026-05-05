@@ -101,7 +101,8 @@
     }
 
     .context {
-      display: inline-flex;
+      display: inline-block;
+      max-width: 100%;
       margin-top: 16px;
       padding: 8px 11px;
       border: 1px solid rgba(255, 255, 255, 0.28);
@@ -110,6 +111,7 @@
       color: #f5fbff;
       font-size: 0.88rem;
       font-weight: 650;
+      line-height: 1.35;
     }
 
     .scenario-toggle {
@@ -342,6 +344,18 @@
       color: var(--blue-700);
       font-weight: 750;
       white-space: nowrap;
+    }
+
+    .section-note {
+      margin: -2px 0 12px;
+      padding: 10px 11px;
+      border: 1px solid #d8e6f2;
+      border-radius: 14px;
+      background: #f4faff;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 750;
+      line-height: 1.4;
     }
 
     .cards {
@@ -616,15 +630,15 @@
         <p class="eyebrow">Lokale Demo mit Beispiel-Daten</p>
         <h1>Scout4U</h1>
         <p class="subtitle">Camping-Reisebegleiter rund um Bern</p>
-        <div class="context" data-current-scenario-context>Camper-Reise · Regen · 25 km</div>
+        <div class="context" data-current-scenario-context>Camper-Reise · Regen · Standort-Demo: Bern Umgebung · Radius: 25 km</div>
       </header>
 
       <section class="scenario-toggle" aria-label="Szenario wählen">
-        <button class="scenario-toggle-button active" type="button" data-scenario-toggle="rainy" data-scenario-context="Camper-Reise · Regen · 25 km" aria-pressed="true">Regen</button>
-        <button class="scenario-toggle-button" type="button" data-scenario-toggle="sunny" data-scenario-context="Camper-Reise · Sonne · 25 km" aria-pressed="false">Sonne</button>
+        <button class="scenario-toggle-button active" type="button" data-scenario-toggle="rainy" data-scenario-context="Camper-Reise · Regen · Standort-Demo: Bern Umgebung · Radius: 25 km" aria-pressed="true">Regen</button>
+        <button class="scenario-toggle-button" type="button" data-scenario-toggle="sunny" data-scenario-context="Camper-Reise · Sonne · Standort-Demo: Bern Umgebung · Radius: 25 km" aria-pressed="false">Sonne</button>
       </section>
 
-      <div class="scenario-view" data-scenario-view="rainy" data-default-section="stays" data-scenario-context="Camper-Reise · Regen · 25 km">
+      <div class="scenario-view" data-scenario-view="rainy" data-default-section="stays" data-scenario-context="Camper-Reise · Regen · Standort-Demo: Bern Umgebung · Radius: 25 km">
         <section class="summary" style="--summary-count: 3" aria-label="Zusammenfassung">
 
       <button class="summary-card summary-stays active" type="button" data-filter="stays" aria-pressed="true" aria-label="Übernachten anzeigen, 5 Treffer">
@@ -966,6 +980,7 @@
         <h2>Erleben</h2>
         <span>2 Treffer</span>
       </div>
+      <p class="section-note">Einige Ausflüge liegen außerhalb deines 25-km-Radius.</p>
       <div class="cards">
 
       <article class="place-card" data-place-card>
@@ -1009,7 +1024,7 @@
       </div>
 
 
-      <div class="scenario-view" data-scenario-view="sunny" data-default-section="stays" data-scenario-context="Camper-Reise · Sonne · 25 km" hidden>
+      <div class="scenario-view" data-scenario-view="sunny" data-default-section="stays" data-scenario-context="Camper-Reise · Sonne · Standort-Demo: Bern Umgebung · Radius: 25 km" hidden>
         <section class="summary" style="--summary-count: 3" aria-label="Zusammenfassung">
 
       <button class="summary-card summary-stays active" type="button" data-filter="stays" aria-pressed="true" aria-label="Übernachten anzeigen, 5 Treffer">
@@ -1351,6 +1366,7 @@
         <h2>Erleben</h2>
         <span>2 Treffer</span>
       </div>
+      <p class="section-note">Einige Ausflüge liegen außerhalb deines 25-km-Radius.</p>
       <div class="cards">
 
       <article class="place-card" data-place-card>
