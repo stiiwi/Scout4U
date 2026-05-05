@@ -1,7 +1,7 @@
 # Codex Handoff
 
 ## Aktuelles Thema
-Workflow verbessern: kurze Übergabe von ChatGPT an Codex.
+Scout4U nach dem Karten-Upgrade vom Demo-Feinschliff in Richtung App-/Produkt-Fundament führen.
 
 ## Ziel
 Codex soll pro Arbeitspaket schnell erkennen, worum es geht, welche Dateien relevant sind, was nicht geändert werden soll und wie geprüft wird.
@@ -10,12 +10,15 @@ Codex soll pro Arbeitspaket schnell erkennen, worum es geht, welche Dateien rele
 - Scout4U ist ein früher Python-/HTML-Prototyp für einen smarten Reisebegleiter für Camper.
 - Aktuelle Demo liegt in demo.html und wird über generate_demo_html.py erzeugt.
 - Ergebniskarten zeigen Typ-Pills, feste Camper-Service-Reihe, kompakte Entscheidungszeile, Fakten und Inline-Details.
+- Das Karten-Upgrade ist abgeschlossen und soll jetzt nicht weiter kleinteilig poliert werden.
+- app_concept.md beschreibt Produktidee, V1-Zielgruppe, Hauptflüsse und bewusste Nicht-Ziele.
+- data_model.md skizziert ein zukünftiges Ort-/POI-Datenmodell ohne Migration in JSON, Datenbank oder App-Architektur.
 - Kernlogik liegt in scout4u_score.py.
 - GitHub Pages nutzt demo.html.
 - main ist aktuell sauber und synchron, sofern nicht anders im Chat genannt.
 
 ## Aufgabe
-Diese Datei künftig vor neuen Codex-Arbeitspaketen aktualisieren, wenn der Kontext sonst zu lang würde.
+Nächster Fokus: App-Fundament und Datenmodell als Produktgrundlage weiter klären, bevor neue technische App-Strukturen entstehen.
 
 ## Nicht ändern
 - Keine Projektlogik ohne expliziten Auftrag.
@@ -29,6 +32,8 @@ Diese Datei künftig vor neuen Codex-Arbeitspaketen aktualisieren, wenn der Kont
 - demo.html
 - pois_camper_test_sample.csv
 - profiles_camper_test_sample.csv
+- app_concept.md
+- data_model.md
 - project_status.md
 - backlog.md
 

@@ -1,16 +1,19 @@
 # Scout4U Backlog
 
 ## Next
-- [ ] Demo-Erleben prüfen: Wettereffekt klarer zeigen, ohne Services wetterabhängig wirken zu lassen.
+- [ ] Echte Details-/Route-/Website-Daten vorbereiten.
+- [ ] Radius 25 km / 40 km als statische Produktvariante prüfen.
+- [ ] Wettereffekt bei Erleben ausbauen, ohne Services wetterabhängig wirken zu lassen.
+- [ ] Modus-Schalter als App-Mock prüfen, z. B. Übernachten, Versorgung, Erleben.
 
 ## Later
-- [ ] Radius-Schalter 25 km / 40 km prüfen.
 - [ ] Standortauswahl als statische Demo-Variante prüfen.
 - [ ] Weitere Profile sichtbar machen, z. B. Servicefokus oder kurz & praktisch.
-- [ ] Datenmodell für echte Orte und Services entwerfen.
+- [ ] Ort-/POI-Datenmodell später ausbauen, wenn echte Detaildaten recherchiert werden.
 - [ ] Mobile-App-Option erst prüfen, wenn HTML-/Produktprototyp ausgereizt ist.
 
 ## Done
+- [x] App-Fundament / Produktfluss und Datenmodell dokumentieren.
 - [x] Kategorie-Kacheln als Filter nutzbar machen.
 - [x] Merkliste einklappbar machen.
 - [x] Merkliste nach Kategorien gruppieren.
@@ -24,6 +27,7 @@
 - [x] Externe Route-Aktion bedingt vorbereiten, nur wenn lat/lon in den Daten vorhanden sind.
 
 ## Not now
+- [ ] CSV-Daten in JSON oder Datenbank migrieren.
 - [ ] Login.
 - [ ] Datenbank.
 - [ ] API.
