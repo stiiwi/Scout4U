@@ -16,6 +16,7 @@ from scout4u_score import (
     is_service_poi,
     parse_pois,
     parse_profiles,
+    recommendation_section,
     select_profile,
     weather_sentence,
 )
@@ -641,7 +642,11 @@ def render_scenario_view(
     experience_recommendations=None,
     is_active: bool = False,
 ) -> str:
-    visible_recommendations = recommendations[: scenario.top]
+    visible_recommendations = [
+        result
+        for result in recommendations
+        if recommendation_section(result) != "experiences"
+    ][: scenario.top]
     grouped = group_recommendations(visible_recommendations)
     section_weather = {key: scenario.weather for key in scenario.section_order}
     section_interest_weights = {
