@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from html import escape
 from pathlib import Path
 
@@ -67,8 +67,11 @@ CAMPER_SCENARIO = DemoScenario(
     intro_template="Scout4U zeigt dir passende Stopps zum Übernachten, Versorgen und Erleben.",
 )
 
-SCENARIOS = (
+CAMPER_SUNNY_SCENARIO = replace(CAMPER_SCENARIO, weather="sunny")
+
+CAMPER_SCENARIOS = (
     CAMPER_SCENARIO,
+    CAMPER_SUNNY_SCENARIO,
 )
 
 
@@ -166,155 +169,193 @@ def fit_label(score: float) -> str:
 def render_page_script() -> str:
     return """  <script>
     (() => {
-      const filterButtons = Array.from(document.querySelectorAll("[data-filter]"));
-      const sections = Array.from(document.querySelectorAll("[data-section]"));
-      let activeFilter = filterButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.filter || "";
-
-      const setFilter = (key) => {
-        activeFilter = key || "";
-
-        filterButtons.forEach((button) => {
-          const isActive = activeFilter !== "" && button.dataset.filter === activeFilter;
-          button.classList.toggle("active", isActive);
-          button.setAttribute("aria-pressed", isActive ? "true" : "false");
-        });
-
-        sections.forEach((section) => {
-          section.hidden = activeFilter !== "" && section.dataset.section !== activeFilter;
-        });
-      };
-
-      filterButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const nextFilter = activeFilter === button.dataset.filter ? "" : button.dataset.filter;
-          setFilter(nextFilter);
-        });
-      });
-
-      const savedPlaces = new Map();
-      const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));
-      const favoritesToggle = document.querySelector("[data-favorites-toggle]");
-      const favoritesBody = document.querySelector("[data-favorites-body]");
-      const favoritesList = document.querySelector("[data-favorites-list]");
-      const favoritesEmpty = document.querySelector("[data-favorites-empty]");
       const categoryLabels = {
         stays: "Übernachten",
         camper_services: "Services",
         experiences: "Erleben",
       };
       const categoryOrder = ["Übernachten", "Services", "Erleben"];
+      const scenarioButtons = Array.from(document.querySelectorAll("[data-scenario-toggle]"));
+      const scenarioViews = Array.from(document.querySelectorAll("[data-scenario-view]"));
+      const scenarioContext = document.querySelector("[data-current-scenario-context]");
+      const viewControllers = new Map();
 
-      const setButtonState = (button, isSaved) => {
-        const name = button.dataset.placeName;
-        button.classList.toggle("saved", isSaved);
-        button.setAttribute("aria-pressed", isSaved ? "true" : "false");
-        button.setAttribute(
-          "aria-label",
-          isSaved ? `${name} aus Merkliste entfernen` : `${name} merken`
-        );
-        button.textContent = isSaved ? "Gemerkt" : "Merken";
-      };
+      const setupScenarioView = (view) => {
+        const filterButtons = Array.from(view.querySelectorAll("[data-filter]"));
+        const sections = Array.from(view.querySelectorAll("[data-section]"));
+        let activeFilter = filterButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.filter || "";
+        const savedPlaces = new Map();
+        const saveButtons = Array.from(view.querySelectorAll("[data-save-place]"));
+        const favoritesToggle = view.querySelector("[data-favorites-toggle]");
+        const favoritesBody = view.querySelector("[data-favorites-body]");
+        const favoritesList = view.querySelector("[data-favorites-list]");
+        const favoritesEmpty = view.querySelector("[data-favorites-empty]");
 
-      const jumpToPlace = (button) => {
-        const section = button.closest("[data-section]");
-        const card = button.closest("[data-place-card]");
+        const setFilter = (key) => {
+          activeFilter = key || "";
 
-        if (section?.dataset.section) {
-          setFilter(section.dataset.section);
-        }
-
-        if (!card) {
-          return;
-        }
-
-        card.scrollIntoView({ behavior: "smooth", block: "center" });
-        card.classList.add("favorite-highlight");
-        window.setTimeout(() => {
-          card.classList.remove("favorite-highlight");
-        }, 1400);
-      };
-
-      const renderFavorites = () => {
-        if (!favoritesList || !favoritesEmpty) {
-          return;
-        }
-
-        favoritesList.textContent = "";
-        favoritesEmpty.hidden = savedPlaces.size > 0;
-
-        categoryOrder.forEach((categoryName) => {
-          const groupItems = saveButtons.filter((button) => {
-            const place = savedPlaces.get(button.dataset.placeId);
-            return place?.category === categoryName;
+          filterButtons.forEach((button) => {
+            const isActive = activeFilter !== "" && button.dataset.filter === activeFilter;
+            button.classList.toggle("active", isActive);
+            button.setAttribute("aria-pressed", isActive ? "true" : "false");
           });
 
-          if (groupItems.length === 0) {
+          sections.forEach((section) => {
+            section.hidden = activeFilter !== "" && section.dataset.section !== activeFilter;
+          });
+        };
+
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const nextFilter = activeFilter === button.dataset.filter ? "" : button.dataset.filter;
+            setFilter(nextFilter);
+          });
+        });
+
+        const setButtonState = (button, isSaved) => {
+          const name = button.dataset.placeName;
+          button.classList.toggle("saved", isSaved);
+          button.setAttribute("aria-pressed", isSaved ? "true" : "false");
+          button.setAttribute(
+            "aria-label",
+            isSaved ? `${name} aus Merkliste entfernen` : `${name} merken`
+          );
+          button.textContent = isSaved ? "Gemerkt" : "Merken";
+        };
+
+        const jumpToPlace = (button) => {
+          const section = button.closest("[data-section]");
+          const card = button.closest("[data-place-card]");
+
+          if (section?.dataset.section) {
+            setFilter(section.dataset.section);
+          }
+
+          if (!card) {
             return;
           }
 
-          const heading = document.createElement("li");
-          heading.className = "favorite-group-heading";
-          heading.textContent = categoryName;
-          favoritesList.appendChild(heading);
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+          card.classList.add("favorite-highlight");
+          window.setTimeout(() => {
+            card.classList.remove("favorite-highlight");
+          }, 1400);
+        };
 
-          groupItems.forEach((button) => {
-            const id = button.dataset.placeId;
-            const place = savedPlaces.get(id);
-            const item = document.createElement("li");
-            item.className = "favorite-item";
+        const renderFavorites = () => {
+          if (!favoritesList || !favoritesEmpty) {
+            return;
+          }
 
-            const jumpButton = document.createElement("button");
-            jumpButton.className = "favorite-jump";
-            jumpButton.type = "button";
-            jumpButton.textContent = place.name;
-            jumpButton.addEventListener("click", () => {
-              jumpToPlace(button);
+          favoritesList.textContent = "";
+          favoritesEmpty.hidden = savedPlaces.size > 0;
+
+          categoryOrder.forEach((categoryName) => {
+            const groupItems = saveButtons.filter((button) => {
+              const place = savedPlaces.get(button.dataset.placeId);
+              return place?.category === categoryName;
             });
 
-            const removeButton = document.createElement("button");
-            removeButton.className = "favorite-remove";
-            removeButton.type = "button";
-            removeButton.textContent = "Entfernen";
-            removeButton.setAttribute("aria-label", `${place.name} aus Merkliste entfernen`);
-            removeButton.addEventListener("click", () => {
-              savedPlaces.delete(id);
-              setButtonState(button, false);
-              renderFavorites();
-            });
+            if (groupItems.length === 0) {
+              return;
+            }
 
-            item.append(jumpButton, removeButton);
-            favoritesList.appendChild(item);
+            const heading = document.createElement("li");
+            heading.className = "favorite-group-heading";
+            heading.textContent = categoryName;
+            favoritesList.appendChild(heading);
+
+            groupItems.forEach((button) => {
+              const id = button.dataset.placeId;
+              const place = savedPlaces.get(id);
+              const item = document.createElement("li");
+              item.className = "favorite-item";
+
+              const jumpButton = document.createElement("button");
+              jumpButton.className = "favorite-jump";
+              jumpButton.type = "button";
+              jumpButton.textContent = place.name;
+              jumpButton.addEventListener("click", () => {
+                jumpToPlace(button);
+              });
+
+              const removeButton = document.createElement("button");
+              removeButton.className = "favorite-remove";
+              removeButton.type = "button";
+              removeButton.textContent = "Entfernen";
+              removeButton.setAttribute("aria-label", `${place.name} aus Merkliste entfernen`);
+              removeButton.addEventListener("click", () => {
+                savedPlaces.delete(id);
+                setButtonState(button, false);
+                renderFavorites();
+              });
+
+              item.append(jumpButton, removeButton);
+              favoritesList.appendChild(item);
+            });
           });
+        };
+
+        saveButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const id = button.dataset.placeId;
+            const name = button.dataset.placeName;
+
+            if (savedPlaces.has(id)) {
+              savedPlaces.delete(id);
+            } else {
+              const section = button.closest("[data-section]");
+              const category = categoryLabels[section?.dataset.section] || "";
+              savedPlaces.set(id, { name, category });
+            }
+
+            setButtonState(button, savedPlaces.has(id));
+            renderFavorites();
+          });
+        });
+
+        if (favoritesToggle && favoritesBody) {
+          favoritesToggle.addEventListener("click", () => {
+            const isExpanded = favoritesToggle.getAttribute("aria-expanded") === "true";
+            favoritesToggle.setAttribute("aria-expanded", isExpanded ? "false" : "true");
+            favoritesBody.hidden = isExpanded;
+          });
+        }
+
+        renderFavorites();
+        return {
+          resetFilter: () => setFilter(view.dataset.defaultSection || "stays"),
+        };
+      };
+
+      scenarioViews.forEach((view) => {
+        viewControllers.set(view.dataset.scenarioView, setupScenarioView(view));
+      });
+
+      const setScenario = (key) => {
+        scenarioButtons.forEach((button) => {
+          const isActive = button.dataset.scenarioToggle === key;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", isActive ? "true" : "false");
+          if (isActive && scenarioContext) {
+            scenarioContext.textContent = button.dataset.scenarioContext || "";
+          }
+        });
+
+        scenarioViews.forEach((view) => {
+          const isActive = view.dataset.scenarioView === key;
+          view.hidden = !isActive;
+          if (isActive) {
+            viewControllers.get(key)?.resetFilter();
+          }
         });
       };
 
-      saveButtons.forEach((button) => {
+      scenarioButtons.forEach((button) => {
         button.addEventListener("click", () => {
-          const id = button.dataset.placeId;
-          const name = button.dataset.placeName;
-
-          if (savedPlaces.has(id)) {
-            savedPlaces.delete(id);
-          } else {
-            const section = button.closest("[data-section]");
-            const category = categoryLabels[section?.dataset.section] || "";
-            savedPlaces.set(id, { name, category });
-          }
-
-          setButtonState(button, savedPlaces.has(id));
-          renderFavorites();
+          setScenario(button.dataset.scenarioToggle);
         });
       });
-
-      if (favoritesToggle && favoritesBody) {
-        favoritesToggle.addEventListener("click", () => {
-          const isExpanded = favoritesToggle.getAttribute("aria-expanded") === "true";
-          favoritesToggle.setAttribute("aria-expanded", isExpanded ? "false" : "true");
-          favoritesBody.hidden = isExpanded;
-        });
-      }
-
-      renderFavorites();
 
     })();
   </script>"""
@@ -586,11 +627,19 @@ def render_favorites_panel() -> str:
       </section>"""
 
 
-def render_html(
+def scenario_context(profile, scenario: DemoScenario) -> str:
+    return (
+        f"{profile.profile_name} · {weather_label(scenario.weather)} · "
+        f"{format_number(profile.radius_km)} km"
+    )
+
+
+def render_scenario_view(
     scenario: DemoScenario,
     profile,
     recommendations: list,
     experience_recommendations=None,
+    is_active: bool = False,
 ) -> str:
     visible_recommendations = recommendations[: scenario.top]
     grouped = group_recommendations(visible_recommendations)
@@ -628,19 +677,47 @@ def render_html(
     favorites_html = render_favorites_panel()
 
     section_count = len(section_keys)
-    page_script_html = render_page_script()
+    hidden_attr = "" if is_active else " hidden"
+    context = scenario_context(profile, scenario)
 
-    context = (
-        f"{profile.profile_name} · {weather_label(scenario.weather)} · "
-        f"{format_number(profile.radius_km)} km"
+    return f"""
+      <div class="scenario-view" data-scenario-view="{h(scenario.weather)}" data-default-section="{h(active_key)}" data-scenario-context="{h(context)}"{hidden_attr}>
+        <section class="summary" style="--summary-count: {h(section_count)}" aria-label="Zusammenfassung">
+          {summary_html}
+        </section>
+
+{intro_html}
+{favorites_html}
+
+        {sections_html}
+      </div>
+"""
+
+
+def render_scenario_toggle(scenarios: tuple[DemoScenario, ...], active_scenario: DemoScenario, contexts: dict[str, str]) -> str:
+    buttons = "\n".join(
+        f"""        <button class="scenario-toggle-button{' active' if scenario.weather == active_scenario.weather else ''}" type="button" data-scenario-toggle="{h(scenario.weather)}" data-scenario-context="{h(contexts[scenario.weather])}" aria-pressed="{'true' if scenario.weather == active_scenario.weather else 'false'}">{h(weather_label(scenario.weather))}</button>"""
+        for scenario in scenarios
     )
+    return f"""      <section class="scenario-toggle" aria-label="Szenario wählen">
+{buttons}
+      </section>"""
+
+
+def render_html(
+    output_scenario: DemoScenario,
+    scenario_views_html: str,
+    scenario_toggle_html: str,
+    initial_context: str,
+) -> str:
+    page_script_html = render_page_script()
 
     return f"""<!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{h(scenario.document_title)}</title>
+  <title>{h(output_scenario.document_title)}</title>
   <style>
     :root {{
       --blue-950: #08233f;
@@ -747,6 +824,45 @@ def render_html(
       color: #f5fbff;
       font-size: 0.88rem;
       font-weight: 650;
+    }}
+
+    .scenario-toggle {{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin: 14px 14px 0;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+    }}
+
+    .scenario-toggle-button {{
+      appearance: none;
+      min-height: 40px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 850;
+    }}
+
+    .scenario-toggle-button.active {{
+      background: var(--blue-900);
+      border-color: var(--blue-900);
+      color: #ffffff;
+    }}
+
+    .scenario-toggle-button:focus-visible {{
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
+    }}
+
+    .scenario-view[hidden] {{
+      display: none;
     }}
 
     .summary {{
@@ -1213,18 +1329,12 @@ def render_html(
       <header class="hero">
         <p class="eyebrow">Lokale Demo mit Beispiel-Daten</p>
         <h1>Scout4U</h1>
-        <p class="subtitle">{h(scenario.subtitle)}</p>
-        <div class="context">{h(context)}</div>
+        <p class="subtitle">{h(output_scenario.subtitle)}</p>
+        <div class="context" data-current-scenario-context>{h(initial_context)}</div>
       </header>
 
-      <section class="summary" style="--summary-count: {h(section_count)}" aria-label="Zusammenfassung">
-        {summary_html}
-      </section>
-
-{intro_html}
-{favorites_html}
-
-      {sections_html}
+{scenario_toggle_html}
+{scenario_views_html}
 
       <p class="footnote">Diese HTML-Seite wird lokal aus CSV-Testdaten erzeugt. Keine Live-Daten, keine Karte, keine API.</p>
     </div>
@@ -1253,22 +1363,42 @@ def build_experience_recommendations(scenario: DemoScenario) -> list:
     return group_recommendations(recommendations)["experiences"][:EXPERIENCE_TOP]
 
 
-def build_demo(scenario: DemoScenario) -> None:
-    profile, recommendations = load_recommendations(
-        scenario.pois_path,
-        scenario.profiles_path,
-        scenario.profile_id,
-        scenario.weather,
+def build_demo(scenarios: tuple[DemoScenario, ...]) -> None:
+    active_scenario = scenarios[0]
+    contexts = {}
+    scenario_views = []
+    for scenario in scenarios:
+        profile, recommendations = load_recommendations(
+            scenario.pois_path,
+            scenario.profiles_path,
+            scenario.profile_id,
+            scenario.weather,
+        )
+        contexts[scenario.weather] = scenario_context(profile, scenario)
+        experience_recommendations = build_experience_recommendations(scenario)
+        scenario_views.append(
+            render_scenario_view(
+                scenario,
+                profile,
+                recommendations,
+                experience_recommendations,
+                is_active=scenario == active_scenario,
+            )
+        )
+
+    html = render_html(
+        active_scenario,
+        "\n".join(scenario_views),
+        render_scenario_toggle(scenarios, active_scenario, contexts),
+        contexts[active_scenario.weather],
     )
-    experience_recommendations = build_experience_recommendations(scenario)
-    html = render_html(scenario, profile, recommendations, experience_recommendations)
-    scenario.output_path.write_text(html, encoding="utf-8")
-    print(f"HTML-Demo erzeugt: {scenario.output_path}")
+    html = "\n".join(line.rstrip() for line in html.splitlines()) + "\n"
+    active_scenario.output_path.write_text(html, encoding="utf-8")
+    print(f"HTML-Demo erzeugt: {active_scenario.output_path}")
 
 
 def main() -> int:
-    for scenario in SCENARIOS:
-        build_demo(scenario)
+    build_demo(CAMPER_SCENARIOS)
     return 0
 
 
