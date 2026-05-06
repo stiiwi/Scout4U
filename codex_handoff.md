@@ -1,7 +1,7 @@
 # Codex Handoff
 
 ## Aktuelles Thema
-Scout4U nach dem Karten-Upgrade vom Demo-Feinschliff in Richtung App-/Produkt-Fundament führen.
+Scout4U vom Demo-Feinschliff in Richtung App-/Produkt-Fundament führen.
 
 ## Ziel
 Codex soll pro Arbeitspaket schnell erkennen, worum es geht, welche Dateien relevant sind, was nicht geändert werden soll und wie geprüft wird.
@@ -13,12 +13,14 @@ Codex soll pro Arbeitspaket schnell erkennen, worum es geht, welche Dateien rele
 - Das Karten-Upgrade ist abgeschlossen und soll jetzt nicht weiter kleinteilig poliert werden.
 - app_concept.md beschreibt Produktidee, V1-Zielgruppe, Hauptflüsse und bewusste Nicht-Ziele.
 - data_model.md skizziert ein zukünftiges Ort-/POI-Datenmodell ohne Migration in JSON, Datenbank oder App-Architektur.
+- Die Demo hat einen statischen Radius-Mock mit 25 km / 40 km; 25 km ist initial aktiv.
+- Radius, Wetter und Kategorie-Filter sind als App-Flow kombinierbar, ohne GPS, Karte, API oder Datenbank.
 - Kernlogik liegt in scout4u_score.py.
 - GitHub Pages nutzt demo.html.
 - main ist aktuell sauber und synchron, sofern nicht anders im Chat genannt.
 
 ## Aufgabe
-Nächster Fokus: App-Fundament und Datenmodell als Produktgrundlage weiter klären, bevor neue technische App-Strukturen entstehen.
+Nächster Fokus: Produktlogik im bestehenden statischen Prototyp weiter schärfen, bevor neue technische App-Strukturen entstehen.
 
 ## Nicht ändern
 - Keine Projektlogik ohne expliziten Auftrag.

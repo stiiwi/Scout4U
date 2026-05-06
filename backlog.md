@@ -2,7 +2,6 @@
 
 ## Next
 - [ ] Echte Details-/Route-/Website-Daten vorbereiten.
-- [ ] Radius 25 km / 40 km als statische Produktvariante prüfen.
 - [ ] Wettereffekt bei Erleben ausbauen, ohne Services wetterabhängig wirken zu lassen.
 - [ ] Modus-Schalter als App-Mock prüfen, z. B. Übernachten, Versorgung, Erleben.
 
@@ -23,6 +22,7 @@
 - [x] Regen/Sonne-Schalter als statische Demo-Szenarien einbauen.
 - [x] Services in der Demo wetter-neutral halten.
 - [x] Standort-/Radius-Hinweis in der Demo ergänzen.
+- [x] Radius 25 km / 40 km als statischen App-Flow-Mock ergänzen.
 - [x] Karten-Upgrade V1: Typ-Pills, feste Service-Reihe, kompakte Entscheidungszeile, Faktenzeile und Inline-Details ergänzen.
 - [x] Externe Route-Aktion bedingt vorbereiten, nur wenn lat/lon in den Daten vorhanden sind.
 

@@ -28,7 +28,6 @@ class DemoScenario:
     profiles_path: Path
     profile_id: str
     weather: str
-    top: int
     document_title: str
     subtitle: str
     section_order: tuple[str, ...]
@@ -41,7 +40,8 @@ class DemoScenario:
 
 
 CAMPER_SECTION_ORDER = tuple(key for key, _label in RECOMMENDATION_SECTION_ORDER)
-EXPERIENCE_TOP = 4
+RADIUS_OPTIONS_KM = (25, 40)
+DEFAULT_RADIUS_KM = 25
 
 CAMPER_SCENARIO = DemoScenario(
     output_path=Path("demo.html"),
@@ -49,7 +49,6 @@ CAMPER_SCENARIO = DemoScenario(
     profiles_path=Path("profiles_camper_test_sample.csv"),
     profile_id="V",
     weather="rainy",
-    top=12,
     document_title="Scout4U Camping-Reisebegleiter",
     subtitle="Camping-Reisebegleiter rund um Bern",
     section_order=CAMPER_SECTION_ORDER,
@@ -418,23 +417,58 @@ def render_page_script() -> str:
       };
       const categoryOrder = ["Übernachten", "Services", "Erleben"];
       const scenarioButtons = Array.from(document.querySelectorAll("[data-scenario-toggle]"));
+      const radiusButtons = Array.from(document.querySelectorAll("[data-radius-toggle]"));
       const scenarioViews = Array.from(document.querySelectorAll("[data-scenario-view]"));
       const scenarioContext = document.querySelector("[data-current-scenario-context]");
       const viewControllers = new Map();
+      const savedPlaces = new Map();
+      const saveButtons = Array.from(document.querySelectorAll("[data-save-place]"));
+      let activeWeather = scenarioButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.scenarioToggle || "rainy";
+      let activeRadius = radiusButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.radiusToggle || "25";
+      let activeCategory = "stays";
+
+      const activeViewKey = () => `${activeWeather}-${activeRadius}`;
+
+      const activeView = () => scenarioViews.find((view) => view.dataset.scenarioView === activeViewKey());
+
+      const setButtonState = (button, isSaved) => {
+        const name = button.dataset.placeName;
+        button.classList.toggle("saved", isSaved);
+        button.setAttribute("aria-pressed", isSaved ? "true" : "false");
+        button.setAttribute(
+          "aria-label",
+          isSaved ? `${name} aus Merkliste entfernen` : `${name} merken`
+        );
+        button.textContent = isSaved ? "Gemerkt" : "Merken";
+      };
+
+      const syncSaveButtons = (placeId) => {
+        saveButtons
+          .filter((button) => !placeId || button.dataset.placeId === placeId)
+          .forEach((button) => {
+            setButtonState(button, savedPlaces.has(button.dataset.placeId));
+          });
+      };
+
+      const renderAllFavorites = () => {
+        viewControllers.forEach((controller) => controller.renderFavorites());
+      };
 
       const setupScenarioView = (view) => {
         const filterButtons = Array.from(view.querySelectorAll("[data-filter]"));
         const sections = Array.from(view.querySelectorAll("[data-section]"));
         let activeFilter = filterButtons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.filter || "";
-        const savedPlaces = new Map();
-        const saveButtons = Array.from(view.querySelectorAll("[data-save-place]"));
+        const viewSaveButtons = Array.from(view.querySelectorAll("[data-save-place]"));
         const favoritesToggle = view.querySelector("[data-favorites-toggle]");
         const favoritesBody = view.querySelector("[data-favorites-body]");
         const favoritesList = view.querySelector("[data-favorites-list]");
         const favoritesEmpty = view.querySelector("[data-favorites-empty]");
 
-        const setFilter = (key) => {
+        const setFilter = (key, syncGlobal = true) => {
           activeFilter = key || "";
+          if (syncGlobal) {
+            activeCategory = activeFilter;
+          }
 
           filterButtons.forEach((button) => {
             const isActive = activeFilter !== "" && button.dataset.filter === activeFilter;
@@ -454,24 +488,13 @@ def render_page_script() -> str:
           });
         });
 
-        const setButtonState = (button, isSaved) => {
-          const name = button.dataset.placeName;
-          button.classList.toggle("saved", isSaved);
-          button.setAttribute("aria-pressed", isSaved ? "true" : "false");
-          button.setAttribute(
-            "aria-label",
-            isSaved ? `${name} aus Merkliste entfernen` : `${name} merken`
-          );
-          button.textContent = isSaved ? "Gemerkt" : "Merken";
-        };
-
-        const jumpToPlace = (button) => {
-          const section = button.closest("[data-section]");
-          const card = button.closest("[data-place-card]");
-
-          if (section?.dataset.section) {
-            setFilter(section.dataset.section);
+        const jumpToPlace = (placeId, categoryKey) => {
+          if (categoryKey) {
+            setFilter(categoryKey);
           }
+
+          const button = view.querySelector(`[data-save-place][data-place-id="${placeId}"]`);
+          const card = button?.closest("[data-place-card]");
 
           if (!card) {
             return;
@@ -493,10 +516,8 @@ def render_page_script() -> str:
           favoritesEmpty.hidden = savedPlaces.size > 0;
 
           categoryOrder.forEach((categoryName) => {
-            const groupItems = saveButtons.filter((button) => {
-              const place = savedPlaces.get(button.dataset.placeId);
-              return place?.category === categoryName;
-            });
+            const groupItems = Array.from(savedPlaces.entries())
+              .filter(([_id, place]) => place.category === categoryName);
 
             if (groupItems.length === 0) {
               return;
@@ -507,9 +528,7 @@ def render_page_script() -> str:
             heading.textContent = categoryName;
             favoritesList.appendChild(heading);
 
-            groupItems.forEach((button) => {
-              const id = button.dataset.placeId;
-              const place = savedPlaces.get(id);
+            groupItems.forEach(([id, place]) => {
               const item = document.createElement("li");
               item.className = "favorite-item";
 
@@ -518,7 +537,8 @@ def render_page_script() -> str:
               jumpButton.type = "button";
               jumpButton.textContent = place.name;
               jumpButton.addEventListener("click", () => {
-                jumpToPlace(button);
+                const controller = viewControllers.get(activeViewKey());
+                controller?.jumpToPlace(id, place.categoryKey);
               });
 
               const removeButton = document.createElement("button");
@@ -528,8 +548,8 @@ def render_page_script() -> str:
               removeButton.setAttribute("aria-label", `${place.name} aus Merkliste entfernen`);
               removeButton.addEventListener("click", () => {
                 savedPlaces.delete(id);
-                setButtonState(button, false);
-                renderFavorites();
+                syncSaveButtons(id);
+                renderAllFavorites();
               });
 
               item.append(jumpButton, removeButton);
@@ -538,7 +558,7 @@ def render_page_script() -> str:
           });
         };
 
-        saveButtons.forEach((button) => {
+        viewSaveButtons.forEach((button) => {
           button.addEventListener("click", () => {
             const id = button.dataset.placeId;
             const name = button.dataset.placeName;
@@ -547,12 +567,13 @@ def render_page_script() -> str:
               savedPlaces.delete(id);
             } else {
               const section = button.closest("[data-section]");
-              const category = categoryLabels[section?.dataset.section] || "";
-              savedPlaces.set(id, { name, category });
+              const categoryKey = section?.dataset.section || "";
+              const category = categoryLabels[categoryKey] || "";
+              savedPlaces.set(id, { name, category, categoryKey });
             }
 
-            setButtonState(button, savedPlaces.has(id));
-            renderFavorites();
+            syncSaveButtons(id);
+            renderAllFavorites();
           });
         });
 
@@ -566,7 +587,9 @@ def render_page_script() -> str:
 
         renderFavorites();
         return {
-          resetFilter: () => setFilter(view.dataset.defaultSection || "stays"),
+          setFilter,
+          jumpToPlace,
+          renderFavorites,
         };
       };
 
@@ -574,28 +597,47 @@ def render_page_script() -> str:
         viewControllers.set(view.dataset.scenarioView, setupScenarioView(view));
       });
 
-      const setScenario = (key) => {
+      renderAllFavorites();
+
+      const updateControls = () => {
         scenarioButtons.forEach((button) => {
-          const isActive = button.dataset.scenarioToggle === key;
+          const isActive = button.dataset.scenarioToggle === activeWeather;
           button.classList.toggle("active", isActive);
           button.setAttribute("aria-pressed", isActive ? "true" : "false");
-          if (isActive && scenarioContext) {
-            scenarioContext.textContent = button.dataset.scenarioContext || "";
-          }
         });
 
+        radiusButtons.forEach((button) => {
+          const isActive = button.dataset.radiusToggle === activeRadius;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+      };
+
+      const setActiveView = () => {
+        updateControls();
         scenarioViews.forEach((view) => {
-          const isActive = view.dataset.scenarioView === key;
+          const isActive = view.dataset.scenarioView === activeViewKey();
           view.hidden = !isActive;
           if (isActive) {
-            viewControllers.get(key)?.resetFilter();
+            if (scenarioContext) {
+              scenarioContext.textContent = view.dataset.scenarioContext || "";
+            }
+            viewControllers.get(view.dataset.scenarioView)?.setFilter(activeCategory, false);
           }
         });
       };
 
       scenarioButtons.forEach((button) => {
         button.addEventListener("click", () => {
-          setScenario(button.dataset.scenarioToggle);
+          activeWeather = button.dataset.scenarioToggle;
+          setActiveView();
+        });
+      });
+
+      radiusButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          activeRadius = button.dataset.radiusToggle;
+          setActiveView();
         });
       });
 
@@ -874,6 +916,10 @@ def scenario_context(profile, scenario: DemoScenario) -> str:
     )
 
 
+def scenario_view_key(scenario: DemoScenario, radius_km: float) -> str:
+    return f"{scenario.weather}-{format_number(radius_km)}"
+
+
 def render_scenario_view(
     scenario: DemoScenario,
     profile,
@@ -886,14 +932,14 @@ def render_scenario_view(
         result
         for result in recommendations
         if recommendation_section(result) != "experiences"
-    ][: scenario.top]
+    ]
     grouped = group_recommendations(visible_recommendations)
     section_weather = {key: scenario.weather for key in scenario.section_order}
     section_interest_weights = {
         key: scenario.show_interest_weights for key in scenario.section_order
     }
     if experience_recommendations is not None:
-        grouped["experiences"] = experience_recommendations[:EXPERIENCE_TOP]
+        grouped["experiences"] = experience_recommendations
     outside_radius_experiences = [
         result
         for result in filtered_results
@@ -937,9 +983,10 @@ def render_scenario_view(
     section_count = len(section_keys)
     hidden_attr = "" if is_active else " hidden"
     context = scenario_context(profile, scenario)
+    view_key = scenario_view_key(scenario, profile.radius_km)
 
     return f"""
-      <div class="scenario-view" data-scenario-view="{h(scenario.weather)}" data-default-section="{h(active_key)}" data-scenario-context="{h(context)}"{hidden_attr}>
+      <div class="scenario-view" data-scenario-view="{h(view_key)}" data-scenario-weather="{h(scenario.weather)}" data-radius-km="{h(format_number(profile.radius_km))}" data-default-section="{h(active_key)}" data-scenario-context="{h(context)}"{hidden_attr}>
         <section class="summary" style="--summary-count: {h(section_count)}" aria-label="Zusammenfassung">
           {summary_html}
         </section>
@@ -952,12 +999,22 @@ def render_scenario_view(
 """
 
 
-def render_scenario_toggle(scenarios: tuple[DemoScenario, ...], active_scenario: DemoScenario, contexts: dict[str, str]) -> str:
+def render_scenario_toggle(scenarios: tuple[DemoScenario, ...], active_scenario: DemoScenario) -> str:
     buttons = "\n".join(
-        f"""        <button class="scenario-toggle-button{' active' if scenario.weather == active_scenario.weather else ''}" type="button" data-scenario-toggle="{h(scenario.weather)}" data-scenario-context="{h(contexts[scenario.weather])}" aria-pressed="{'true' if scenario.weather == active_scenario.weather else 'false'}">{h(weather_label(scenario.weather))}</button>"""
+        f"""        <button class="scenario-toggle-button{' active' if scenario.weather == active_scenario.weather else ''}" type="button" data-scenario-toggle="{h(scenario.weather)}" aria-pressed="{'true' if scenario.weather == active_scenario.weather else 'false'}">{h(weather_label(scenario.weather))}</button>"""
         for scenario in scenarios
     )
     return f"""      <section class="scenario-toggle" aria-label="Szenario wählen">
+{buttons}
+      </section>"""
+
+
+def render_radius_toggle(active_radius_km: int) -> str:
+    buttons = "\n".join(
+        f"""        <button class="scenario-toggle-button{' active' if radius_km == active_radius_km else ''}" type="button" data-radius-toggle="{h(radius_km)}" aria-pressed="{'true' if radius_km == active_radius_km else 'false'}">{h(radius_km)} km</button>"""
+        for radius_km in RADIUS_OPTIONS_KM
+    )
+    return f"""      <section class="scenario-toggle radius-toggle" aria-label="Radius wählen">
 {buttons}
       </section>"""
 
@@ -966,6 +1023,7 @@ def render_html(
     output_scenario: DemoScenario,
     scenario_views_html: str,
     scenario_toggle_html: str,
+    radius_toggle_html: str,
     initial_context: str,
 ) -> str:
     page_script_html = render_page_script()
@@ -1095,6 +1153,10 @@ def render_html(
       border: 1px solid var(--line);
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.72);
+    }}
+
+    .radius-toggle {{
+      margin-top: 8px;
     }}
 
     .scenario-toggle-button {{
@@ -1793,6 +1855,7 @@ def render_html(
       </header>
 
 {scenario_toggle_html}
+{radius_toggle_html}
 {scenario_views_html}
 
       <p class="footnote">Diese HTML-Seite wird lokal aus CSV-Testdaten erzeugt. Keine Live-Daten, keine Karte, keine API.</p>
@@ -1804,54 +1867,75 @@ def render_html(
 """
 
 
-def load_recommendations(pois_path: Path, profiles_path: Path, profile_id: str, weather: str):
+def load_recommendations(
+    pois_path: Path,
+    profiles_path: Path,
+    profile_id: str,
+    weather: str,
+    radius_km=None,
+):
     pois = parse_pois(pois_path)
     attach_optional_poi_fields(pois, pois_path)
     profiles = parse_profiles(profiles_path)
     profile = select_profile(profiles, profile_id)
+    if radius_km is not None:
+        profile = replace(profile, radius_km=radius_km)
     recommendations, filtered = evaluate_pois(pois, profile, weather)
     return profile, recommendations, filtered
 
 
-def build_experience_recommendations(scenario: DemoScenario) -> list:
+def build_experience_recommendations(scenario: DemoScenario, radius_km: int) -> list:
     _profile, recommendations, _filtered = load_recommendations(
         scenario.pois_path,
         scenario.profiles_path,
         scenario.profile_id,
         scenario.weather,
+        radius_km,
     )
-    return group_recommendations(recommendations)["experiences"][:EXPERIENCE_TOP]
+    return group_recommendations(recommendations)["experiences"]
 
 
 def build_demo(scenarios: tuple[DemoScenario, ...]) -> None:
     active_scenario = scenarios[0]
-    contexts = {}
     scenario_views = []
     for scenario in scenarios:
-        profile, recommendations, filtered = load_recommendations(
-            scenario.pois_path,
-            scenario.profiles_path,
-            scenario.profile_id,
-            scenario.weather,
-        )
-        contexts[scenario.weather] = scenario_context(profile, scenario)
-        experience_recommendations = build_experience_recommendations(scenario)
-        scenario_views.append(
-            render_scenario_view(
-                scenario,
-                profile,
-                recommendations,
-                filtered,
-                experience_recommendations,
-                is_active=scenario == active_scenario,
+        for radius_km in RADIUS_OPTIONS_KM:
+            profile, recommendations, filtered = load_recommendations(
+                scenario.pois_path,
+                scenario.profiles_path,
+                scenario.profile_id,
+                scenario.weather,
+                radius_km,
             )
-        )
+            experience_recommendations = build_experience_recommendations(scenario, radius_km)
+            scenario_views.append(
+                render_scenario_view(
+                    scenario,
+                    profile,
+                    recommendations,
+                    filtered,
+                    experience_recommendations,
+                    is_active=(
+                        scenario == active_scenario
+                        and radius_km == DEFAULT_RADIUS_KM
+                    ),
+                )
+            )
+
+    initial_profile, _recommendations, _filtered = load_recommendations(
+        active_scenario.pois_path,
+        active_scenario.profiles_path,
+        active_scenario.profile_id,
+        active_scenario.weather,
+        DEFAULT_RADIUS_KM,
+    )
 
     html = render_html(
         active_scenario,
         "\n".join(scenario_views),
-        render_scenario_toggle(scenarios, active_scenario, contexts),
-        contexts[active_scenario.weather],
+        render_scenario_toggle(scenarios, active_scenario),
+        render_radius_toggle(DEFAULT_RADIUS_KM),
+        scenario_context(initial_profile, active_scenario),
     )
     html = "\n".join(line.rstrip() for line in html.splitlines()) + "\n"
     active_scenario.output_path.write_text(html, encoding="utf-8")
