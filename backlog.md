@@ -3,7 +3,7 @@
 ## Next
 - [ ] Echte Details-/Route-/Website-Daten vorbereiten.
 - [ ] Wettereffekt bei Erleben ausbauen, ohne Services wetterabhängig wirken zu lassen.
-- [ ] Match-Gründe als Chips/Signale auf Karten statt zusätzlicher Erklärungssätze vorbereiten.
+- [ ] Match-Gründe/Profiltreffer später schlank neu konzipieren, ohne Hauptkarten mit Zusatzzeilen zu überladen.
 
 ## Later
 - [ ] Standortauswahl als statische Demo-Variante prüfen.
@@ -26,8 +26,9 @@
 - [x] Karten-Upgrade V1: Typ-Pills, feste Service-Reihe, kompakte Entscheidungszeile, Faktenzeile und Inline-Details ergänzen.
 - [x] Externe Route-Aktion bedingt vorbereiten, nur wenn lat/lon in den Daten vorhanden sind.
 - [x] Manueller Modus-Schalter getestet und wieder verworfen; spätere Situationslogik soll eher automatisch aus Profil, Kategorie, Wetter und Radius entstehen.
-- [x] Automatische Situationshinweise in Ergebniskarten ergänzen.
+- [x] Automatische Situationshinweise in Ergebniskarten getestet und wieder verworfen.
 - [x] Sichtbare Info-Zeile auf Hauptkarten getestet und verworfen; Quellen-/Zuverlässigkeitslogik bleibt später für Details oder Datenmodell wichtig.
+- [x] Sichtbare Situationszeile und Merkmal-Chips auf Hauptkarten getestet und vorerst verworfen; Hauptkarten sollen schlank bleiben, Match-Gründe/Profiltreffer später sauber neu lösen.
 
 ## Not now
 - [ ] CSV-Daten in JSON oder Datenbank migrieren.
