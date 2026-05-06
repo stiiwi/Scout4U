@@ -713,6 +713,80 @@ def weather_chip_text(poi, weather: str) -> str:
     return weather_sentence(poi, weather)
 
 
+def radius_reason(result, radius_km: float) -> str:
+    distance_km = result.poi.distance_km
+    if radius_km <= 25:
+        if distance_km <= 5:
+            return "nah gelegen"
+        if distance_km <= 10:
+            return "kurzer Abstecher"
+        return "im 25-km-Radius"
+
+    if distance_km > 25:
+        return "lohnender Umweg im 40-km-Radius"
+    if distance_km > 10:
+        return "noch nah im 40-km-Radius"
+    return "ohne großen Umweg erreichbar"
+
+
+def compact_service_labels(result, limit: int = 2) -> list[str]:
+    return active_service_labels(result)[:limit]
+
+
+def service_situation_reason(result, radius_km: float) -> str:
+    labels = compact_service_labels(result)
+    radius_text = radius_reason(result, radius_km)
+    if labels:
+        service_text = natural_list_de(labels)
+        if result.poi.overnight_allowed is True:
+            return f"{radius_text}, {service_text} am Stellplatz"
+        return f"{radius_text}, {service_text} verfügbar"
+    if result.poi.overnight_allowed is True:
+        return f"{radius_text}, Übernachten möglich"
+    return f"{radius_text} für einen praktischen Stopp"
+
+
+def experience_situation_reason(result, weather: str, radius_km: float) -> str:
+    poi = result.poi
+    tags = poi.tags
+    radius_text = radius_reason(result, radius_km)
+
+    if weather == "rainy":
+        if poi.indoor_anteil == 1.0:
+            weather_text = "wettergeschützt"
+        elif poi.indoor_anteil == 0.5:
+            weather_text = "teilweise wettergeschützt"
+        elif poi.aufwand == "leicht":
+            weather_text = "kurzer Stopp bei Regenfenster"
+        else:
+            weather_text = "bewusster Regentag-Abstecher"
+    else:
+        if "aussicht" in tags and "natur" in tags:
+            weather_text = "Aussicht und Natur bei trockenem Wetter"
+        elif "wasser" in tags and "natur" in tags:
+            weather_text = "Natur und Wasser draußen"
+        elif "aussicht" in tags:
+            weather_text = "Aussicht bei trockenem Wetter"
+        elif poi.indoor_anteil == 0.0:
+            weather_text = "draußen stark"
+        else:
+            weather_text = "leichter Ausflug"
+
+    return f"{weather_text}, {radius_text}"
+
+
+def situation_hint_text(result, weather: str, radius_km: float) -> str:
+    type_label, _class_key = card_type(result)
+    section_key = recommendation_section(result)
+    if section_key in {"stays", "camper_services"}:
+        reason = service_situation_reason(result, radius_km)
+    elif type_label in {"Stellplatz", "Versorgung", "Toilette", "Stellplatz + Service"}:
+        reason = service_situation_reason(result, radius_km)
+    else:
+        reason = experience_situation_reason(result, weather, radius_km)
+    return f"Heute sinnvoll: {reason}."
+
+
 def distance_today_reason(distance_km: float) -> str:
     if distance_km <= 5:
         return f"nur {format_number(distance_km)} km entfernt"
@@ -779,9 +853,15 @@ def today_hint_text(result, weather: str) -> str:
     return today_sentence(join_today_reasons(reasons[:2]))
 
 
-def render_recommendation_card(result, weather: str, show_interest_weights: bool) -> str:
+def render_recommendation_card(
+    result,
+    weather: str,
+    show_interest_weights: bool,
+    radius_km: float,
+) -> str:
     fit_text = fit_label(result.score.total)
     decision_line = decision_line_text(result, weather, show_interest_weights)
+    situation_hint = situation_hint_text(result, weather, radius_km)
 
     fact_chips = [
         render_fact_chip("Distanz", distance_fact_text(result)),
@@ -812,6 +892,7 @@ def render_recommendation_card(result, weather: str, show_interest_weights: bool
           {render_place_title(result.poi)}
         </div>
         <p class="decision-line">{h(decision_line)}</p>
+        <p class="situation-line">{h(situation_hint)}</p>
         <div class="chip-row fact-row">
           {"".join(fact_chips)}
         </div>
@@ -834,6 +915,7 @@ def render_section(
     active_key: str,
     weather: str,
     show_interest_weights: bool,
+    radius_km: float,
     section_note: str = "",
 ) -> str:
     title = scenario.section_labels[key]
@@ -848,7 +930,7 @@ def render_section(
         )
     else:
         cards = "\n".join(
-            render_recommendation_card(result, weather, show_interest_weights)
+            render_recommendation_card(result, weather, show_interest_weights, radius_km)
             for result in results
         )
         content_html = f"""      <div class="cards">
@@ -973,6 +1055,7 @@ def render_scenario_view(
             active_key,
             section_weather[key],
             section_interest_weights[key],
+            profile.radius_km,
             section_notes.get(key, ""),
         )
         for key in section_keys
@@ -1546,6 +1629,14 @@ def render_html(
       line-height: 1.3;
       font-size: 0.88rem;
       font-weight: 800;
+    }}
+
+    .situation-line {{
+      margin: -2px 0 11px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 750;
+      line-height: 1.35;
     }}
 
     .why {{

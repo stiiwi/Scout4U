@@ -25,6 +25,7 @@
 - [x] Karten-Upgrade V1: Typ-Pills, feste Service-Reihe, kompakte Entscheidungszeile, Faktenzeile und Inline-Details ergänzen.
 - [x] Externe Route-Aktion bedingt vorbereiten, nur wenn lat/lon in den Daten vorhanden sind.
 - [x] Manueller Modus-Schalter getestet und wieder verworfen; spätere Situationslogik soll eher automatisch aus Profil, Kategorie, Wetter und Radius entstehen.
+- [x] Automatische Situationshinweise in Ergebniskarten ergänzen.
 
 ## Not now
 - [ ] CSV-Daten in JSON oder Datenbank migrieren.
