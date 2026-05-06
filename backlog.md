@@ -26,6 +26,7 @@
 - [x] Externe Route-Aktion bedingt vorbereiten, nur wenn lat/lon in den Daten vorhanden sind.
 - [x] Manueller Modus-Schalter getestet und wieder verworfen; spätere Situationslogik soll eher automatisch aus Profil, Kategorie, Wetter und Radius entstehen.
 - [x] Automatische Situationshinweise in Ergebniskarten ergänzen.
+- [x] Sichtbare Info-Zeile auf Hauptkarten getestet und verworfen; Quellen-/Zuverlässigkeitslogik bleibt später für Details oder Datenmodell wichtig.
 
 ## Not now
 - [ ] CSV-Daten in JSON oder Datenbank migrieren.
