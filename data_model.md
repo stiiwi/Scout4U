@@ -36,6 +36,27 @@ Gleichzeitig soll sichtbar bleiben, wie verlaesslich ein Ort ist und ob wichtige
 | `notes` / `description` | Kurzer menschenlesbarer Hinweis: Besonderheiten, Einschränkungen, Zugang, Demo-Kontext oder Beschreibung. | Optional | Heute genutzt als `notes`. |
 | `reliability` | Einschaetzung der Datenverlaesslichkeit, z. B. `low`, `medium`, `high` oder ein spaeteres Punktesystem. Kann Quelle, Pruefstand und Vollstaendigkeit zusammenfassen. | Optional, spaeter wichtig. | Spaeter. |
 
+## Match-Gruende / Profiltreffer
+
+Scout4U sollte spaeter nicht nur einen Gesamtscore berechnen, sondern nachvollziehbare Match-Gruende ableiten. Diese Gruende sind die Bruecke zwischen Rohdaten, Profil, Kontext und Kartenanzeige. Sie sollten strukturiert genug sein, um sortiert, gewichtet und sichtbar oder intern genutzt zu werden.
+
+### Arten von Gruenden
+
+| Art | Beispiele | Quelle im Modell | Sichtbarkeit |
+| --- | --- | --- | --- |
+| Profiltreffer | fotogen, familienfreundlich, ruhig, guenstig, hundefreundlich | `tags`, Profilinteressen, spaetere Nutzerpraeferenzen | Gute sichtbare Kandidaten als kurze Chips, wenn sie fuer die Entscheidung hilfreich sind. |
+| Service-Merkmale | Wasser, Strom, WC-Entsorgung, Dusche, Toilette, Oeffnungszeiten, Kosten | `services`, `opening_hours`, `price_label`, spaetere Detaildaten | Bei Stellplaetzen und Versorgung sehr wichtig; sichtbar als Service-Chips oder Fakten, nicht als langer Satz. |
+| Kontextsignale | nah, im Radius, wettergeschuetzt, draussen, lohnender Umweg, Route moeglich | Standort, Radius, Wetter, `distance_km`, `weather_suitability`, `lat`/`lon` | Sichtbar, wenn sie die aktuelle Situation erklaeren; z. B. nah, wettergeschuetzt oder lohnender Umweg. |
+| Ausschluss- und Warnsignale | ausserhalb Radius, unklare Daten, fehlende Serviceangaben, Oeffnungszeiten pruefen | Filterlogik, `reliability`, fehlende Felder, Pruefstand | Eher intern fuer Filter/Ranking oder in Details/Warnhinweisen; nur sichtbar, wenn es die Entscheidung direkt beeinflusst. |
+
+### Sichtbar vs. intern
+
+Sichtbar auf Karten sollten vor allem positive, kurze und entscheidungsnahe Gruende erscheinen: wichtige Services, Profiltreffer und aktuelle Kontextsignale. Beispiele sind `Wasser`, `Strom`, `fotogen`, `familienfreundlich`, `nah`, `wettergeschuetzt` oder `lohnender Umweg`.
+
+Intern bleiben sollten technische Score-Bestandteile, harte Filtergruende und Rohdatenqualitaet, solange sie nicht unmittelbar handlungsrelevant sind. Datenqualitaet, Quelle und Pruefstand koennen spaeter in Details, Warnungen oder einem Vertrauensmodell auftauchen, sollten aber nicht jede Hauptkarte dominieren.
+
+Die aktuelle Demo-Zeile `Heute sinnvoll: ...` ist eine Uebergangsloesung, um diese Logik sichtbar zu testen. Langfristig sollten die gleichen Informationen eher als gut priorisierte Chips, Fakten oder Statussignale auf Karten erscheinen.
+
 ## Hinweise fuer die aktuelle Phase
 
 - Das Modell soll zuerst Produktklarheit schaffen, nicht sofort Technik erzwingen.

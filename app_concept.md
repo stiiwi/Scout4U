@@ -17,6 +17,12 @@ V1 richtet sich an Camper- und Camping-Reisende, die unterwegs schnell gute Ents
 
 Die erste Zielgruppe ist praktisch orientiert, nicht technisch. Scout4U soll ruhig, klar und hilfreich wirken, ohne die Nutzerin mit Rohdaten oder internen Scores zu belasten.
 
+## Produktprinzip: passende Eigenschaften sichtbar machen
+
+Scout4U soll Empfehlungen nachvollziehbar machen, aber nicht jede Karte mit Erklaersaetzen fuellen. Die Nutzerin soll schnell sehen, welche Eigenschaften gerade passen: z. B. Wasser, Strom, WC-Entsorgung, fotogen, familienfreundlich, nah, wettergeschuetzt oder lohnender Umweg.
+
+Die aktuelle Demo-Zeile `Heute sinnvoll: ...` ist deshalb nur eine Uebergangsloesung. Langfristig sollte Scout4U Profiltreffer, Service-Merkmale und Kontextsignale eher als kurze Chips, Fakten oder Statussignale direkt in der Karte zeigen. Interne Score-Details, Datenqualitaet und Quellenlogik gehoeren eher in Details oder in die Hintergrundbewertung.
+
 ## Hauptnutzerfluesse
 
 ### Ich suche einen Stellplatz

@@ -3,6 +3,7 @@
 ## Next
 - [ ] Echte Details-/Route-/Website-Daten vorbereiten.
 - [ ] Wettereffekt bei Erleben ausbauen, ohne Services wetterabhängig wirken zu lassen.
+- [ ] Match-Gründe als Chips/Signale auf Karten statt zusätzlicher Erklärungssätze vorbereiten.
 
 ## Later
 - [ ] Standortauswahl als statische Demo-Variante prüfen.

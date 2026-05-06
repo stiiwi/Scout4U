@@ -15,6 +15,7 @@ Codex soll pro Arbeitspaket schnell erkennen, worum es geht, welche Dateien rele
 - data_model.md skizziert ein zukünftiges Ort-/POI-Datenmodell ohne Migration in JSON, Datenbank oder App-Architektur.
 - Die Demo hat einen statischen Radius-Mock mit 25 km / 40 km; 25 km ist initial aktiv.
 - Radius, Wetter und Kategorie-Filter sind als App-Flow kombinierbar, ohne GPS, Karte, API oder Datenbank.
+- Die aktuelle Zeile „Heute sinnvoll: ...“ ist eine Uebergangsloesung; spaeter sollen Match-Gruende eher als Chips oder Signale in Karten erscheinen.
 - Kernlogik liegt in scout4u_score.py.
 - GitHub Pages nutzt demo.html.
 - main ist aktuell sauber und synchron, sofern nicht anders im Chat genannt.
